@@ -253,6 +253,7 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	
 	func helperAddTestAttributeLevel(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
 		attributedString.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
 	}
@@ -260,5 +261,26 @@ class XibLocTests: XCTestCase {
 	func helperAddTestAttributeIndex(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
 		attributedString.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
 	}
+	
+	
+	/* Fill this array with all the tests to have Linux testing compatibility. */
+	static var allTests = [
+		("testOneSimpleReplacement", testOneSimpleReplacement),
+		("testOneOrderedReplacement1", testOneOrderedReplacement1),
+		("testOneOrderedReplacement2", testOneOrderedReplacement2),
+		("testOneOrderedReplacementTwice", testOneOrderedReplacementTwice),
+		("testOneOrderedReplacementAboveMax", testOneOrderedReplacementAboveMax),
+		("testOnePluralReplacement", testOnePluralReplacement),
+		("testOnePluralReplacementMissingOneZone", testOnePluralReplacementMissingOneZone),
+		("testOneOrderedReplacementAndSimpleReplacement1", testOneOrderedReplacementAndSimpleReplacement1),
+		("testOneOrderedReplacementAndSimpleReplacement2", testOneOrderedReplacementAndSimpleReplacement2),
+		("testOneOrderedReplacementAndIdentityAttributeModification1", testOneOrderedReplacementAndIdentityAttributeModification1),
+		("testOneOrderedReplacementAndIdentityAttributeModification2", testOneOrderedReplacementAndIdentityAttributeModification2),
+		("testOneOrderedReplacementAndIdentityAttributeModification3", testOneOrderedReplacementAndIdentityAttributeModification3),
+		("testOneOrderedReplacementAndIdentityAttributeModification4", testOneOrderedReplacementAndIdentityAttributeModification4),
+		("testOneAttributesChange", testOneAttributesChange),
+		("testTwoOverlappingAttributesChange", testTwoOverlappingAttributesChange),
+		("testOneOrderedReplacementAndSimpleReplacement1", testOneOrderedReplacementAndSimpleReplacement1)
+	]
 	
 }

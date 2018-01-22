@@ -39,18 +39,18 @@ import Foundation
  *      - Unsupported: "Let's replace <*multiple:choice*:stuff>" */
 public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	
-	let defaultPluralityDefinition: PluralityDefinition
+	public let defaultPluralityDefinition: PluralityDefinition
 	
-	let escapeToken: String?
+	public let escapeToken: String?
 	
-	let simpleSourceTypeReplacements: [OneWordTokens: SourceType]
-	let orderedReplacements: [MultipleWordsTokens: Int]
+	public let simpleSourceTypeReplacements: [OneWordTokens: SourceType]
+	public let orderedReplacements: [MultipleWordsTokens: Int]
 	/* Plural groups are ordered because of the possibility of plurality
 	 * definition overrides. */
-	let pluralGroups: [(MultipleWordsTokens, PluralValue)]
+	public let pluralGroups: [(MultipleWordsTokens, PluralValue)]
 	
-	let attributesModifications: [OneWordTokens: (_ modified: inout ReturnType, _ strRange: Range<String.Index>, _ refStr: String) -> Void] /* The handler must NOT modify the string representation of the given argument. */
-	let simpleReturnTypeReplacements: [OneWordTokens: ReturnType]
+	public let attributesModifications: [OneWordTokens: (_ modified: inout ReturnType, _ strRange: Range<String.Index>, _ refStr: String) -> Void] /* The handler must NOT modify the string representation of the given argument. */
+	public let simpleReturnTypeReplacements: [OneWordTokens: ReturnType]
 	
 	/* Format: "@[id|key1:val1|key2:val2¦default replacement]".
 	 * Examples of use:
@@ -77,9 +77,9 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	 * "@\\[plural|one:dude¦dudes]".
 	 * Inside a dictionary, to escape a special character, just escape it with
 	 * the escape token as expected (eg. "@[escaped|colon\\::and\\|pipe]"). */
-	let dictionaryReplacements: [String: String?]?
+	public let dictionaryReplacements: [String: String?]?
 	
-	let identityReplacement: (_ source: SourceType) -> ReturnType
+	public let identityReplacement: (_ source: SourceType) -> ReturnType
 	
 }
 
@@ -119,14 +119,14 @@ public extension XibLocResolvingInfo where SourceType == String, ReturnType == S
 
 public struct OneWordTokens : Hashable {
 	
-	let leftToken: String
-	let rightToken: String
+	public let leftToken: String
+	public let rightToken: String
 	
-	init(token: String) {
+	public init(token: String) {
 		self.init(leftToken: token, rightToken: token)
 	}
 	
-	init(leftToken lt: String, rightToken rt: String) {
+	public init(leftToken lt: String, rightToken rt: String) {
 		leftToken = lt
 		rightToken = rt
 		hashValue = (leftToken + rightToken).hashValue
@@ -141,15 +141,15 @@ public struct OneWordTokens : Hashable {
 
 public struct MultipleWordsTokens : Hashable {
 	
-	let leftToken: String
-	let interiorToken: String
-	let rightToken: String
+	public let leftToken: String
+	public let interiorToken: String
+	public let rightToken: String
 	
-	init(exteriorToken: String, interiorToken: String) {
+	public init(exteriorToken: String, interiorToken: String) {
 		self.init(leftToken: exteriorToken, interiorToken: interiorToken, rightToken: exteriorToken)
 	}
 	
-	init(leftToken lt: String, interiorToken it: String, rightToken rt: String) {
+	public init(leftToken lt: String, interiorToken it: String, rightToken rt: String) {
 		leftToken = lt
 		interiorToken = it
 		rightToken = rt

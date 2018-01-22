@@ -10,7 +10,7 @@ import Foundation
 
 
 
-enum PluralValue {
+public enum PluralValue {
 	
 	case int(Int)
 	case float(Float)
@@ -18,25 +18,25 @@ enum PluralValue {
 	
 }
 
-struct PluralityDefinition : CustomDebugStringConvertible {
+public struct PluralityDefinition : CustomDebugStringConvertible {
 	
 	let zones: [PluralityDefinitionZone]
 	
 	/** Returns an empty plurality definition, which will always return the
 	latest plural version  */
-	init() {
+	public init() {
 		zones = []
 	}
 	
 	/** Returns a plurality definition that contains one zone that matches
 	anything. Will always return the first plural version. */
-	init(matchingAnything: Void) {
+	public init(matchingAnything: Void) {
 		zones = [PluralityDefinitionZone()]
 	}
 	
 	/* Parses the plurality string to create a plurality definition. The parsing
 	 * is forgiving: messages are printed in the logs if there are syntax errors. */
-	init(string: String) {
+	public init(string: String) {
 		let scanner = Scanner(string: string)
 		scanner.charactersToBeSkipped = CharacterSet()
 		
@@ -92,7 +92,7 @@ struct PluralityDefinition : CustomDebugStringConvertible {
 		return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, precision: precision) }, numberOfVersions: numberOfVersions)
 	}
 	
-	var debugDescription: String {
+	public var debugDescription: String {
 		var ret = "PluralityDefinition: (\n"
 		zones.forEach{ ret.append("   \($0)\n") }
 		ret.append(")")
