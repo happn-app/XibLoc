@@ -16,6 +16,14 @@ public enum PluralValue {
 	case float(Float)
 	case floatCustomPrecision(value: Float, precision: Float?)
 	
+	public func asNumber() -> NSNumber {
+		switch self {
+		case .int(let i):                     return NSNumber(value: i)
+		case .float(let f):                   return NSNumber(value: f)
+		case .floatCustomPrecision(let f, _): return NSNumber(value: f)
+		}
+	}
+	
 }
 
 public struct PluralityDefinition : CustomDebugStringConvertible {

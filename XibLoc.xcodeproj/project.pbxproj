@@ -28,6 +28,10 @@
 		7B04C92F20166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
 		7B04C93020166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
 		7B04C93120166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
+		7B353B832017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
+		7B353B842017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
+		7B353B852017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
+		7B353B862017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
 		7B7A34C820027B4700348DF4 /* XibLoc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7A34BF20027B4600348DF4 /* XibLoc.framework */; };
 		7B8A96ED2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
 		7B8A96EE2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
@@ -158,6 +162,7 @@
 		7B21BACE2003B2C600DFF758 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		7B21BAD02003BBC700DFF758 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		7B21BAD12003BF0600DFF758 /* License.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
+		7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Str2StrXibLocInfo.swift; sourceTree = "<group>"; };
 		7B7A34BF20027B4600348DF4 /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B7A34C720027B4700348DF4 /* XibLoc-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XibLoc-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B8A96EC2017528C00481B45 /* OneWordTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneWordTokens.swift; sourceTree = "<group>"; };
@@ -294,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */,
+				7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */,
 				7B8A96EC2017528C00481B45 /* OneWordTokens.swift */,
 				7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */,
 			);
@@ -659,6 +665,7 @@
 				7BCBB145201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
 				7BCBB135201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB159201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
+				7B353B842017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
 				7BCBB129201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F3201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB149201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
@@ -691,6 +698,7 @@
 				7BCBB144201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
 				7BCBB134201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB158201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
+				7B353B832017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
 				7BCBB128201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB148201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
@@ -723,6 +731,7 @@
 				7BCBB147201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
 				7BCBB137201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB15B201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
+				7B353B862017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
 				7BCBB12B201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F5201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB14B201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
@@ -747,6 +756,7 @@
 				7BCBB146201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
 				7BCBB136201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB15A201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
+				7B353B852017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
 				7BCBB12A201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F4201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB14A201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
