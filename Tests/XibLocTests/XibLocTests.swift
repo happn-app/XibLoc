@@ -253,6 +253,25 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	func failing_testApplyingOnMutableAttributedStringTwice() {
+		let info = XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>(
+			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
+			simpleSourceTypeReplacements: [OneWordTokens(token: "|"): NSMutableAttributedString(string: "replaced")], orderedReplacements: [:], pluralGroups: [],
+			attributesModifications: [:], simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
+			identityReplacement: { $0 }
+		)
+		let tested = NSMutableAttributedString(string: "the test |replacement|")
+		let parsedXibLoc = ParsedXibLoc(source: tested, parserHelper: NSMutableAttributedStringSourceTypeHelper.self, forXibLocResolvingInfo: info)
+		XCTAssertEqual(
+			parsedXibLoc.resolve(xibLocResolvingInfo: info, returnTypeHelperType: NSMutableAttributedStringReturnTypeHelper.self),
+			NSMutableAttributedString(string: "the test replaced")
+		)
+		XCTAssertEqual(
+			parsedXibLoc.resolve(xibLocResolvingInfo: info, returnTypeHelperType: NSMutableAttributedStringReturnTypeHelper.self),
+			NSMutableAttributedString(string: "the test replaced")
+		)
+	}
+	
 	
 	func helperAddTestAttributeLevel(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
 		attributedString.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
