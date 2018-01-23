@@ -40,7 +40,6 @@ struct NSMutableAttributedStringSourceTypeHelper : SourceTypeHelper {
 }
 
 
-
 struct NSMutableAttributedStringReturnTypeHelper : ReturnTypeHelper {
 	
 	typealias ReturnType = NSMutableAttributedString
