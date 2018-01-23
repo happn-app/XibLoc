@@ -10,7 +10,7 @@ import Foundation
 
 
 
-struct ParsedXibLoc<SourceType, SourceTypeHelper : XibLoc.SourceTypeHelper> where SourceTypeHelper.SourceType == SourceType {
+struct ParsedXibLoc<SourceType, SourceTypeHelper : ParserHelper> where SourceTypeHelper.ParsedType == SourceType {
 	
 	/* Would prefer embedded in Replacement, but makes Swift crash :( (Xcode 9.1/9B55) */
 	enum ReplacementValue {
@@ -224,7 +224,7 @@ struct ParsedXibLoc<SourceType, SourceTypeHelper : XibLoc.SourceTypeHelper> wher
 		pluralityDefinitions = pluralityDefinitionsBuilding
 	}
 	
-	func resolve<ReturnTypeHelper : XibLoc.ReturnTypeHelper>(xibLocResolvingInfo: XibLocResolvingInfo<SourceType, ReturnTypeHelper.ReturnType>, returnTypeHelperType: ReturnTypeHelper.Type) -> ReturnTypeHelper.ReturnType {
+	func resolve<ReturnTypeHelper : ParserHelper>(xibLocResolvingInfo: XibLocResolvingInfo<SourceType, ReturnTypeHelper.ParsedType>, returnTypeHelperType: ReturnTypeHelper.Type) -> ReturnTypeHelper.ParsedType {
 		let replacementsIterator = ReplacementsIterator(refString: untokenizedStringSource, adjustedReplacements: replacements)
 		
 		var pluralGroupsDictionary = [MultipleWordsTokens: PluralValue]()

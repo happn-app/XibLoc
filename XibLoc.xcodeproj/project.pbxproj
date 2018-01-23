@@ -43,18 +43,18 @@
 		7BCBB125201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
 		7BCBB126201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
 		7BCBB127201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
-		7BCBB128201634E4008A3FC0 /* ParserHelpers+AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelpers+AttributedString.swift */; };
-		7BCBB129201634E4008A3FC0 /* ParserHelpers+AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelpers+AttributedString.swift */; };
-		7BCBB12A201634E4008A3FC0 /* ParserHelpers+AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelpers+AttributedString.swift */; };
-		7BCBB12B201634E4008A3FC0 /* ParserHelpers+AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelpers+AttributedString.swift */; };
-		7BCBB12C201634E4008A3FC0 /* ParserHelpers+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelpers+String.swift */; };
-		7BCBB12D201634E4008A3FC0 /* ParserHelpers+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelpers+String.swift */; };
-		7BCBB12E201634E4008A3FC0 /* ParserHelpers+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelpers+String.swift */; };
-		7BCBB12F201634E4008A3FC0 /* ParserHelpers+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelpers+String.swift */; };
-		7BCBB130201634E4008A3FC0 /* ParserHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelpers.swift */; };
-		7BCBB131201634E4008A3FC0 /* ParserHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelpers.swift */; };
-		7BCBB132201634E4008A3FC0 /* ParserHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelpers.swift */; };
-		7BCBB133201634E4008A3FC0 /* ParserHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelpers.swift */; };
+		7BCBB128201634E4008A3FC0 /* ParserHelper+AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelper+AttributedString.swift */; };
+		7BCBB129201634E4008A3FC0 /* ParserHelper+AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelper+AttributedString.swift */; };
+		7BCBB12A201634E4008A3FC0 /* ParserHelper+AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelper+AttributedString.swift */; };
+		7BCBB12B201634E4008A3FC0 /* ParserHelper+AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelper+AttributedString.swift */; };
+		7BCBB12C201634E4008A3FC0 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
+		7BCBB12D201634E4008A3FC0 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
+		7BCBB12E201634E4008A3FC0 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
+		7BCBB12F201634E4008A3FC0 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
+		7BCBB130201634E4008A3FC0 /* ParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelper.swift */; };
+		7BCBB131201634E4008A3FC0 /* ParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelper.swift */; };
+		7BCBB132201634E4008A3FC0 /* ParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelper.swift */; };
+		7BCBB133201634E4008A3FC0 /* ParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelper.swift */; };
 		7BCBB134201634E4008A3FC0 /* PluralityDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11A201634E4008A3FC0 /* PluralityDefinition.swift */; };
 		7BCBB135201634E4008A3FC0 /* PluralityDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11A201634E4008A3FC0 /* PluralityDefinition.swift */; };
 		7BCBB136201634E4008A3FC0 /* PluralityDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11A201634E4008A3FC0 /* PluralityDefinition.swift */; };
@@ -171,9 +171,9 @@
 		7BC696D52002775C007BC3E9 /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BC696DD2002775C007BC3E9 /* XibLoc-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XibLoc-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParsedXibLoc.swift; sourceTree = "<group>"; };
-		7BCBB116201634E4008A3FC0 /* ParserHelpers+AttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParserHelpers+AttributedString.swift"; sourceTree = "<group>"; };
-		7BCBB117201634E4008A3FC0 /* ParserHelpers+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParserHelpers+String.swift"; sourceTree = "<group>"; };
-		7BCBB118201634E4008A3FC0 /* ParserHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserHelpers.swift; sourceTree = "<group>"; };
+		7BCBB116201634E4008A3FC0 /* ParserHelper+AttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParserHelper+AttributedString.swift"; sourceTree = "<group>"; };
+		7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParserHelper+String.swift"; sourceTree = "<group>"; };
+		7BCBB118201634E4008A3FC0 /* ParserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserHelper.swift; sourceTree = "<group>"; };
 		7BCBB11A201634E4008A3FC0 /* PluralityDefinition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PluralityDefinition.swift; sourceTree = "<group>"; };
 		7BCBB11B201634E4008A3FC0 /* PluralityDefinitionZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PluralityDefinitionZone.swift; sourceTree = "<group>"; };
 		7BCBB11C201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PluralityDefinitionZoneValue.swift; sourceTree = "<group>"; };
@@ -247,9 +247,9 @@
 			isa = PBXGroup;
 			children = (
 				7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */,
-				7BCBB118201634E4008A3FC0 /* ParserHelpers.swift */,
-				7BCBB117201634E4008A3FC0 /* ParserHelpers+String.swift */,
-				7BCBB116201634E4008A3FC0 /* ParserHelpers+AttributedString.swift */,
+				7BCBB118201634E4008A3FC0 /* ParserHelper.swift */,
+				7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */,
+				7BCBB116201634E4008A3FC0 /* ParserHelper+AttributedString.swift */,
 			);
 			path = Parser;
 			sourceTree = "<group>";
@@ -647,19 +647,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B8A96EE2017528C00481B45 /* OneWordTokens.swift in Sources */,
-				7BCBB12D201634E4008A3FC0 /* ParserHelpers+String.swift in Sources */,
+				7BCBB12D201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
 				7BCBB139201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
 				7B04C92F20166897002F9F52 /* Config.swift in Sources */,
 				7BCBB125201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */,
 				7BCBB151201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */,
 				7BCBB13D201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */,
 				7BCBB14D201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
-				7BCBB131201634E4008A3FC0 /* ParserHelpers.swift in Sources */,
+				7BCBB131201634E4008A3FC0 /* ParserHelper.swift in Sources */,
 				7BCBB141201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */,
 				7BCBB145201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
 				7BCBB135201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB159201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
-				7BCBB129201634E4008A3FC0 /* ParserHelpers+AttributedString.swift in Sources */,
+				7BCBB129201634E4008A3FC0 /* ParserHelper+AttributedString.swift in Sources */,
 				7B8A96F3201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB149201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
 				7BCBB155201634E4008A3FC0 /* XibLoc.swift in Sources */,
@@ -679,19 +679,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B8A96ED2017528C00481B45 /* OneWordTokens.swift in Sources */,
-				7BCBB12C201634E4008A3FC0 /* ParserHelpers+String.swift in Sources */,
+				7BCBB12C201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
 				7BCBB138201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
 				7B04C92E20166897002F9F52 /* Config.swift in Sources */,
 				7BCBB124201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */,
 				7BCBB150201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */,
 				7BCBB13C201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */,
 				7BCBB14C201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
-				7BCBB130201634E4008A3FC0 /* ParserHelpers.swift in Sources */,
+				7BCBB130201634E4008A3FC0 /* ParserHelper.swift in Sources */,
 				7BCBB140201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */,
 				7BCBB144201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
 				7BCBB134201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB158201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
-				7BCBB128201634E4008A3FC0 /* ParserHelpers+AttributedString.swift in Sources */,
+				7BCBB128201634E4008A3FC0 /* ParserHelper+AttributedString.swift in Sources */,
 				7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB148201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
 				7BCBB154201634E4008A3FC0 /* XibLoc.swift in Sources */,
@@ -711,19 +711,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B8A96F02017528C00481B45 /* OneWordTokens.swift in Sources */,
-				7BCBB12F201634E4008A3FC0 /* ParserHelpers+String.swift in Sources */,
+				7BCBB12F201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
 				7BCBB13B201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
 				7B04C93120166897002F9F52 /* Config.swift in Sources */,
 				7BCBB127201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */,
 				7BCBB153201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */,
 				7BCBB13F201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */,
 				7BCBB14F201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
-				7BCBB133201634E4008A3FC0 /* ParserHelpers.swift in Sources */,
+				7BCBB133201634E4008A3FC0 /* ParserHelper.swift in Sources */,
 				7BCBB143201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */,
 				7BCBB147201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
 				7BCBB137201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB15B201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
-				7BCBB12B201634E4008A3FC0 /* ParserHelpers+AttributedString.swift in Sources */,
+				7BCBB12B201634E4008A3FC0 /* ParserHelper+AttributedString.swift in Sources */,
 				7B8A96F5201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB14B201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
 				7BCBB157201634E4008A3FC0 /* XibLoc.swift in Sources */,
@@ -735,19 +735,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B8A96EF2017528C00481B45 /* OneWordTokens.swift in Sources */,
-				7BCBB12E201634E4008A3FC0 /* ParserHelpers+String.swift in Sources */,
+				7BCBB12E201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
 				7BCBB13A201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
 				7B04C93020166897002F9F52 /* Config.swift in Sources */,
 				7BCBB126201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */,
 				7BCBB152201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */,
 				7BCBB13E201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */,
 				7BCBB14E201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
-				7BCBB132201634E4008A3FC0 /* ParserHelpers.swift in Sources */,
+				7BCBB132201634E4008A3FC0 /* ParserHelper.swift in Sources */,
 				7BCBB142201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */,
 				7BCBB146201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
 				7BCBB136201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB15A201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
-				7BCBB12A201634E4008A3FC0 /* ParserHelpers+AttributedString.swift in Sources */,
+				7BCBB12A201634E4008A3FC0 /* ParserHelper+AttributedString.swift in Sources */,
 				7B8A96F4201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB14A201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
 				7BCBB156201634E4008A3FC0 /* XibLoc.swift in Sources */,

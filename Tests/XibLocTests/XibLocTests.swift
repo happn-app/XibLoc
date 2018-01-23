@@ -261,13 +261,13 @@ class XibLocTests: XCTestCase {
 			identityReplacement: { $0 }
 		)
 		let tested = NSMutableAttributedString(string: "the test |replacement|")
-		let parsedXibLoc = ParsedXibLoc(source: tested, parserHelper: NSMutableAttributedStringSourceTypeHelper.self, forXibLocResolvingInfo: info)
+		let parsedXibLoc = ParsedXibLoc(source: tested, parserHelper: NSMutableAttributedStringParserHelper.self, forXibLocResolvingInfo: info)
 		XCTAssertEqual(
-			parsedXibLoc.resolve(xibLocResolvingInfo: info, returnTypeHelperType: NSMutableAttributedStringReturnTypeHelper.self),
+			parsedXibLoc.resolve(xibLocResolvingInfo: info, returnTypeHelperType: NSMutableAttributedStringParserHelper.self),
 			NSMutableAttributedString(string: "the test replaced")
 		)
 		XCTAssertEqual(
-			parsedXibLoc.resolve(xibLocResolvingInfo: info, returnTypeHelperType: NSMutableAttributedStringReturnTypeHelper.self),
+			parsedXibLoc.resolve(xibLocResolvingInfo: info, returnTypeHelperType: NSMutableAttributedStringParserHelper.self),
 			NSMutableAttributedString(string: "the test replaced")
 		)
 	}
