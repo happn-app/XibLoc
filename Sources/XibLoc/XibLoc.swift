@@ -21,10 +21,7 @@ public extension String {
 	}
 	
 	public func applying(xibLocInfo: XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>, defaultAttributes: [NSAttributedStringKey: Any]?) -> NSMutableAttributedString {
-		/* We don't call “applying” directly on the mutable string because there
-		 * is no need to copy the mutable string (see implementation of applying) */
-		let attributedString = NSMutableAttributedString(string: self, attributes: defaultAttributes)
-		return ParsedXibLoc(source: attributedString, parserHelper: NSMutableAttributedStringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
+		return NSMutableAttributedString(string: self, attributes: defaultAttributes).applying(xibLocInfo: xibLocInfo)
 	}
 	
 }
@@ -32,9 +29,10 @@ public extension String {
 public extension NSAttributedString {
 	
 	public func applying(xibLocInfo: XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>) -> NSMutableAttributedString {
-		/* Even if self is already an NSMutableString, we have to copy it before
-		 * passing it to the ParsedXibLoc, because it will modify it. */
-		let resolved = ParsedXibLoc(source: NSMutableAttributedString(attributedString: self), parserHelper: NSMutableAttributedStringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
+		let mutableAttrStr: NSMutableAttributedString
+		if let mself = self as? NSMutableAttributedString {mutableAttrStr = mself}
+		else                                              {mutableAttrStr = NSMutableAttributedString(attributedString: self)}
+		let resolved = ParsedXibLoc(source: mutableAttrStr, parserHelper: NSMutableAttributedStringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
 		return resolved
 	}
 	
@@ -43,7 +41,7 @@ public extension NSAttributedString {
 public extension NSMutableAttributedString {
 	
 	public func apply(xibLocInfo: XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>) {
-		let resolved = ParsedXibLoc(source: self, parserHelper: NSMutableAttributedStringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
+		let resolved = applying(xibLocInfo: xibLocInfo)
 		replaceCharacters(in: NSRange(location: 0, length: length), with: resolved)
 	}
 	

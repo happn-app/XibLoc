@@ -10,7 +10,9 @@ import Foundation
 
 
 
-struct ParsedXibLoc<SourceType, SourceTypeHelper : ParserHelper> where SourceTypeHelper.ParsedType == SourceType {
+struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
+	
+	typealias SourceType = SourceTypeHelper.ParsedType
 	
 	/* Would prefer embedded in Replacement, but makes Swift crash :( (Xcode 9.1/9B55) */
 	enum ReplacementValue {
@@ -87,7 +89,7 @@ struct ParsedXibLoc<SourceType, SourceTypeHelper : ParserHelper> where SourceTyp
 	}
 	
 	init(source: SourceType, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens], hasDictionaryReplacements: Bool) {
-		var source = source
+		var source = SourceTypeHelper.copy(source: source)
 		var stringSource = parserHelper.stringRepresentation(of: source)
 		var pluralityDefinitionsList = ParsedXibLoc.preprocessForPluralityDefinitionOverrides(source: &source, stringSource: &stringSource, parserHelper: parserHelper)
 		while pluralityDefinitionsList.count < pluralGroups.count {pluralityDefinitionsList.append(nil)}
@@ -231,7 +233,7 @@ struct ParsedXibLoc<SourceType, SourceTypeHelper : ParserHelper> where SourceTyp
 		xibLocResolvingInfo.pluralGroups.forEach{ pluralGroupsDictionary[$0.0] = $0.1 }
 		
 		/* Applying simple source type replacements */
-		var sourceWithSimpleReplacements = untokenizedSource
+		var sourceWithSimpleReplacements = SourceTypeHelper.copy(source: untokenizedSource)
 		while let replacement = replacementsIterator.next() {
 			guard case .simpleSourceTypeReplacement(let token) = replacement.value else {continue}
 			guard let newValue = xibLocResolvingInfo.simpleSourceTypeReplacements[token] else {
@@ -259,10 +261,7 @@ struct ParsedXibLoc<SourceType, SourceTypeHelper : ParserHelper> where SourceTyp
 					continue
 				}
 				modifier(&result, replacement.range, replacementsIterator.refString)
-				/* We cannot do the assert below because the returnTypeHelperType
-				 * does not have a method to convert from the return type to a
-				 * string. However, if possible, the assert would be correct. */
-//				assert(returnTypeHelperType.stringRepresentation(of: result) == refString)
+				assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
 				replacementsIterator.delete(replacementGroup: replacement.groupId)
 				
 			case .simpleReturnTypeReplacement(let token):

@@ -253,7 +253,26 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
-	func failing_testApplyingOnMutableAttributedStringTwice() {
+	func testApplyingOnStringTwice() {
+		let info = XibLocResolvingInfo<String, String>(
+			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
+			simpleSourceTypeReplacements: [OneWordTokens(token: "|"): "replaced"], orderedReplacements: [:], pluralGroups: [],
+			attributesModifications: [:], simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
+			identityReplacement: { $0 }
+		)
+		let tested = "the test |replacement|"
+		let parsedXibLoc = ParsedXibLoc(source: tested, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: info)
+		XCTAssertEqual(
+			parsedXibLoc.resolve(xibLocResolvingInfo: info, returnTypeHelperType: StringParserHelper.self),
+			"the test replaced"
+		)
+		XCTAssertEqual(
+			parsedXibLoc.resolve(xibLocResolvingInfo: info, returnTypeHelperType: StringParserHelper.self),
+			"the test replaced"
+		)
+	}
+	
+	func testApplyingOnMutableAttributedStringTwice() {
 		let info = XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>(
 			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
 			simpleSourceTypeReplacements: [OneWordTokens(token: "|"): NSMutableAttributedString(string: "replaced")], orderedReplacements: [:], pluralGroups: [],

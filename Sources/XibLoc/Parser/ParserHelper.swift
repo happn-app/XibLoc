@@ -15,8 +15,13 @@ import Foundation
 
 protocol ParserHelper {
 	
-	/** Can be anything. Usually it will be a String or an NSMutableString. */
+	/** Can be anything. Usually it will be a String or an NS(Mutable)AttributedString. */
 	associatedtype ParsedType
+	
+	/** Workaround the NSMutableAttributedString are reference types problem. For
+	reference types, copy the referenced object and return the copy. For value
+	types, there is nothing to do, you can simply return the input. */
+	static func copy(source: ParsedType) -> ParsedType
 	
 	/* When asked to (remove, replace, whatever) something from the source type,
 	 * the given range will always contain a String range, and the corresponding

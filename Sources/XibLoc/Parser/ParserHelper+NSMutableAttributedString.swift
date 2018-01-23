@@ -13,9 +13,12 @@ import Foundation
 struct NSMutableAttributedStringParserHelper : ParserHelper {
 	
 	/* While the NSAttributedString is not “Swifted” to support let/var, we
-	 * prefer dealing with mutable attributed string directly for performance
-	 * reasons. */
+	 * prefer dealing with mutable attributed string directly for convenience. */
 	typealias ParsedType = NSMutableAttributedString
+	
+	static func copy(source: NSMutableAttributedString) -> NSMutableAttributedString {
+		return NSMutableAttributedString(attributedString: source)
+	}
 	
 	static func stringRepresentation(of source: NSMutableAttributedString) -> String {
 		return source.string

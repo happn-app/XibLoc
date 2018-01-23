@@ -14,6 +14,10 @@ struct StringParserHelper : ParserHelper {
 	
 	typealias ParsedType = String
 	
+	static func copy(source: String) -> String {
+		return source
+	}
+	
 	static func stringRepresentation(of source: String) -> String {
 		return source
 	}
