@@ -7,6 +7,7 @@
  */
 
 import Foundation
+import os.log
 
 
 
@@ -44,12 +45,13 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 			
 			if       transformedString.hasPrefix("^+") {transformedString.remove(at: transformedString.index(after: transformedString.startIndex))} /* We remove the "+" */
 			else if !transformedString.hasPrefix("^-") {transformedString.insert(contentsOf: "-?+", at: transformedString.index(after: transformedString.startIndex))}
-//			HCLogTS("Glob language to regex conversion: \(string) --> \(transformedString)")
+//			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Glob language to regex conversion: “%@” --> “%@”", type: .debug, string, transformedString)}
+//			else                                                          {NSLog("Glob language to regex conversion: “%@” --> “%@”", string, transformedString)}
 			
 			do {value = .regex(try NSRegularExpression(pattern: string, options: []))}
 			catch {
-				/* We used to use HCLogES */
-				NSLog("%@", "Cannot create regular expression from string \"\(transformedString)\" (original was \"\(string)\"); got error \(error)")
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Cannot create regular expression from string “%@” (original was “%@”); got error %@", type: .info, transformedString, string, String(describing: error))}
+				else                                                          {NSLog("Cannot create regular expression from string “%@” (original was “%@”); got error %@", transformedString, string, String(describing: error))}
 				return nil
 			}
 		}

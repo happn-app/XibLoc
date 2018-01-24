@@ -7,6 +7,7 @@
  */
 
 import Foundation
+import os.log
 
 
 
@@ -237,7 +238,8 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		while let replacement = replacementsIterator.next() {
 			guard case .simpleSourceTypeReplacement(let token) = replacement.value else {continue}
 			guard let newValue = xibLocResolvingInfo.simpleSourceTypeReplacements[token] else {
-				NSLog("%@", "Got token \(token) in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo") /* HCLogES */
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got token %{public}@ in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", type: .info, String(describing: token))}
+				else                                                          {NSLog("Got token %@ in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", String(describing: token))}
 				continue
 			}
 			
@@ -257,7 +259,8 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			case .simpleSourceTypeReplacement: (/* Treated before conversion to ReturnType */)
 			case .attributesModification(let token):
 				guard let modifier = xibLocResolvingInfo.attributesModifications[token] else {
-					NSLog("%@", "Got token \(token) in replacement tree for attributes modification, but no value given in xibLocResolvingInfo") /* HCLogES */
+					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got token %{public}@ in replacement tree for attributes modification, but no value given in xibLocResolvingInfo", type: .info, String(describing: token))}
+					else                                                          {NSLog("Got token %@ in replacement tree for attributes modification, but no value given in xibLocResolvingInfo", String(describing: token))}
 					continue
 				}
 				modifier(&result, replacement.range, replacementsIterator.refString)
@@ -266,7 +269,8 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				
 			case .simpleReturnTypeReplacement(let token):
 				guard let newValue = xibLocResolvingInfo.simpleReturnTypeReplacements[token] else {
-					NSLog("%@", "Got token \(token) in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo") /* HCLogES */
+					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got token %{public}@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", type: .info, String(describing: token))}
+					else                                                          {NSLog("Got token %@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", String(describing: token))}
 					continue
 				}
 				
@@ -276,7 +280,8 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				
 			case .orderedReplacement(let token, valueIndex: let valueIndex, numberOfValues: let numberOfValues):
 				guard let wantedValue = xibLocResolvingInfo.orderedReplacements[token] else {
-					NSLog("%@", "Got token \(token) in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo") /* HCLogES */
+					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got token %{public}@ in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo", type: .info, String(describing: token))}
+					else                                                          {NSLog("Got token %@ in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo", String(describing: token))}
 					continue
 				}
 				guard valueIndex == wantedValue || (wantedValue >= numberOfValues.value && valueIndex == numberOfValues.value-1) else {continue}
@@ -288,7 +293,8 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				
 			case .pluralGroup(let token, zoneIndex: let zoneIndex, numberOfZones: let numberOfZones):
 				guard let wantedValue = pluralGroupsDictionary[token] else {
-					NSLog("%@", "Got token \(token) in replacement tree for plural replacement, but no value given in xibLocResolvingInfo") /* HCLogES */
+					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got token %{public}@ in replacement tree for plural replacement, but no value given in xibLocResolvingInfo", type: .info, String(describing: token))}
+					else                                                          {NSLog("Got token %@ in replacement tree for plural replacement, but no value given in xibLocResolvingInfo", String(describing: token))}
 					continue
 				}
 				let pluralityDefinition = pluralityDefinitions[token] ?? xibLocResolvingInfo.defaultPluralityDefinition
@@ -305,7 +311,8 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			case .dictionaryReplacement(id: let id, key: let key, allKeys: let allKeys):
 				/* Note: The dictionary replacement has never been tested (parsing not implemented yet). */
 				guard let dictionaryReplacements = xibLocResolvingInfo.dictionaryReplacements else {
-					NSLog("%@", "Got dictionary with id \(id) in replacement tree, but no dictionary replacements in xibLocResolvingInfo") /* HCLogES */
+					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got dictionary with id %{public}@ in replacement tree, but no dictionary replacements in xibLocResolvingInfo", type: .info, id)}
+					else                                                          {NSLog("Got dictionary with id %@ in replacement tree, but no dictionary replacements in xibLocResolvingInfo", id)}
 					continue
 				}
 				guard let wantedKey = dictionaryReplacements[id] else {
@@ -595,7 +602,8 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		/* We do have plurality override(s)! Is it valid? */
 		guard let pluralityEndIdx = stringSource.range(of: "||", options: [.literal], range: pluralityStringStartIdx..<stringSource.endIndex)?.lowerBound else {
 			/* Nope. It is not. */
-			NSLog("%@", "Got invalid plurality override in string \(source)") /* We used to use HCLogES */
+			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got invalid plurality override in string source \"%@\"", type: .info, stringSource)}
+			else                                                          {NSLog("Got invalid plurality override in string source \"%@\"", stringSource)}
 			return []
 		}
 		
@@ -625,7 +633,8 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		guard let rightSeparatorRange = range(of: rightSeparator, escapeToken: escapeToken, baseString: baseString, in: currentPositionInString..<baseString.endIndex) else {
 			/* Invalid string: The left token was found, but the right is not. */
-			NSLog("%@", "Invalid baseString \"\(baseString)\": left token “\(leftSeparator)” was found, but right one “\(rightSeparator)” was not. Ignoring.") /* HCLogES */
+			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Invalid baseString “%@”: left token “%@” was found, but right one “%@” was not. Ignoring.", type: .info, baseString, leftSeparator, rightSeparator)}
+			else                                                          {NSLog("Invalid baseString “%@”: left token “%@” was found, but right one “%@” was not. Ignoring.", baseString, leftSeparator, rightSeparator)}
 			currentPositionInString = baseString.endIndex
 			return nil
 		}

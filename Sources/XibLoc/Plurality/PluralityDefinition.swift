@@ -7,6 +7,7 @@
  */
 
 import Foundation
+import os.log
 
 
 
@@ -53,16 +54,16 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		repeat {
 			var garbage: NSString?
 			if scanner.scanUpTo("(", into: &garbage) {
-				/* We used to use HCLogES */
-				NSLog("%@", "Got garbage (\(garbage!)) while parsing plurality definition string \(string). Ignoring...")
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", type: .info, garbage!, string)}
+				else                                                          {NSLog("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", garbage!, string)}
 			}
 			
 			guard scanner.scanString("(", into: nil) else {break}
 			
 			var curZoneStrMinusOpeningParenthesis: NSString?
 			guard scanner.scanUpTo("(", into: &curZoneStrMinusOpeningParenthesis) else {
-				/* We used to use HCLogES */
-				NSLog("%@", "Got malformed plurality definition string \(string). Attempting to continue anyway...")
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got malformed plurality definition string “%@”. Attempting to continue anyway...", type: .info, string)}
+				else                                                          {NSLog("Got malformed plurality definition string “%@”. Attempting to continue anyway...", string)}
 				continue
 			}
 			
@@ -70,8 +71,8 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 				zonesBuilding.append(curZone)
 				idx += 1
 			} else {
-				/* We used to use HCLogES */
-				NSLog("%@", "Got zone str (\(curZoneStrMinusOpeningParenthesis!), which I cannot parse into a zone")
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got zone str (%@), which I cannot parse into a zone", type: .info, curZoneStrMinusOpeningParenthesis!)}
+				else                                                          {NSLog("Got zone str (%@), which I cannot parse into a zone", curZoneStrMinusOpeningParenthesis!)}
 			}
 		} while !scanner.isAtEnd
 		
@@ -113,7 +114,8 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		let matchingZones = zonesToTest(for: numberOfVersions).filter(matchingZonePredicate)
 		
 		if matchingZones.isEmpty {
-//			HCLogIS("No zones matched for given predicate in plurality definition \(self). Returning latest version.")
+//			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("No zones matched for given predicate in plurality definition %{public}@. Returning latest version.", String(describing: self))}
+//			else                                                          {NSLog("No zones matched for given predicate in plurality definition %@. Returning latest version.", String(describing: self))}
 			return numberOfVersions-1
 		}
 		
@@ -126,8 +128,8 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		/* The zones are already sorted in a way that we can do the trick below. */
 		let sepIdx = zones.count - numberOfVersions
 		if zones[sepIdx-1].optionalityLevel == 0 {
-			/* We used to use HCLogWS */
-			NSLog("%@", "Had to remove at least one non-optional zone in plurality definition \(self) in order to get version idx for \(numberOfVersions) version(s).")
+			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Had to remove at least one non-optional zone in plurality definition %@ in order to get version idx for %d version(s).", type: .info, String(describing: self), numberOfVersions)}
+			else                                                          {NSLog("Had to remove at least one non-optional zone in plurality definition %@ in order to get version idx for %d version(s).", String(describing: self), numberOfVersions)}
 		}
 		return Array(zones[sepIdx..<zones.endIndex])
 	}

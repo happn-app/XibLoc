@@ -7,6 +7,7 @@
  */
 
 import Foundation
+import os.log
 
 
 
@@ -42,8 +43,8 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 		scanner.scanCharacters(from: CharacterSet(charactersIn: "?"), into: &optionalities)
 		
 		if !scanner.isAtEnd {
-			/* We used to use HCLogES */
-			NSLog("%@", "Got garbage after end of plurality definition zone string: \((scanner.string as NSString).substring(from: scanner.scanLocation))")
+			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got garbage after end of plurality definition zone string: %@", type: .info, (scanner.string as NSString).substring(from: scanner.scanLocation))}
+			else                                                          {NSLog("Got garbage after end of plurality definition zone string: %@", (scanner.string as NSString).substring(from: scanner.scanLocation))}
 		}
 		
 		index = i
@@ -57,8 +58,10 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 			else if let v = PluralityDefinitionZoneValueIntervalOfFloats(string: $0) {ret = v}
 			else if let v = PluralityDefinitionZoneValueGlob(string: $0)             {ret = v}
 			else                                                                     {ret = nil}
-			/* We used to use HCLogES */
-			if ret == nil {NSLog("%@", "Cannot parse zone value string \"\($0)\". Skipping...")}
+			if ret == nil {
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Cannot parse zone value string “%@”. Skipping...", type: .info, $0)}
+				else                                                          {NSLog("Cannot parse zone value string “%@”. Skipping...", $0)}
+			}
 			return ret
 		}
 	}
