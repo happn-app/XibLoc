@@ -54,7 +54,7 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		repeat {
 			var garbage: NSString?
 			if scanner.scanUpTo("(", into: &garbage) {
-				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", type: .info, garbage!, string)}
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", log: $0, type: .info, garbage!, string) }}
 				else                                                          {NSLog("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", garbage!, string)}
 			}
 			
@@ -62,7 +62,7 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 			
 			var curZoneStrMinusOpeningParenthesis: NSString?
 			guard scanner.scanUpTo("(", into: &curZoneStrMinusOpeningParenthesis) else {
-				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got malformed plurality definition string “%@”. Attempting to continue anyway...", type: .info, string)}
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got malformed plurality definition string “%@”. Attempting to continue anyway...", log: $0, type: .info, string) }}
 				else                                                          {NSLog("Got malformed plurality definition string “%@”. Attempting to continue anyway...", string)}
 				continue
 			}
@@ -71,7 +71,7 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 				zonesBuilding.append(curZone)
 				idx += 1
 			} else {
-				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Got zone str (%@), which I cannot parse into a zone", type: .info, curZoneStrMinusOpeningParenthesis!)}
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got zone str (%@), which I cannot parse into a zone", log: $0, type: .info, curZoneStrMinusOpeningParenthesis!) }}
 				else                                                          {NSLog("Got zone str (%@), which I cannot parse into a zone", curZoneStrMinusOpeningParenthesis!)}
 			}
 		} while !scanner.isAtEnd
@@ -114,7 +114,7 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		let matchingZones = zonesToTest(for: numberOfVersions).filter(matchingZonePredicate)
 		
 		if matchingZones.isEmpty {
-//			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("No zones matched for given predicate in plurality definition %{public}@. Returning latest version.", String(describing: self))}
+//			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("No zones matched for given predicate in plurality definition %{public}@. Returning latest version.", log: $0, String(describing: self)) }}
 //			else                                                          {NSLog("No zones matched for given predicate in plurality definition %@. Returning latest version.", String(describing: self))}
 			return numberOfVersions-1
 		}
@@ -128,7 +128,7 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		/* The zones are already sorted in a way that we can do the trick below. */
 		let sepIdx = zones.count - numberOfVersions
 		if zones[sepIdx-1].optionalityLevel == 0 {
-			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {os_log("Had to remove at least one non-optional zone in plurality definition %@ in order to get version idx for %d version(s).", type: .info, String(describing: self), numberOfVersions)}
+			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Had to remove at least one non-optional zone in plurality definition %@ in order to get version idx for %d version(s).", log: $0, type: .info, String(describing: self), numberOfVersions) }}
 			else                                                          {NSLog("Had to remove at least one non-optional zone in plurality definition %@ in order to get version idx for %d version(s).", String(describing: self), numberOfVersions)}
 		}
 		return Array(zones[sepIdx..<zones.endIndex])
