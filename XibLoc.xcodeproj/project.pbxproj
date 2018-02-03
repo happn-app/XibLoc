@@ -335,12 +335,12 @@
 		7BCBB114201634E4008A3FC0 /* XibLoc */ = {
 			isa = PBXGroup;
 			children = (
-				7B04C92D20166897002F9F52 /* Config.swift */,
 				7BCBB122201634E4008A3FC0 /* XibLoc.swift */,
 				7B8A96EB2017526000481B45 /* Resolving Info */,
 				7B04C92B20166784002F9F52 /* Parser */,
 				7BCBB119201634E4008A3FC0 /* Plurality */,
 				7B04C92C20166794002F9F52 /* Utilities */,
+				7B04C92D20166897002F9F52 /* Config.swift */,
 			);
 			path = XibLoc;
 			sourceTree = "<group>";
