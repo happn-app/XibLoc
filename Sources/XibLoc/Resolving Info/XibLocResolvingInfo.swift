@@ -85,4 +85,25 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	
 	public let identityReplacement: (_ source: SourceType) -> ReturnType
 	
+	public init(
+		defaultPluralityDefinition dpd: PluralityDefinition, escapeToken et: String? = nil,
+		simpleSourceTypeReplacements sstr: [OneWordTokens: (_ originalValue: SourceType) -> SourceType] = [:],
+		orderedReplacements or: [MultipleWordsTokens: Int] = [:],
+		pluralGroups pg: [(MultipleWordsTokens, PluralValue)] = [],
+		attributesModifications am: [OneWordTokens: (_ modified: inout ReturnType, _ strRange: Range<String.Index>, _ refStr: String) -> Void] = [:],
+		simpleReturnTypeReplacements srtr: [OneWordTokens: (_ originalValue: ReturnType) -> ReturnType] = [:],
+		dictionaryReplacements dr: [String: String?]? = nil,
+		identityReplacement ir: @escaping (_ source: SourceType) -> ReturnType
+	) {
+		defaultPluralityDefinition = dpd
+		escapeToken = et
+		simpleSourceTypeReplacements = sstr
+		orderedReplacements = or
+		pluralGroups = pg
+		attributesModifications = am
+		simpleReturnTypeReplacements = srtr
+		dictionaryReplacements = dr
+		identityReplacement = ir
+	}
+	
 }
