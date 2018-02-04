@@ -43,14 +43,18 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	
 	public let escapeToken: String?
 	
-	public let simpleSourceTypeReplacements: [OneWordTokens: SourceType]
+	/* Value for a simple type replacement is a handler, so you can have access
+	 * to the original value being replaced. It used to be a constant. */
+	public let simpleSourceTypeReplacements: [OneWordTokens: (_ originalValue: SourceType) -> SourceType]
 	public let orderedReplacements: [MultipleWordsTokens: Int]
 	/* Plural groups are ordered because of the possibility of plurality
 	 * definition overrides. */
 	public let pluralGroups: [(MultipleWordsTokens, PluralValue)]
 	
 	public let attributesModifications: [OneWordTokens: (_ modified: inout ReturnType, _ strRange: Range<String.Index>, _ refStr: String) -> Void] /* The handler must NOT modify the string representation of the given argument. */
-	public let simpleReturnTypeReplacements: [OneWordTokens: ReturnType]
+	/* Value for a simple type replacement is a handler, so you can have access
+	 * to the original value being replaced. It used to be a constant. */
+	public let simpleReturnTypeReplacements: [OneWordTokens: (_ originalValue: ReturnType) -> ReturnType]
 	
 	/* Format: "@[id|key1:val1|key2:val2¦default replacement]".
 	 * Examples of use:

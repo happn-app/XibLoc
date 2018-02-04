@@ -237,13 +237,14 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		var sourceWithSimpleReplacements = SourceTypeHelper.copy(source: untokenizedSource)
 		while let replacement = replacementsIterator.next() {
 			guard case .simpleSourceTypeReplacement(let token) = replacement.value else {continue}
-			guard let newValue = xibLocResolvingInfo.simpleSourceTypeReplacements[token] else {
+			guard let newValueCreator = xibLocResolvingInfo.simpleSourceTypeReplacements[token] else {
 				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got token %{public}@ in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 				else                                                          {NSLog("Got token %@ in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", String(describing: token))}
 				continue
 			}
 			
-			let stringReplacement = sourceTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: newValue, in: &sourceWithSimpleReplacements)
+			let currentValue = sourceTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: sourceWithSimpleReplacements)
+			let stringReplacement = sourceTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: newValueCreator(currentValue), in: &sourceWithSimpleReplacements)
 			
 			replacementsIterator.delete(replacementGroup: replacement.groupId)
 			replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringReplacement)
@@ -268,13 +269,14 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				replacementsIterator.delete(replacementGroup: replacement.groupId)
 				
 			case .simpleReturnTypeReplacement(let token):
-				guard let newValue = xibLocResolvingInfo.simpleReturnTypeReplacements[token] else {
+				guard let newValueCreator = xibLocResolvingInfo.simpleReturnTypeReplacements[token] else {
 					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got token %{public}@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 					else                                                          {NSLog("Got token %@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", String(describing: token))}
 					continue
 				}
 				
-				let stringReplacement = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: newValue, in: &result)
+				let currentValue = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
+				let stringReplacement = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: newValueCreator(currentValue), in: &result)
 				replacementsIterator.delete(replacementGroup: replacement.groupId)
 				replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringReplacement)
 				

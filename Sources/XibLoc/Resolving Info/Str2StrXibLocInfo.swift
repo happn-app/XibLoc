@@ -19,11 +19,11 @@ public extension XibLocResolvingInfo where SourceType == String, ReturnType == S
 		escapeToken = nil
 		attributesModifications = [:]
 		simpleSourceTypeReplacements = [:]
-		var simpleReturnTypeReplacementsBuilding = [OneWordTokens: String]()
-		if let replacement = replacement {simpleReturnTypeReplacementsBuilding[OneWordTokens(token: "|")] = replacement}
+		var simpleReturnTypeReplacementsBuilding = [OneWordTokens: (String) -> String]()
+		if let replacement = replacement {simpleReturnTypeReplacementsBuilding[OneWordTokens(token: "|")] = { _ in replacement }}
 		if let (pluralValue, formatterStyle) = pluralValue {
 			let strPluralValue = NumberFormatter.localizedString(from: pluralValue.asNumber(), number: formatterStyle)
-			simpleReturnTypeReplacementsBuilding[OneWordTokens(token: "#")] = strPluralValue
+			simpleReturnTypeReplacementsBuilding[OneWordTokens(token: "#")] = { _ in strPluralValue }
 			pluralGroups = [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), pluralValue)]
 		} else {
 			pluralGroups = []
@@ -44,7 +44,7 @@ public extension XibLocResolvingInfo where SourceType == String, ReturnType == S
 		escapeToken = nil
 		attributesModifications = [:]
 		simpleSourceTypeReplacements = [:]
-		simpleReturnTypeReplacements = [OneWordTokens(leftToken: leftToken, rightToken: rightToken): value]
+		simpleReturnTypeReplacements = [OneWordTokens(leftToken: leftToken, rightToken: rightToken): { _ in value }]
 		orderedReplacements = [:]
 		pluralGroups = []
 		dictionaryReplacements = nil
