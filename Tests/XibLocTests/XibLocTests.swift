@@ -303,6 +303,19 @@ class XibLocTests: XCTestCase {
 	}
 	
 	
+	func testInvalidOverlappingReplacements() {
+		let info = XibLocResolvingInfo<String, String>(
+			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
+			simpleSourceTypeReplacements: [OneWordTokens(token: "*"): { w in "<b>" + w + "</b>" }, OneWordTokens(token: "_"): { w in "<i>" + w + "</i>" }],
+			orderedReplacements: [:], pluralGroups: [], attributesModifications: [:], simpleReturnTypeReplacements: [:],
+			dictionaryReplacements: nil,
+			identityReplacement: { $0 }
+		)
+		let r = "the *bold _and* italic_".applying(xibLocInfo: info)
+		XCTAssertTrue(r == "the *bold <i>and* italic</i>" || r == "the <b>bold _and</b> italic_")
+	}
+	
+	
 	/* Fill this array with all the tests to have Linux testing compatibility. */
 	static var allTests = [
 		("testOneSimpleReplacement", testOneSimpleReplacement),
