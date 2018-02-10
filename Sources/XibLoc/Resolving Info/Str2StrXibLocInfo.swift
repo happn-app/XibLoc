@@ -35,13 +35,13 @@ public extension XibLocResolvingInfo where SourceType == String, ReturnType == S
 		identityReplacement = { $0 }
 	}
 	
-	public init(simpleReplacementWithToken token: String, value: String) {
-		self.init(simpleReplacementWithLeftToken: token, rightToken: token, value: value)
+	public init(simpleReplacementWithToken token: String, escapeToken e: String? = nil, value: String) {
+		self.init(simpleReplacementWithLeftToken: token, rightToken: token, escapeToken: e, value: value)
 	}
 	
-	public init(simpleReplacementWithLeftToken leftToken: String, rightToken: String, value: String) {
+	public init(simpleReplacementWithLeftToken leftToken: String, rightToken: String, escapeToken e: String? = nil, value: String) {
 		defaultPluralityDefinition = PluralityDefinition()
-		escapeToken = nil
+		escapeToken = e
 		attributesModifications = [:]
 		simpleSourceTypeReplacements = [:]
 		simpleReturnTypeReplacements = [OneWordTokens(leftToken: leftToken, rightToken: rightToken): { _ in value }]
@@ -51,9 +51,9 @@ public extension XibLocResolvingInfo where SourceType == String, ReturnType == S
 		identityReplacement = { $0 }
 	}
 	
-	public init(genderReplacementWithLeftToken leftToken: String, interiorToken: String, rightToken: String, valueIsMale: Bool) {
+	public init(genderReplacementWithLeftToken leftToken: String, interiorToken: String, rightToken: String, escapeToken e: String? = nil, valueIsMale: Bool) {
 		defaultPluralityDefinition = PluralityDefinition()
-		escapeToken = nil
+		escapeToken = e
 		attributesModifications = [:]
 		simpleSourceTypeReplacements = [:]
 		simpleReturnTypeReplacements = [:]
