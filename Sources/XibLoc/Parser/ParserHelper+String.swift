@@ -24,17 +24,23 @@ struct StringParserHelper : ParserHelper {
 	
 	static func slice<R>(strRange: (r: R, s: String), from source: String) -> String where R : RangeExpression, R.Bound == String.Index {
 		assert(strRange.s == source)
+//		print("slicing range \(strRange.r) from source \"\(source)\"")
+//		print("   --> Result: \"\(source[strRange.r])\"")
 		return String(source[strRange.r])
 	}
 	
 	static func remove<R>(strRange: (r: R, s: String), from source: inout String) where R : RangeExpression, R.Bound == String.Index {
 		assert(strRange.s == source)
+//		print("removing range \(strRange.r) from source \"\(source)\"")
 		source.removeSubrange(strRange.r)
+//		print("   --> Result: \"\(source)\"")
 	}
 	
 	static func replace<R>(strRange: (r: R, s: String), with replacement: String, in source: inout String) -> String where R : RangeExpression, R.Bound == String.Index {
 		assert(strRange.s == source)
+//		print("replacing range \(strRange.r) from source \"\(source)\" with \"\(replacement)\"")
 		source.replaceSubrange(strRange.r, with: replacement)
+//		print("   --> Result: \"\(source)\"")
 		return replacement
 	}
 	

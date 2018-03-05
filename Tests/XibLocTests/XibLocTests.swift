@@ -162,6 +162,16 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	/* TBH, this is the same test as testThaiGender... */
+	func testEmojiGender() {
+		let str = "`a¦b´🤷‍♂️`a¦b´"
+		let info = Str2StrXibLocInfo(genderReplacementWithLeftToken: "`", interiorToken: "¦", rightToken: "´", valueIsMale: true)
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			"a🤷‍♂️a"
+		)
+	}
+	
 	func testOneOrderedReplacementAndIdentityAttributeModification1() {
 		let info = XibLocResolvingInfo<String, NSMutableAttributedString>(
 			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
@@ -336,6 +346,7 @@ class XibLocTests: XCTestCase {
 		("testOneOrderedReplacementAndSimpleReplacement1", testOneOrderedReplacementAndSimpleReplacement1),
 		("testOneOrderedReplacementAndSimpleReplacement2", testOneOrderedReplacementAndSimpleReplacement2),
 		("testThaiGender", testThaiGender),
+		("testEmojiGender", testEmojiGender),
 		("testOneOrderedReplacementAndIdentityAttributeModification1", testOneOrderedReplacementAndIdentityAttributeModification1),
 		("testOneOrderedReplacementAndIdentityAttributeModification2", testOneOrderedReplacementAndIdentityAttributeModification2),
 		("testOneOrderedReplacementAndIdentityAttributeModification3", testOneOrderedReplacementAndIdentityAttributeModification3),

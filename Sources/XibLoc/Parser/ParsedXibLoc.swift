@@ -419,24 +419,39 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		private var currentIndexPath = IndexPath()
 		private var wentIn = false
 		
-		/* range and removedRange are relative to originalString
-		 * addedDistance is relative to newString */
+		/* range and removedRange are relative to originalString. addedDistance is
+		 * relative to newString.
+		 *
+		 * The original range that will be adjusted MUST start and end with
+		 * indexes that are at the start of an extended grapheme cluster. */
 		private static func adjustedRange(from range: Range<String.Index>, byReplacing removedRange: Range<String.Index>, in originalString: String, with addedDistance: (String.IndexDistance, String)?) -> Range<String.Index> {
+			/* Let's verify we're indeed at the start of a cluster for the lower
+			 * and upper bounds of the adjusted range. */
+			assert(String.Index(range.lowerBound, within: originalString) != nil)
+			assert(String.Index(range.upperBound, within: originalString) != nil)
+			
 			let adjustLowerBound = (originalString.distance(from: range.lowerBound, to: removedRange.upperBound) <= 0)
 			let adjustUpperBound = (originalString.distance(from: range.upperBound, to: removedRange.upperBound) <= 0)
-			let removedDistance = originalString.distance(from: removedRange.lowerBound, to: removedRange.upperBound)
-			
-			let adjustedLowerBoundWithRemoval = !adjustLowerBound ? range.lowerBound : originalString.index(range.lowerBound, offsetBy: -removedDistance)
-			let adjustedUpperBoundWithRemoval = !adjustUpperBound ? range.upperBound : originalString.index(range.upperBound, offsetBy: -removedDistance)
+			guard adjustLowerBound || adjustUpperBound else {return range}
 			
 			if let (addedDistance, newString) = addedDistance {
+				let addedRange = Range<String.Index>(uncheckedBounds: (lower: removedRange.lowerBound, upper: newString.index(removedRange.lowerBound, offsetBy: addedDistance)))
+				let removedEncodedDistance = removedRange.upperBound.encodedOffset - addedRange.upperBound.encodedOffset
+				/* The two asserts below make sure the new indexes returned in the new range are at the start of an extended grapheme cluster.
+				 * We verified we were at the start of cluster in input, we must return something at the start of a cluster in output! */
+				assert(!adjustLowerBound || String.Index(String.Index(encodedOffset: range.lowerBound.encodedOffset - removedEncodedDistance), within: newString) != nil)
+				assert(!adjustUpperBound || String.Index(String.Index(encodedOffset: range.upperBound.encodedOffset - removedEncodedDistance), within: newString) != nil)
 				return Range<String.Index>(uncheckedBounds:
-					(lower: !adjustLowerBound ? adjustedLowerBoundWithRemoval : newString.index(adjustedLowerBoundWithRemoval, offsetBy: addedDistance),
-					 upper: !adjustUpperBound ? adjustedUpperBoundWithRemoval : newString.index(adjustedUpperBoundWithRemoval, offsetBy: addedDistance))
+					(lower: !adjustLowerBound ? range.lowerBound : String.Index(encodedOffset: range.lowerBound.encodedOffset - removedEncodedDistance),
+					 upper: !adjustUpperBound ? range.upperBound : String.Index(encodedOffset: range.upperBound.encodedOffset - removedEncodedDistance))
+				)
+			} else {
+				let removedDistance = originalString.distance(from: removedRange.lowerBound, to: removedRange.upperBound)
+				return Range<String.Index>(uncheckedBounds:
+					(lower: !adjustLowerBound ? range.lowerBound : originalString.index(range.lowerBound, offsetBy: -removedDistance),
+					 upper: !adjustUpperBound ? range.upperBound : originalString.index(range.upperBound, offsetBy: -removedDistance))
 				)
 			}
-			
-			return Range<String.Index>(uncheckedBounds: (lower: adjustedLowerBoundWithRemoval, upper: adjustedUpperBoundWithRemoval))
 		}
 		
 		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with distance: String.IndexDistance?, in replacements: inout [Replacement], originalString: String, newString: String) {
@@ -526,12 +541,14 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		let iterator = ReplacementsIterator(refString: stringSource, adjustedReplacements: replacements)
 		
 		while let replacement = iterator.next() {
+			guard replacement.removedLeftTokenDistance > 0 else {continue}
 			let leftTokenRange = iterator.refString.index(replacement.range.lowerBound, offsetBy: -replacement.removedLeftTokenDistance)..<replacement.range.lowerBound
 			parserHelper.remove(strRange: (leftTokenRange, iterator.refString), from: &source)
 			iterator.delete(rangeInText: leftTokenRange)
 		}
 		iterator.reset()
 		while let replacement = iterator.next() {
+			guard replacement.removedRightTokenDistance > 0 else {continue}
 			let rightTokenRange = replacement.range.upperBound..<iterator.refString.index(replacement.range.upperBound, offsetBy: replacement.removedRightTokenDistance)
 			parserHelper.remove(strRange: (rightTokenRange, iterator.refString), from: &source)
 			iterator.delete(rangeInText: rightTokenRange)
