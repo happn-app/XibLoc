@@ -153,6 +153,15 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	func testThaiGender() {
+		let str = "`a¦b´ต้`a¦b´"
+		let info = Str2StrXibLocInfo(genderReplacementWithLeftToken: "`", interiorToken: "¦", rightToken: "´", valueIsMale: true)
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			"aต้a"
+		)
+	}
+	
 	func testOneOrderedReplacementAndIdentityAttributeModification1() {
 		let info = XibLocResolvingInfo<String, NSMutableAttributedString>(
 			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
@@ -293,16 +302,6 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
-	
-	func helperAddTestAttributeLevel(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
-		attributedString.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
-	}
-	
-	func helperAddTestAttributeIndex(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
-		attributedString.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
-	}
-	
-	
 	func testInvalidOverlappingReplacements() {
 		let info = XibLocResolvingInfo<String, String>(
 			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
@@ -313,6 +312,15 @@ class XibLocTests: XCTestCase {
 		)
 		let r = "the *bold _and* italic_".applying(xibLocInfo: info)
 		XCTAssertTrue(r == "the *bold <i>and* italic</i>" || r == "the <b>bold _and</b> italic_")
+	}
+	
+	
+	func helperAddTestAttributeLevel(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
+		attributedString.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
+	}
+	
+	func helperAddTestAttributeIndex(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
+		attributedString.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
 	}
 	
 	
@@ -327,13 +335,16 @@ class XibLocTests: XCTestCase {
 		("testOnePluralReplacementMissingOneZone", testOnePluralReplacementMissingOneZone),
 		("testOneOrderedReplacementAndSimpleReplacement1", testOneOrderedReplacementAndSimpleReplacement1),
 		("testOneOrderedReplacementAndSimpleReplacement2", testOneOrderedReplacementAndSimpleReplacement2),
+		("testThaiGender", testThaiGender),
 		("testOneOrderedReplacementAndIdentityAttributeModification1", testOneOrderedReplacementAndIdentityAttributeModification1),
 		("testOneOrderedReplacementAndIdentityAttributeModification2", testOneOrderedReplacementAndIdentityAttributeModification2),
 		("testOneOrderedReplacementAndIdentityAttributeModification3", testOneOrderedReplacementAndIdentityAttributeModification3),
 		("testOneOrderedReplacementAndIdentityAttributeModification4", testOneOrderedReplacementAndIdentityAttributeModification4),
 		("testOneAttributesChange", testOneAttributesChange),
 		("testTwoOverlappingAttributesChange", testTwoOverlappingAttributesChange),
-		("testOneOrderedReplacementAndSimpleReplacement1", testOneOrderedReplacementAndSimpleReplacement1)
+		("testApplyingOnStringTwice", testApplyingOnStringTwice),
+		("testApplyingOnMutableAttributedStringTwice", testApplyingOnMutableAttributedStringTwice),
+		("testInvalidOverlappingReplacements", testInvalidOverlappingReplacements)
 	]
 	
 }
