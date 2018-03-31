@@ -51,7 +51,7 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 		optionalityLevel = optionalities?.length ?? 0
 		priorityDecreaseLevel = priorityDecreases?.length ?? 0
 		
-		zoneValues = zoneContent!.components(separatedBy: ":").flatMap{
+		zoneValues = zoneContent!.components(separatedBy: ":").compactMap{
 			let ret: PluralityDefinitionZoneValue?
 			if      let v = PluralityDefinitionZoneValueNumber(string: $0)           {ret = v}
 			else if let v = PluralityDefinitionZoneValueIntervalOfInts(string: $0)   {ret = v}

@@ -57,8 +57,8 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		var range: Range<String.Index>
 		let value: ReplacementValue
 		
-		var removedLeftTokenDistance: String.IndexDistance
-		var removedRightTokenDistance: String.IndexDistance
+		var removedLeftTokenDistance: Int
+		var removedRightTokenDistance: Int
 		var containerRange: Range<String.Index> /* Always contains “range”. Equals “range” for OneWordTokens. */
 		
 		var children: [Replacement]
@@ -424,7 +424,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		 *
 		 * The original range that will be adjusted MUST start and end with
 		 * indexes that are at the start of an extended grapheme cluster. */
-		private static func adjustedRange(from range: Range<String.Index>, byReplacing removedRange: Range<String.Index>, in originalString: String, with addedDistance: (String.IndexDistance, String)?) -> Range<String.Index> {
+		private static func adjustedRange(from range: Range<String.Index>, byReplacing removedRange: Range<String.Index>, in originalString: String, with addedDistance: (Int, String)?) -> Range<String.Index> {
 			/* Let's verify we're indeed at the start of a cluster for the lower
 			 * and upper bounds of the adjusted range. */
 			assert(String.Index(range.lowerBound, within: originalString) != nil)
@@ -454,7 +454,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			}
 		}
 		
-		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with distance: String.IndexDistance?, in replacements: inout [Replacement], originalString: String, newString: String) {
+		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with distance: Int?, in replacements: inout [Replacement], originalString: String, newString: String) {
 			for (idx, var replacement) in replacements.enumerated() {
 				/* We make sure range is contained by the container range of the
 				 * replacement, or that both do not overlap. */
