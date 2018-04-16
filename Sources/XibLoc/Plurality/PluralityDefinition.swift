@@ -15,7 +15,7 @@ public enum PluralValue {
 	
 	case int(Int)
 	case float(Float)
-	case floatCustomPrecision(value: Float, precision: Float?)
+	case floatCustomPrecision(value: Float, precision: Float)
 	
 	public func asNumber() -> NSNumber {
 		switch self {
@@ -89,7 +89,7 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		switch value {
 		case .int(let int):                                                     return indexOfVersionToUse(matchingZonePredicate: { $0.matches(int: int) }, numberOfVersions: numberOfVersions)
 		case .float(let float):                                                 return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, precision: defaultFloatPrecision) }, numberOfVersions: numberOfVersions)
-		case .floatCustomPrecision(value: let float, precision: let precision): return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, precision: precision ?? defaultFloatPrecision) }, numberOfVersions: numberOfVersions)
+		case .floatCustomPrecision(value: let float, precision: let precision): return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, precision: precision) }, numberOfVersions: numberOfVersions)
 		}
 	}
 	

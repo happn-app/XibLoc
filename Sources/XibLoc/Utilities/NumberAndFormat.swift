@@ -20,7 +20,7 @@ public struct NumberAndFormat {
 		format = fmt
 	}
 	
-	public init(_ f: Float, pluralityPrecision: Float?? = nil, format fmt: NumberFormatter.Style = .decimal) {
+	public init(_ f: Float, pluralityPrecision: Float? = nil, format fmt: NumberFormatter.Style = .decimal) {
 		if let p = pluralityPrecision {number = .floatCustomPrecision(value: f, precision: p)}
 		else                          {number = .float(f)}
 		format = fmt
