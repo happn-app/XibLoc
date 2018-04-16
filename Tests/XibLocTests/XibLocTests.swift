@@ -15,10 +15,28 @@ class XibLocTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
+		
+		di.defaultEscapeToken = "\\"
 	}
 	
 	override func tearDown() {
 		super.tearDown()
+	}
+	
+	func testEscapedSimpleReplacement() {
+		let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement")
+		XCTAssertEqual(
+			"the \\|replaced\\|".applying(xibLocInfo: info),
+			"the |replaced|"
+		)
+	}
+	
+	func testNonEscapedButPrecededByEscapeTokenSimpleReplacement() {
+		let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement")
+		XCTAssertEqual(
+			"the \\\\|replaced|".applying(xibLocInfo: info),
+			"the \\replacement"
+		)
 	}
 	
 	func testOneSimpleReplacement() {
@@ -155,7 +173,7 @@ class XibLocTests: XCTestCase {
 	
 	func testThaiGender() {
 		let str = "`a¦b´ต้`a¦b´"
-		let info = Str2StrXibLocInfo(genderReplacementWithLeftToken: "`", interiorToken: "¦", rightToken: "´", valueIsMale: true)
+		let info = Str2StrXibLocInfo(genderMeIsMale: true)
 		XCTAssertEqual(
 			str.applying(xibLocInfo: info),
 			"aต้a"
@@ -165,7 +183,7 @@ class XibLocTests: XCTestCase {
 	/* TBH, this is the same test as testThaiGender... */
 	func testEmojiGender() {
 		let str = "`a¦b´🤷‍♂️`a¦b´"
-		let info = Str2StrXibLocInfo(genderReplacementWithLeftToken: "`", interiorToken: "¦", rightToken: "´", valueIsMale: true)
+		let info = Str2StrXibLocInfo(genderMeIsMale: true)
 		XCTAssertEqual(
 			str.applying(xibLocInfo: info),
 			"a🤷‍♂️a"
@@ -336,6 +354,8 @@ class XibLocTests: XCTestCase {
 	
 	/* Fill this array with all the tests to have Linux testing compatibility. */
 	static var allTests = [
+		("testEscapedSimpleReplacement", testEscapedSimpleReplacement),
+		("testNonEscapedButPrecededByEscapeTokenSimpleReplacement", testNonEscapedButPrecededByEscapeTokenSimpleReplacement),
 		("testOneSimpleReplacement", testOneSimpleReplacement),
 		("testOneOrderedReplacement1", testOneOrderedReplacement1),
 		("testOneOrderedReplacement2", testOneOrderedReplacement2),

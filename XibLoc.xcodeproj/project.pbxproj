@@ -32,6 +32,10 @@
 		7B353B842017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
 		7B353B852017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
 		7B353B862017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
+		7B5BF7B82084E0EF006AAB6A /* NumberAndFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */; };
+		7B5BF7B92084E0EF006AAB6A /* NumberAndFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */; };
+		7B5BF7BA2084E0EF006AAB6A /* NumberAndFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */; };
+		7B5BF7BB2084E0EF006AAB6A /* NumberAndFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */; };
 		7B7A34C820027B4700348DF4 /* XibLoc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7A34BF20027B4600348DF4 /* XibLoc.framework */; };
 		7B8A96ED2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
 		7B8A96EE2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
@@ -163,6 +167,7 @@
 		7B21BAD02003BBC700DFF758 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		7B21BAD12003BF0600DFF758 /* License.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
 		7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Str2StrXibLocInfo.swift; sourceTree = "<group>"; };
+		7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberAndFormat.swift; sourceTree = "<group>"; };
 		7B7A34BF20027B4600348DF4 /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B7A34C720027B4700348DF4 /* XibLoc-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XibLoc-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B8A96EC2017528C00481B45 /* OneWordTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneWordTokens.swift; sourceTree = "<group>"; };
@@ -262,6 +267,7 @@
 		7B04C92C20166794002F9F52 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */,
 				7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */,
 			);
 			path = Utilities;
@@ -656,6 +662,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B8A96EE2017528C00481B45 /* OneWordTokens.swift in Sources */,
+				7B5BF7B92084E0EF006AAB6A /* NumberAndFormat.swift in Sources */,
 				7BCBB12D201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
 				7BCBB139201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
 				7B04C92F20166897002F9F52 /* Config.swift in Sources */,
@@ -689,6 +696,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B8A96ED2017528C00481B45 /* OneWordTokens.swift in Sources */,
+				7B5BF7B82084E0EF006AAB6A /* NumberAndFormat.swift in Sources */,
 				7BCBB12C201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
 				7BCBB138201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
 				7B04C92E20166897002F9F52 /* Config.swift in Sources */,
@@ -722,6 +730,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B8A96F02017528C00481B45 /* OneWordTokens.swift in Sources */,
+				7B5BF7BB2084E0EF006AAB6A /* NumberAndFormat.swift in Sources */,
 				7BCBB12F201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
 				7BCBB13B201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
 				7B04C93120166897002F9F52 /* Config.swift in Sources */,
@@ -747,6 +756,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B8A96EF2017528C00481B45 /* OneWordTokens.swift in Sources */,
+				7B5BF7BA2084E0EF006AAB6A /* NumberAndFormat.swift in Sources */,
 				7BCBB12E201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
 				7BCBB13A201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
 				7B04C93020166897002F9F52 /* Config.swift in Sources */,

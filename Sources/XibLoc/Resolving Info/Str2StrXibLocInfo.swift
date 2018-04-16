@@ -14,51 +14,44 @@ public typealias Str2StrXibLocInfo = XibLocResolvingInfo<String, String>
 
 public extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 	
-	public init(replacement: String? = nil, pluralValue: (PluralValue, NumberFormatter.Style)? = nil, genderIsMale isMale: Bool? = nil) {
+	public init(simpleReplacementWithToken token: String, value: String, escapeToken e: String? = di.defaultEscapeToken) {
+		self.init(replacements: [token: value], escapeToken: e)
+	}
+	
+	public init(replacement: String, pluralValue: NumberAndFormat? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
+		self.init(replacements: ["|": replacement], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
+	}
+	
+	public init(numberReplacement: NumberAndFormat, pluralValue: NumberAndFormat? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
+		self.init(replacements: ["#": numberReplacement.asString()], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
+	}
+	
+	public init(numberReplacements: [String: NumberAndFormat], pluralValue: NumberAndFormat? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
+		self.init(replacements: numberReplacements.mapValues{ $0.asString() }, pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
+	}
+	
+	public init(replacements: [String: String] = [:], pluralValue: NumberAndFormat? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
 		defaultPluralityDefinition = di.defaultPluralityDefinition
-		escapeToken = nil
+		escapeToken = e
 		attributesModifications = [:]
 		simpleSourceTypeReplacements = [:]
+		
 		var simpleReturnTypeReplacementsBuilding = [OneWordTokens: (String) -> String]()
-		if let replacement = replacement {simpleReturnTypeReplacementsBuilding[OneWordTokens(token: "|")] = { _ in replacement }}
-		if let (pluralValue, formatterStyle) = pluralValue {
-			let strPluralValue = NumberFormatter.localizedString(from: pluralValue.asNumber(), number: formatterStyle)
-			simpleReturnTypeReplacementsBuilding[OneWordTokens(token: "#")] = { _ in strPluralValue }
-			pluralGroups = [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), pluralValue)]
+		for (t, v) in replacements {simpleReturnTypeReplacementsBuilding[OneWordTokens(token: t)] = { _ in v }}
+		if let numberAndFormat = pluralValue {
+			simpleReturnTypeReplacementsBuilding[OneWordTokens(token: "#")] = { _ in numberAndFormat.asString() }
+			pluralGroups = [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), numberAndFormat.number)]
 		} else {
 			pluralGroups = []
 		}
-		if let isMale = isMale {orderedReplacements = [MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´"): isMale ? 0 : 1]}
-		else                   {orderedReplacements = [:]}
+		
+		var orderedReplacementsBuilding = [MultipleWordsTokens: Int]()
+		if let isMeMale = isMeMale       {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´")] = isMeMale ? 0 : 1}
+		if let isOtherMale = isOtherMale {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "{", interiorToken: "⟷", rightToken: "}")] = isOtherMale ? 0 : 1}
+		if let isMeMale = isMeMale, let isOtherMale = isOtherMale {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "⎡", interiorToken: "⟡", rightToken: "⎤")] = isMeMale || isOtherMale ? 0 : 1}
+		orderedReplacements = orderedReplacementsBuilding
+		
 		simpleReturnTypeReplacements = simpleReturnTypeReplacementsBuilding
-		dictionaryReplacements = nil
-		identityReplacement = { $0 }
-	}
-	
-	public init(simpleReplacementWithToken token: String, escapeToken e: String? = nil, value: String) {
-		self.init(simpleReplacementWithLeftToken: token, rightToken: token, escapeToken: e, value: value)
-	}
-	
-	public init(simpleReplacementWithLeftToken leftToken: String, rightToken: String, escapeToken e: String? = nil, value: String) {
-		defaultPluralityDefinition = PluralityDefinition()
-		escapeToken = e
-		attributesModifications = [:]
-		simpleSourceTypeReplacements = [:]
-		simpleReturnTypeReplacements = [OneWordTokens(leftToken: leftToken, rightToken: rightToken): { _ in value }]
-		orderedReplacements = [:]
-		pluralGroups = []
-		dictionaryReplacements = nil
-		identityReplacement = { $0 }
-	}
-	
-	public init(genderReplacementWithLeftToken leftToken: String, interiorToken: String, rightToken: String, escapeToken e: String? = nil, valueIsMale: Bool) {
-		defaultPluralityDefinition = PluralityDefinition()
-		escapeToken = e
-		attributesModifications = [:]
-		simpleSourceTypeReplacements = [:]
-		simpleReturnTypeReplacements = [:]
-		orderedReplacements = [MultipleWordsTokens(leftToken: leftToken, interiorToken: interiorToken, rightToken: rightToken): valueIsMale ? 0 : 1]
-		pluralGroups = []
 		dictionaryReplacements = nil
 		identityReplacement = { $0 }
 	}

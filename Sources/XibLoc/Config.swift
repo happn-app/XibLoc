@@ -21,6 +21,7 @@ public struct DependencyInjection {
 	
 	public var log: OSLog?
 	
+	public var defaultEscapeToken: String?
 	public var defaultPluralityDefinition = PluralityDefinition()
 	
 }
