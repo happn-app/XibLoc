@@ -47,8 +47,7 @@ public extension XibLocResolvingInfo where SourceType == String, ReturnType == S
 		
 		var orderedReplacementsBuilding = [MultipleWordsTokens: Int]()
 		if let isOtherMale = isOtherMale {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´")] = isOtherMale ? 0 : 1}
-		if let isMeMale = isMeMale       {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "{", interiorToken: "⟷", rightToken: "}")] = isMeMale ? 0 : 1}
-		if let isMeMale = isMeMale, let isOtherMale = isOtherMale {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "⎡", interiorToken: "⟡", rightToken: "⎤")] = isMeMale || isOtherMale ? 0 : 1}
+		if let isMeMale = isMeMale       {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}")] = isMeMale ? 0 : 1}
 		orderedReplacements = orderedReplacementsBuilding
 		
 		simpleReturnTypeReplacements = simpleReturnTypeReplacementsBuilding
