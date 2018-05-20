@@ -86,7 +86,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	public let identityReplacement: (_ source: SourceType) -> ReturnType
 	
 	public init(
-		defaultPluralityDefinition dpd: PluralityDefinition, escapeToken et: String? = di.defaultEscapeToken,
+		defaultPluralityDefinition dpd: PluralityDefinition = di.defaultPluralityDefinition, escapeToken et: String? = di.defaultEscapeToken,
 		simpleSourceTypeReplacements sstr: [OneWordTokens: (_ originalValue: SourceType) -> SourceType] = [:],
 		orderedReplacements or: [MultipleWordsTokens: Int] = [:],
 		pluralGroups pg: [(MultipleWordsTokens, PluralValue)] = [],
