@@ -7,7 +7,6 @@
  */
 
 import Foundation
-
 import os.log
 
 
@@ -21,7 +20,7 @@ public struct DependencyInjection {
 	
 	public var log: OSLog?
 	
-	public var defaultEscapeToken: String?
+	public var defaultEscapeToken: String? = nil
 	public var defaultPluralityDefinition = PluralityDefinition()
 	
 }

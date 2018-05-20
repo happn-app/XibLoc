@@ -50,6 +50,14 @@
 		7B8A96F4201752B400481B45 /* MultipleWordsTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */; };
 		7B8A96F5201752B400481B45 /* MultipleWordsTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */; };
 		7B8BD02320026E8C009BE667 /* XibLoc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B8BD01A20026E8C009BE667 /* XibLoc.framework */; };
+		7BC4590C20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
+		7BC4590D20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
+		7BC4590E20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
+		7BC4590F20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
+		7BC4591120B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
+		7BC4591220B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
+		7BC4591320B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
+		7BC4591420B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
 		7BC696DE2002775C007BC3E9 /* XibLoc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BC696D52002775C007BC3E9 /* XibLoc.framework */; };
 		7BCBB124201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
 		7BCBB125201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
@@ -183,6 +191,8 @@
 		7B8BD02920026E8C009BE667 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		7B8BD032200274B9009BE667 /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		7BB52E43200279EA007CAD7B /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringAttributesChangesDescription.swift; sourceTree = "<group>"; };
+		7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Utils.swift"; sourceTree = "<group>"; };
 		7BC696D52002775C007BC3E9 /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BC696DD2002775C007BC3E9 /* XibLoc-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XibLoc-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParsedXibLoc.swift; sourceTree = "<group>"; };
@@ -273,6 +283,8 @@
 			isa = PBXGroup;
 			children = (
 				7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */,
+				7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */,
+				7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */,
 				7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */,
 			);
 			path = Utilities;
@@ -683,6 +695,8 @@
 				7BCBB135201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB159201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
 				7B353B842017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
+				7BC4591220B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */,
+				7BC4590D20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
 				7BCBB129201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F3201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB149201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
@@ -718,6 +732,8 @@
 				7BCBB134201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB158201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
 				7B353B832017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
+				7BC4591120B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */,
+				7BC4590C20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
 				7BCBB128201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB148201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
@@ -753,6 +769,8 @@
 				7BCBB137201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB15B201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
 				7B353B862017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
+				7BC4591420B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */,
+				7BC4590F20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
 				7BCBB12B201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F5201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB14B201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
@@ -780,6 +798,8 @@
 				7BCBB136201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
 				7BCBB15A201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
 				7B353B852017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
+				7BC4591320B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */,
+				7BC4590E20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
 				7BCBB12A201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F4201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB14A201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
