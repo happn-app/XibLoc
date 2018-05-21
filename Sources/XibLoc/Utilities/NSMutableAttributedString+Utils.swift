@@ -103,6 +103,9 @@ extension NSMutableAttributedString {
 		#endif
 	}
 	
+	/** - Warning: If no font is defined in the given range, the method will use
+	the preferred font for the “body” style (on iOS, watchOS and tvOS) or the
+	system font of “system” size. */
 	func setBoldOrItalic(bold: Bool?, italic: Bool?, range: NSRange? = nil) {
 		let range = range ?? NSRange(location: 0, length: length)
 		guard bold != nil || italic != nil else {return}
@@ -112,11 +115,11 @@ extension NSMutableAttributedString {
 		var outRange = NSRange(location: 0, length: 0)
 		
 		repeat {
-			guard let f = getFont(at: curPos, effectiveRange: &outRange) else {
-				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Cannot get font to set bold or italic; not doing anything. Source string: \"%@\"", log: $0, type: .info, self) }}
-				else                                                          {NSLog("Cannot get font to set bold or italic; not doing anything. Source string: \"%@\"", self)}
-				return
-			}
+			#if !os(OSX)
+				let f = getFont(at: curPos, effectiveRange: &outRange) ?? XibLocFont.preferredFont(forTextStyle: .body)
+			#else
+				let f = getFont(at: curPos, effectiveRange: &outRange) ?? XibLocFont.systemFont(ofSize: XibLocFont.systemFontSize)
+			#endif
 			outRange = NSIntersectionRange(outRange, range)
 			
 			setFontFrom(f, newSize: f.pointSize, newIsBold: bold ?? f.isBold, newIsItalic: italic ?? f.isItalic, range: outRange)
