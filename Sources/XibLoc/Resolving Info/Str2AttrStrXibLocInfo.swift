@@ -12,48 +12,58 @@ import Foundation
 
 public typealias Str2AttrStrXibLocInfo = XibLocResolvingInfo<String, NSMutableAttributedString>
 
-/* TODO: Some actual attributed string transformations... */
 public extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutableAttributedString {
 	
-	public init(simpleReplacementWithToken token: String, value: String, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: [token: value], escapeToken: e)
-	}
-	
-	public init(replacement: String, pluralValue: NumberAndFormat? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: ["|": replacement], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
-	}
-	
-	public init(numberReplacement: NumberAndFormat, pluralValue: NumberAndFormat? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: ["#": numberReplacement.asString()], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
-	}
-	
-	public init(numberReplacements: [String: NumberAndFormat], pluralValue: NumberAndFormat? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: numberReplacements.mapValues{ $0.asString() }, pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
-	}
-	
-	public init(replacements: [String: String] = [:], pluralValue: NumberAndFormat? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		defaultPluralityDefinition = di.defaultPluralityDefinition
-		escapeToken = e
-		attributesModifications = [:]
-		simpleReturnTypeReplacements = [:]
+	public enum BoldOrItalicType {
 		
-		var simpleSourceTypeReplacementsBuilding = [OneWordTokens: (String) -> String]()
-		for (t, v) in replacements {simpleSourceTypeReplacementsBuilding[OneWordTokens(token: t)] = { _ in v }}
-		if let numberAndFormat = pluralValue {
-			simpleSourceTypeReplacementsBuilding[OneWordTokens(token: "#")] = { _ in numberAndFormat.asString() }
-			pluralGroups = [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), numberAndFormat.number)]
-		} else {
-			pluralGroups = []
+		case `default`
+		case custom(XibLocFont)
+		
+	}
+	
+	public init(strResolvingInfo: Str2StrXibLocInfo, boldType: BoldOrItalicType? = nil, italicType: BoldOrItalicType? = nil, baseFont: XibLocFont?, baseColor: XibLocColor?, returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedStringKey: Any]? = di.defaultStr2AttrStrAttributes) {
+		var defaultAttributesBuilding = defaultAttributes ?? [:]
+		if let f = baseFont  {defaultAttributesBuilding[.font] = f}
+		if let c = baseColor {defaultAttributesBuilding[.foregroundColor] = c}
+		
+		var attributesReplacementsBuilding = [String : StringAttributesChangesDescription]()
+		switch boldType {
+		case .default?:          attributesReplacementsBuilding["*"] = StringAttributesChangesDescription(changes: [.setBold])
+		case .custom(let font)?: attributesReplacementsBuilding["*"] = StringAttributesChangesDescription(changes: [.changeFont(newFont: font, preserveSizes: true, preserveBold: false, preserveItalic: true)])
+		default: (/*nop*/)
+		}
+		switch italicType {
+		case .default?:          attributesReplacementsBuilding["_"] = StringAttributesChangesDescription(changes: [.setItalic])
+		case .custom(let font)?: attributesReplacementsBuilding["_"] = StringAttributesChangesDescription(changes: [.changeFont(newFont: font, preserveSizes: true, preserveBold: true, preserveItalic: false)])
+		default: (/*nop*/)
 		}
 		
-		var orderedReplacementsBuilding = [MultipleWordsTokens: Int]()
-		if let isOtherMale = isOtherMale {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´")] = isOtherMale ? 0 : 1}
-		if let isMeMale = isMeMale       {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}")] = isMeMale ? 0 : 1}
-		orderedReplacements = orderedReplacementsBuilding
+		self.init(strResolvingInfo: strResolvingInfo, attributesReplacements: attributesReplacementsBuilding, returnTypeReplacements: returnTypeReplacements, defaultAttributes: defaultAttributesBuilding)
+	}
+	
+	/** Inits the Str2AttrStrXibLocInfo, copying the string resolving info from
+	`strResolvingInfo`. `simpleSourceTypeReplacements` is ignored from the string
+	resolving info. */
+	public init(strResolvingInfo: Str2StrXibLocInfo, attributesReplacements: [String: StringAttributesChangesDescription], returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedStringKey: Any]? = di.defaultStr2AttrStrAttributes) {
+		defaultPluralityDefinition = strResolvingInfo.defaultPluralityDefinition
+		escapeToken = strResolvingInfo.escapeToken
+		pluralGroups = strResolvingInfo.pluralGroups
+		orderedReplacements = strResolvingInfo.orderedReplacements
+		simpleSourceTypeReplacements = strResolvingInfo.simpleReturnTypeReplacements
 		
-		simpleSourceTypeReplacements = simpleSourceTypeReplacementsBuilding
+		var attributesModificationsBuilding = Dictionary<OneWordTokens, (_ modified: inout NSMutableAttributedString, _ strRange: Range<String.Index>, _ refStr: String) -> Void>()
+		for (t, c) in attributesReplacements {
+			attributesModificationsBuilding[OneWordTokens(token: t)] = { attrStr, strRange, refStr in
+				assert(refStr == attrStr.string)
+				c.apply(to: attrStr, range: NSRange(strRange, in: refStr))
+			}
+		}
+		attributesModifications = attributesModificationsBuilding
+		
+		simpleReturnTypeReplacements = returnTypeReplacements ?? [:]
+		
 		dictionaryReplacements = nil
-		identityReplacement = { NSMutableAttributedString(string: $0, attributes: nil) }
+		identityReplacement = { NSMutableAttributedString(string: $0, attributes: defaultAttributes) }
 	}
 	
 }

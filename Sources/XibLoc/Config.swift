@@ -23,6 +23,8 @@ public struct DependencyInjection {
 	public var defaultEscapeToken: String? = nil
 	public var defaultPluralityDefinition = PluralityDefinition()
 	
+	public var defaultStr2AttrStrAttributes: [NSAttributedStringKey: Any]? = nil
+	
 }
 
 public var di = DependencyInjection()
