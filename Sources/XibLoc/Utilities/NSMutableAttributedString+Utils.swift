@@ -122,7 +122,7 @@ extension NSMutableAttributedString {
 			#endif
 			outRange = NSIntersectionRange(outRange, range)
 			
-			setFontFrom(f, newSize: f.pointSize, newIsBold: bold ?? f.isBold, newIsItalic: italic ?? f.isItalic, range: outRange)
+			setFontFrom(f, newSize: f.pointSize, newIsBold: bold, newIsItalic: italic, range: outRange)
 			
 			curPos = outRange.upperBound
 		} while curPos < range.upperBound
