@@ -342,6 +342,25 @@ class XibLocTests: XCTestCase {
 		XCTAssertTrue(r == "the *bold <i>and* italic</i>" || r == "the <b>bold _and</b> italic_")
 	}
 	
+	func testVariableChangeAfterAttrChangeInOrderedReplacementGroup() {
+		let baseColor = XibLocColor.white
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", genderOtherIsMale: true),
+			boldType: .default, baseFont: baseFont, baseColor: baseColor
+		)
+		let result = NSMutableAttributedString(string: "Yo sᴉoɔuɐɹℲ", attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: 2))
+		XCTAssertEqual(
+			"`*Yo* |username|¦Nope. We don’t greet women.´".applying(xibLocInfo: info),
+			result
+		)
+		XCTAssertEqual(
+			"`*Yo* |username|¦*Hey* |username|!´".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
 	
 	func helperAddTestAttributeLevel(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
 		attributedString.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
@@ -375,7 +394,8 @@ class XibLocTests: XCTestCase {
 		("testTwoOverlappingAttributesChange", testTwoOverlappingAttributesChange),
 		("testApplyingOnStringTwice", testApplyingOnStringTwice),
 		("testApplyingOnMutableAttributedStringTwice", testApplyingOnMutableAttributedStringTwice),
-		("testInvalidOverlappingReplacements", testInvalidOverlappingReplacements)
+		("testInvalidOverlappingReplacements", testInvalidOverlappingReplacements),
+		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup", testVariableChangeAfterAttrChangeInOrderedReplacementGroup)
 	]
 	
 }
