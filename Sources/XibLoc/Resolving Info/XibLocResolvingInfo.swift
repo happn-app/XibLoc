@@ -21,7 +21,6 @@ import Foundation
  *      - Supported: "This text will be *bold _and italic too*_!"
  *      - Supported: "This text will be *bold _and italic too_*!"
  *      - Supported: "This text will be *bold _and* italic too_!"
- *      - Supported: "This text will be *bold _and* italic too_!"
  *      - Supported: "Let's replace |*some text*|"
  *           Note: Useless, but supported. If the simple replacement is a source
  *                 type replacement, the content will never be checked and the
@@ -34,9 +33,9 @@ import Foundation
  *      - Supported: "Let's replace with either <*this* is chosen:nope> or <nope:_that_>"
  *      - Supported: "Let's replace with either *<this is chosen:_nope_> or <_nope_:that>*"
  *      - Unsupported: "Let's replace *|some* text|"
- *      - Supported: "Let's replace <*multiple*:*choice*:stuff>"
- *      - Unsupported: "Let's replace *<multiple:choice*:stuff>"
- *      - Unsupported: "Let's replace <*multiple:choice*:stuff>" */
+ *      - Supported: "Let's replace <*multiple*:*choices*:stuff>"
+ *      - Unsupported: "Let's replace *<multiple:choices*:stuff>"
+ *      - Unsupported: "Let's replace <*multiple:choices*:stuff>" */
 public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	
 	public let defaultPluralityDefinition: PluralityDefinition

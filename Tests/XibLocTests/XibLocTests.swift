@@ -343,7 +343,7 @@ class XibLocTests: XCTestCase {
 	}
 	
 	func testVariableChangeAfterAttrChangeInOrderedReplacementGroup() {
-		let baseColor = XibLocColor.white
+		let baseColor = XibLocColor.black
 		let baseFont = XibLocFont.systemFont(ofSize: 14)
 		let info = Str2AttrStrXibLocInfo(
 			strResolvingInfo: Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", genderOtherIsMale: true),
@@ -361,6 +361,144 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	func testTwoVariablesChangesInOrderedReplacementGroup() {
+		let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: NumberAndFormat(42), genderOtherIsMale: true)
+		let result = "42 months for sᴉoɔuɐɹℲ/month"
+		XCTAssertEqual(
+			"<#n# month for |string var|/month:#n# months for |string var|/month>".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	/* ***** Doc Cases Tests ***** */
+	/* Config:
+	 *    "*" is a left and right token for an attributes modification
+	 *    "_" is a left and right token for an attributes modification
+	 *    "|" is a left and right token for a simple replacement
+	 *    "<" ":" ">" are resp. a left, interior and right tokens for an ordered replacement. */
+	
+	func testDocCase1() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "This text will be bold and italic too!", attributes: baseAttributes)
+		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 18, length: 19))
+		result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 23, length: 10))
+		XCTAssertEqual(
+			"This text will be *bold _and italic_ too*!".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testDocCase2() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "This text will be bold and italic too!", attributes: baseAttributes)
+		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 18, length: 19))
+		result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 23, length: 14))
+		print(result)
+		XCTAssertEqual(
+			"This text will be *bold _and italic too*_!".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testDocCase3() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "This text will be bold and italic too!", attributes: baseAttributes)
+		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 18, length: 19))
+		result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 23, length: 14))
+		XCTAssertEqual(
+			"This text will be *bold _and italic too_*!".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testDocCase4() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "This text will be bold and italic too!", attributes: baseAttributes)
+		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 18, length: 8))
+		result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 23, length: 14))
+		XCTAssertEqual(
+			"This text will be *bold _and* italic too_!".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testDocCase5() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "Let's replace replacement_value", attributes: baseAttributes)
+		XCTAssertEqual(
+			"Let's replace |*some text*|".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testDocCase6() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "Let's replace replacement_value", attributes: baseAttributes)
+		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 17))
+		XCTAssertEqual(
+			"Let's replace *|some text|*".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testDocCase7() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "Let's replace with either this is chosen or nope", attributes: baseAttributes)
+		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 26, length: 4))
+		XCTAssertEqual(
+			"Let's replace with either <*this* is chosen:nope> or <nope:_that_>".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testDocCase8() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "Let's replace with either this is chosen or nope", attributes: baseAttributes)
+		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 26, length: 22))
+		result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 44, length: 4))
+		XCTAssertEqual(
+			"Let's replace with either *<this is chosen:_nope_> or <_nope_:that>*".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testDocCase9() {
+		let (info, baseAttributes) = docCasesInfo
+		let result1 = NSMutableAttributedString(string: "Let's replace *replacement_value", attributes: baseAttributes)
+		let result2 = NSMutableAttributedString(string: "Let's replace |some text|", attributes: baseAttributes)
+		result2.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 5))
+		let processed = "Let's replace *|some* text|".applying(xibLocInfo: info)
+		XCTAssert(processed == result1 || processed == result2)
+	}
+	
+	func testDocCase10() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "Let's replace multiple", attributes: baseAttributes)
+		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 8))
+		XCTAssertEqual(
+			"Let's replace <*multiple*:*choices*:stuff>".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testDocCase11() {
+		let (info, baseAttributes) = docCasesInfo
+		let result1 = NSMutableAttributedString(string: "Let's replace *multiple", attributes: baseAttributes)
+		let result2 = NSMutableAttributedString(string: "Let's replace <multiple:choices:stuff>", attributes: baseAttributes)
+		result2.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 17))
+		let processed = "Let's replace *<multiple:choices*:stuff>".applying(xibLocInfo: info)
+		XCTAssert(processed == result1 || processed == result2)
+	}
+	
+	func testDocCase12() {
+		let (info, baseAttributes) = docCasesInfo
+		let result1 = NSMutableAttributedString(string: "Let's replace *multiple", attributes: baseAttributes)
+		let result2 = NSMutableAttributedString(string: "Let's replace <multiple:choices:stuff>", attributes: baseAttributes)
+		result2.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 15, length: 16))
+		let processed = "Let's replace <*multiple:choices*:stuff>".applying(xibLocInfo: info)
+		XCTAssert(processed == result1 || processed == result2)
+	}
+	
 	
 	func helperAddTestAttributeLevel(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
 		attributedString.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
@@ -369,6 +507,21 @@ class XibLocTests: XCTestCase {
 	func helperAddTestAttributeIndex(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
 		attributedString.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
 	}
+	
+	lazy var docCasesInfo: (Str2AttrStrXibLocInfo, [NSAttributedStringKey: Any]) = {
+		let baseAttributes: [NSAttributedStringKey: Any] = [.font: XibLocFont.systemFont(ofSize: 14), .foregroundColor: XibLocColor.black]
+		let info = Str2AttrStrXibLocInfo(
+			escapeToken: nil,
+			simpleSourceTypeReplacements: [OneWordTokens(token: "|"): { _ in "replacement_value" }],
+			orderedReplacements: [MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"): 0],
+			attributesModifications: [
+				OneWordTokens(token: "*"): helperAddTestAttributeIndex,
+				OneWordTokens(token: "_"): helperAddTestAttributeLevel
+			],
+			identityReplacement: { NSMutableAttributedString(string: $0, attributes: baseAttributes) }
+		)
+		return (info, baseAttributes)
+	}()
 	
 	
 	/* Fill this array with all the tests to have Linux testing compatibility. */
@@ -395,7 +548,20 @@ class XibLocTests: XCTestCase {
 		("testApplyingOnStringTwice", testApplyingOnStringTwice),
 		("testApplyingOnMutableAttributedStringTwice", testApplyingOnMutableAttributedStringTwice),
 		("testInvalidOverlappingReplacements", testInvalidOverlappingReplacements),
-		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup", testVariableChangeAfterAttrChangeInOrderedReplacementGroup)
+		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup", testVariableChangeAfterAttrChangeInOrderedReplacementGroup),
+		("testTwoVariablesChangesInOrderedReplacementGroup", testTwoVariablesChangesInOrderedReplacementGroup),
+		("testDocCase1", testDocCase1),
+		("testDocCase2", testDocCase2),
+		("testDocCase3", testDocCase3),
+		("testDocCase4", testDocCase4),
+		("testDocCase5", testDocCase5),
+		("testDocCase6", testDocCase6),
+		("testDocCase7", testDocCase7),
+		("testDocCase8", testDocCase8),
+		("testDocCase9", testDocCase9),
+		("testDocCase10", testDocCase10),
+		("testDocCase11", testDocCase11),
+		("testDocCase12", testDocCase12),
 	]
 	
 }
