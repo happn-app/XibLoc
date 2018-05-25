@@ -173,7 +173,7 @@ class XibLocTests: XCTestCase {
 	
 	func testThaiGender() {
 		let str = "`a¦b´ต้`a¦b´"
-		let info = Str2StrXibLocInfo(genderMeIsMale: true)
+		let info = Str2StrXibLocInfo(genderOtherIsMale: true)
 		XCTAssertEqual(
 			str.applying(xibLocInfo: info),
 			"aต้a"
@@ -183,7 +183,7 @@ class XibLocTests: XCTestCase {
 	/* TBH, this is the same test as testThaiGender... */
 	func testEmojiGender() {
 		let str = "`a¦b´🤷‍♂️`a¦b´"
-		let info = Str2StrXibLocInfo(genderMeIsMale: true)
+		let info = Str2StrXibLocInfo(genderOtherIsMale: true)
 		XCTAssertEqual(
 			str.applying(xibLocInfo: info),
 			"a🤷‍♂️a"
