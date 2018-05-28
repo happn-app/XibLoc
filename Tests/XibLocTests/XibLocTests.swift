@@ -406,6 +406,17 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	func testOverlappingAttributesChangesWithPluralInTheMiddle() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "abcdefghijklmnqrstuvwxyzABCDEFGHIJKLMNOP", attributes: baseAttributes)
+		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 4, length: 13))
+		result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 9, length: 13))
+		XCTAssertEqual(
+			"abcd*efghi_jkl<mn:op>qrs*tuvwx_yzABCDEFGHIJKLMNOP".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
 	/* ***** Doc Cases Tests ***** */
 	/* Config:
 	 *    "*" is a left and right token for an attributes modification
