@@ -370,6 +370,14 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	func testEmbeddedSimpleReplacements() {
+		let info = Str2StrXibLocInfo(replacements: ["#": "42", "|": "replacement_value"])
+		XCTAssertEqual(
+			"Let's replace |#some text#|".applying(xibLocInfo: info),
+			"Let's replace replacement_value"
+		)
+	}
+	
 	/* ***** Doc Cases Tests ***** */
 	/* Config:
 	 *    "*" is a left and right token for an attributes modification
@@ -424,9 +432,9 @@ class XibLocTests: XCTestCase {
 	
 	func testDocCase5() {
 		let (info, baseAttributes) = docCasesInfo
-		let result = NSMutableAttributedString(string: "Let's replace replacement_value", attributes: baseAttributes)
+		let result = NSMutableAttributedString(string: "replacement_value to be replaced", attributes: baseAttributes)
 		XCTAssertEqual(
-			"Let's replace |*some text*|".applying(xibLocInfo: info),
+			"|*some text*| to be replaced".applying(xibLocInfo: info),
 			result
 		)
 	}
@@ -437,6 +445,17 @@ class XibLocTests: XCTestCase {
 		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 17))
 		XCTAssertEqual(
 			"Let's replace *|some text|*".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testDocCase6Variant() {
+		let (info, baseAttributes) = docCasesInfo
+		let result = NSMutableAttributedString(string: "Let's replace replacement_value", attributes: baseAttributes)
+		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 17))
+		result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 14, length: 17))
+		XCTAssertEqual(
+			"Let's replace _<*|some text|*:val2>_".applying(xibLocInfo: info),
 			result
 		)
 	}

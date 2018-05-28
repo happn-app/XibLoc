@@ -15,74 +15,6 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	
 	typealias SourceType = SourceTypeHelper.ParsedType
 	
-	/* Would prefer embedded in Replacement, but makes Swift crash :( (Xcode 9.1/9B55) */
-	enum ReplacementValue {
-		
-		class MutableCount {
-			var value: Int
-			init(v: Int) {value = v}
-		}
-		
-		class MutableKeysList {
-			var keys: Set<String>
-			var hasDefaultValue: Bool
-			init() {keys = []; hasDefaultValue = false}
-		}
-		
-		case simpleSourceTypeReplacement(OneWordTokens)
-		case orderedReplacement(MultipleWordsTokens, valueIndex: Int, numberOfValues: MutableCount)
-		case pluralGroup(MultipleWordsTokens, zoneIndex: Int, numberOfZones: MutableCount)
-		
-		case attributesModification(OneWordTokens)
-		case simpleReturnTypeReplacement(OneWordTokens)
-		
-		case dictionaryReplacement(id: String, key: String?, allKeys: MutableKeysList)
-		
-		var isAttributesModifiation: Bool {
-			switch self {
-			case .attributesModification: return true
-			default:                      return false
-			}
-		}
-		
-	}
-	
-	/* Note: I'm not so sure having a struct here is such a good idea... We have
-	 *       to workaround a lot the fact that we pass replacements by value
-	 *       instead of pointers to replacements... */
-	struct Replacement {
-		
-		let groupId: Int
-		
-		var range: Range<String.Index>
-		let value: ReplacementValue
-		
-		var removedLeftTokenDistance: Int
-		var removedRightTokenDistance: Int
-		var containerRange: Range<String.Index> /* Always contains “range”. Equals “range” for OneWordTokens. */
-		
-		var children: [Replacement]
-		
-		func print(from string: String, prefix: String = "") {
-			Swift.print("\(prefix)REPLACEMENT START")
-			Swift.print("\(prefix)container: \(string[containerRange])")
-			Swift.print("\(prefix)range: \(string[range])")
-			Swift.print("\(prefix)removed left  token distance: \(removedLeftTokenDistance)")
-			Swift.print("\(prefix)removed right token distance: \(removedRightTokenDistance)")
-			Swift.print("\(prefix)children (\(children.count))")
-			for c in children {c.print(from: string, prefix: prefix + "   ")}
-			Swift.print("\(prefix)REPLACEMENT END")
-		}
-		
-	}
-	
-	/* We _may_ want to migrate these three variables to a private let... Some
-	 * client _might_ need those however, so let's keep them accessible (TBD). */
-	let replacements: [Replacement]
-	let untokenizedSource: SourceType
-	let untokenizedStringSource: String
-	let pluralityDefinitions: [MultipleWordsTokens: PluralityDefinition]
-	
 	let sourceTypeHelperType: SourceTypeHelper.Type
 	
 	init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
@@ -185,12 +117,12 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		var currentGroupId = 0
 		var replacementsBuilding = [Replacement]()
 		
+		getMultipleWordsRanges(tokens: orderedReplacements, replacementTypeBuilder: { .orderedReplacement($0, valueIndex: $1, numberOfValues: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getMultipleWordsRanges(tokens: pluralGroups, replacementTypeBuilder: { .pluralGroup($0, zoneIndex: $1, numberOfZones: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		getOneWordRanges(tokens: simpleSourceTypeReplacements, replacementTypeBuilder: { .simpleSourceTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		getOneWordRanges(tokens: simpleReturnTypeReplacements, replacementTypeBuilder: { .simpleReturnTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		getOneWordRanges(tokens: attributesModifications, replacementTypeBuilder: { .attributesModification($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		getMultipleWordsRanges(tokens: pluralGroups, replacementTypeBuilder: { .pluralGroup($0, zoneIndex: $1, numberOfZones: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		getMultipleWordsRanges(tokens: orderedReplacements, replacementTypeBuilder: { .orderedReplacement($0, valueIndex: $1, numberOfValues: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		/* TODO: Parse the dictionary replacements. */
+		getOneWordRanges(tokens: attributesModifications, replacementTypeBuilder: { .attributesModification($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		
 		/* Let's remove the tokens we want gone from the source string. The escape
 		 * token is always removed. We only remove the left and right separator
@@ -348,6 +280,81 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	/* ***************
       MARK: - Private
 	   *************** */
+	
+	/* Would prefer embedded in Replacement, but makes Swift crash :( (Xcode 9.1/9B55) */
+	private enum ReplacementValue {
+		
+		class MutableCount {
+			var value: Int
+			init(v: Int) {value = v}
+		}
+		
+		class MutableKeysList {
+			var keys: Set<String>
+			var hasDefaultValue: Bool
+			init() {keys = []; hasDefaultValue = false}
+		}
+		
+		case simpleSourceTypeReplacement(OneWordTokens)
+		case orderedReplacement(MultipleWordsTokens, valueIndex: Int, numberOfValues: MutableCount)
+		case pluralGroup(MultipleWordsTokens, zoneIndex: Int, numberOfZones: MutableCount)
+		
+		case attributesModification(OneWordTokens)
+		case simpleReturnTypeReplacement(OneWordTokens)
+		
+		case dictionaryReplacement(id: String, key: String?, allKeys: MutableKeysList)
+		
+		var isAttributesModifiation: Bool {
+			switch self {
+			case .attributesModification: return true
+			default:                      return false
+			}
+		}
+		
+	}
+	
+	/* Note: I'm not so sure having a struct here is such a good idea... We have
+	 *       to workaround a lot the fact that we pass replacements by value
+	 *       instead of pointers to replacements... */
+	private struct Replacement {
+		
+		let groupId: Int
+		
+		var range: Range<String.Index>
+		let value: ReplacementValue
+		
+		var removedLeftTokenDistance: Int
+		var removedRightTokenDistance: Int
+		var containerRange: Range<String.Index> /* Always contains “range”. Equals “range” for OneWordTokens. */
+		
+		var children: [Replacement]
+		
+		func print(from string: String, prefix: String = "") {
+			Swift.print("\(prefix)REPLACEMENT START")
+			Swift.print("\(prefix)container: \(string[containerRange])")
+			Swift.print("\(prefix)range: \(string[range])")
+			Swift.print("\(prefix)removed left  token distance: \(removedLeftTokenDistance)")
+			Swift.print("\(prefix)removed right token distance: \(removedRightTokenDistance)")
+			Swift.print("\(prefix)children (\(children.count))")
+			for c in children {c.print(from: string, prefix: prefix + "   ")}
+			Swift.print("\(prefix)REPLACEMENT END")
+		}
+		
+	}
+	
+	/** Contains the parsed replacements to apply when transforming the input
+	string.
+	
+	The data structure is basically a graph whose root is hidden (the variable
+	contains all the children of the root directly). The children of a
+	replacement are the replacements whose ranges are embedded in them.
+	Attributes changes replacements are special: they are sterile (cannot have
+	children). As they have a different behavior than other replacements (they
+	can overlap for instance), they have to be treated a bit differently. */
+	private let replacements: [Replacement]
+	private let untokenizedSource: SourceType
+	private let untokenizedStringSource: String
+	private let pluralityDefinitions: [MultipleWordsTokens: PluralityDefinition]
 	
 	/* *************************
       MARK: → General Utilities
@@ -561,6 +568,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	/** Inserts the given replacement in the given array of replacements, if
 	possible. If a valid insertion cannot be done, returns `false` (otherwise,
 	returns `true`).
+	
 	Assumes the given replacement and current replacements are valid. */
 	@discardableResult
 	private static func insert(replacement: Replacement, in currentReplacements: inout [Replacement]) -> Bool {
@@ -582,18 +590,26 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			guard !replacement.value.isAttributesModifiation || !checkedReplacement.value.isAttributesModifiation else {continue}
 			guard replacement.containerRange.overlaps(checkedReplacement.containerRange) else {continue}
 			
-			if checkedReplacement.range.clamped(to: replacement.containerRange) == replacement.containerRange {
-				/* replacement’s container range is included in checkedReplacement’s range: we must add replacement as a child of checkedReplacement */
+			if !checkedReplacement.value.isAttributesModifiation && checkedReplacement.range.clamped(to: replacement.containerRange) == replacement.containerRange {
+				/* replacement’s container range is included in checkedReplacement’s range and checkedReplacement is not an attributes modification:
+				 *    we must add replacement as a child of checkedReplacement */
 				var checkedReplacement = checkedReplacement
 				guard insert(replacement: replacement, in: &checkedReplacement.children) else {return false}
 				currentReplacements[idx] = checkedReplacement
 				return true
 			} else if replacement.range.clamped(to: checkedReplacement.containerRange) == checkedReplacement.containerRange {
-				/* checkedReplacement’s container range is included in replacement’s range: we must add checkedReplacement as a child of replacement */
-				var replacement = replacement
-				guard insert(replacement: checkedReplacement, in: &replacement.children) else {return false}
-				currentReplacements[idx] = replacement
-				return true
+				if !replacement.value.isAttributesModifiation {
+					/* checkedReplacement’s container range is included in replacement’s range and replacement is not an attributes modification:
+					 *    we must add checkedReplacement as a child of replacement */
+					var replacement = replacement
+					guard insert(replacement: checkedReplacement, in: &replacement.children) else {return false}
+					currentReplacements[idx] = replacement
+					return true
+				} else {
+					/* replacement is an attributes modification: it cannot have children. However the checked replacement is fully embedded
+					 * in the replacement: nothing is stopping us from adding the replacement on this check. */
+					continue
+				}
 			} else {
 				return false
 			}
