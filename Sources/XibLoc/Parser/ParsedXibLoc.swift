@@ -571,7 +571,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	
 	Assumes the given replacement and current replacements are valid. */
 	@discardableResult
-	private static func insert(replacement: Replacement, in currentReplacements: inout [Replacement]) -> Bool {
+	private static func insert(replacement insertedReplacement: Replacement, in currentReplacements: inout [Replacement]) -> Bool {
 		for (idx, checkedReplacement) in currentReplacements.enumerated() {
 			/* If both checked and inserted replacements have the same container
 			 * range, we are inserting a new replacement value for the checked
@@ -579,35 +579,41 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			 * following replacement: “<a:b>”). Let's just check the two ranges do
 			 * not overlap (asserted, this is an internal logic error if ranges
 			 * overlap). */
-			guard replacement.containerRange != checkedReplacement.containerRange else {
-				assert(!replacement.range.overlaps(checkedReplacement.range))
+			guard insertedReplacement.containerRange != checkedReplacement.containerRange else {
+				assert(!insertedReplacement.range.overlaps(checkedReplacement.range))
 				continue
 			}
 			
 			/* If there are no overlaps of the container ranges, or if we have two
 			 * attributes modifications, we have an easy case: nothing to do (all
 			 * ranges are valid). */
-			guard !replacement.value.isAttributesModifiation || !checkedReplacement.value.isAttributesModifiation else {continue}
-			guard replacement.containerRange.overlaps(checkedReplacement.containerRange) else {continue}
+			guard !insertedReplacement.value.isAttributesModifiation || !checkedReplacement.value.isAttributesModifiation else {continue}
+			guard insertedReplacement.range.overlaps(checkedReplacement.range) else {continue}
 			
-			if !checkedReplacement.value.isAttributesModifiation && checkedReplacement.range.clamped(to: replacement.containerRange) == replacement.containerRange {
-				/* replacement’s container range is included in checkedReplacement’s range and checkedReplacement is not an attributes modification:
-				 *    we must add replacement as a child of checkedReplacement */
+			if !checkedReplacement.value.isAttributesModifiation && checkedReplacement.range.clamped(to: insertedReplacement.containerRange) == insertedReplacement.containerRange {
+				/* insertedReplacement’s container range is included in checkedReplacement’s range and checkedReplacement is not an attributes modification:
+				 *    we must add insertedReplacement as a child of checkedReplacement */
 				var checkedReplacement = checkedReplacement
-				guard insert(replacement: replacement, in: &checkedReplacement.children) else {return false}
+				guard insert(replacement: insertedReplacement, in: &checkedReplacement.children) else {return false}
 				currentReplacements[idx] = checkedReplacement
 				return true
-			} else if replacement.range.clamped(to: checkedReplacement.containerRange) == checkedReplacement.containerRange {
-				if !replacement.value.isAttributesModifiation {
-					/* checkedReplacement’s container range is included in replacement’s range and replacement is not an attributes modification:
-					 *    we must add checkedReplacement as a child of replacement */
-					var replacement = replacement
-					guard insert(replacement: checkedReplacement, in: &replacement.children) else {return false}
-					currentReplacements[idx] = replacement
+			} else if insertedReplacement.range.clamped(to: checkedReplacement.containerRange) == checkedReplacement.containerRange {
+				if !insertedReplacement.value.isAttributesModifiation {
+					/* checkedReplacement’s container range is included in insertedReplacement’s range and insertedReplacement is not an attributes modification:
+					 *    we must add all replacements whose group id is equal to checkedReplacement’s group id as a child of insertedReplacement */
+					var i = idx
+					var insertedReplacement = insertedReplacement
+					while i < currentReplacements.endIndex {
+						let r = currentReplacements[i]
+						guard r.groupId == checkedReplacement.groupId else {i += 1; continue}
+						guard insert(replacement: r, in: &insertedReplacement.children) else {return false}
+						currentReplacements.remove(at: i)
+					}
+					currentReplacements.insert(insertedReplacement, at: idx)
 					return true
 				} else {
-					/* replacement is an attributes modification: it cannot have children. However the checked replacement is fully embedded
-					 * in the replacement: nothing is stopping us from adding the replacement on this check. */
+					/* inserted replacement is an attributes modification: it cannot have children. However the checked replacement is fully embedded
+					 * in the inserted replacement: nothing is stopping us from adding the replacement on this check. */
 					continue
 				}
 			} else {
@@ -615,7 +621,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			}
 		}
 		
-		currentReplacements.append(replacement)
+		currentReplacements.append(insertedReplacement)
 		return true
 	}
 	

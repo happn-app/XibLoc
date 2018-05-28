@@ -342,7 +342,7 @@ class XibLocTests: XCTestCase {
 		XCTAssertTrue(r == "the *bold <i>and* italic</i>" || r == "the <b>bold _and</b> italic_")
 	}
 	
-	func testVariableChangeAfterAttrChangeInOrderedReplacementGroup() {
+	func testVariableChangeAfterAttrChangeInOrderedReplacementGroup1() {
 		let baseColor = XibLocColor.black
 		let baseFont = XibLocFont.systemFont(ofSize: 14)
 		let info = Str2AttrStrXibLocInfo(
@@ -361,11 +361,39 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	func testVariableChangeAfterAttrChangeInOrderedReplacementGroup2() {
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", genderOtherIsMale: false),
+			boldType: .default, baseFont: baseFont, baseColor: baseColor
+		)
+		let result = NSMutableAttributedString(string: "Yo sᴉoɔuɐɹℲ", attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: 2))
+		XCTAssertEqual(
+			"`Nope. We don’t greet women.¦*Yo* |username|´".applying(xibLocInfo: info),
+			result
+		)
+		XCTAssertEqual(
+			"`*Hey* |username|!¦*Yo* |username|´".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
 	func testTwoVariablesChangesInOrderedReplacementGroup() {
-		let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: NumberAndFormat(42), genderOtherIsMale: true)
+		let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: NumberAndFormat(42))
 		let result = "42 months for sᴉoɔuɐɹℲ/month"
 		XCTAssertEqual(
 			"<#n# month for |string var|/month:#n# months for |string var|/month>".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testTwoVariablesChangesAndGenderInOrderedReplacementGroup() {
+		let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: NumberAndFormat(42), genderOtherIsMale: false)
+		let result = "42 months for sᴉoɔuɐɹℲ/year"
+		XCTAssertEqual(
+			"<#n# month for |string var|/month:#n# months for |string var|/`month¦year´>".applying(xibLocInfo: info),
 			result
 		)
 	}
@@ -567,14 +595,17 @@ class XibLocTests: XCTestCase {
 		("testApplyingOnStringTwice", testApplyingOnStringTwice),
 		("testApplyingOnMutableAttributedStringTwice", testApplyingOnMutableAttributedStringTwice),
 		("testInvalidOverlappingReplacements", testInvalidOverlappingReplacements),
-		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup", testVariableChangeAfterAttrChangeInOrderedReplacementGroup),
+		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup1", testVariableChangeAfterAttrChangeInOrderedReplacementGroup1),
+		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup2", testVariableChangeAfterAttrChangeInOrderedReplacementGroup2),
 		("testTwoVariablesChangesInOrderedReplacementGroup", testTwoVariablesChangesInOrderedReplacementGroup),
+		("testTwoVariablesChangesAndGenderInOrderedReplacementGroup", testTwoVariablesChangesAndGenderInOrderedReplacementGroup),
 		("testDocCase1", testDocCase1),
 		("testDocCase2", testDocCase2),
 		("testDocCase3", testDocCase3),
 		("testDocCase4", testDocCase4),
 		("testDocCase5", testDocCase5),
 		("testDocCase6", testDocCase6),
+		("testDocCase6Variant", testDocCase6Variant),
 		("testDocCase7", testDocCase7),
 		("testDocCase8", testDocCase8),
 		("testDocCase9", testDocCase9),
