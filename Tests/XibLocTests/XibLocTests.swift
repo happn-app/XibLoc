@@ -440,7 +440,6 @@ class XibLocTests: XCTestCase {
 		let result = NSMutableAttributedString(string: "This text will be bold and italic too!", attributes: baseAttributes)
 		result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 18, length: 19))
 		result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 23, length: 14))
-		print(result)
 		XCTAssertEqual(
 			"This text will be *bold _and italic too*_!".applying(xibLocInfo: info),
 			result
