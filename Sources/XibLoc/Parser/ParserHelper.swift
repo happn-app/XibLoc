@@ -9,9 +9,6 @@
 import Foundation
 
 
-/* Note: We might want to merge the source and return type helpers! They already
- *       have the replace and remove method in common. */
-
 
 protocol ParserHelper {
 	
