@@ -272,6 +272,22 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	func testOneAttributesChangeTwice() {
+		let info = XibLocResolvingInfo<String, NSMutableAttributedString>(
+			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
+			simpleSourceTypeReplacements: [:], orderedReplacements: [:], pluralGroups: [],
+			attributesModifications: [OneWordTokens(token: "*"): helperAddTestAttributeLevel],
+			simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
+			identityReplacement: { NSMutableAttributedString(string: $0) }
+		)
+		let result = NSMutableAttributedString(string: "the ")
+		result.append(NSAttributedString(string: "testtwice", attributes: [.accessibilityListItemLevel: NSNumber(value: 0)]))
+		XCTAssertEqual(
+			"the *test**twice*".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
 	func testTwoOverlappingAttributesChange() {
 		let info = XibLocResolvingInfo<String, NSMutableAttributedString>(
 			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
@@ -601,6 +617,7 @@ class XibLocTests: XCTestCase {
 		("testOneOrderedReplacementAndIdentityAttributeModification3", testOneOrderedReplacementAndIdentityAttributeModification3),
 		("testOneOrderedReplacementAndIdentityAttributeModification4", testOneOrderedReplacementAndIdentityAttributeModification4),
 		("testOneAttributesChange", testOneAttributesChange),
+		("testOneAttributesChangeTwice", testOneAttributesChangeTwice),
 		("testTwoOverlappingAttributesChange", testTwoOverlappingAttributesChange),
 		("testApplyingOnStringTwice", testApplyingOnStringTwice),
 		("testApplyingOnMutableAttributedStringTwice", testApplyingOnMutableAttributedStringTwice),
