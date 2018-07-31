@@ -21,7 +21,7 @@ public extension XibLocResolvingInfo where SourceType == String, ReturnType == N
 		
 	}
 	
-	public init(strResolvingInfo: Str2StrXibLocInfo, boldType: BoldOrItalicType? = nil, italicType: BoldOrItalicType? = nil, baseFont: XibLocFont?, baseColor: XibLocColor?, returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedStringKey: Any]? = di.defaultStr2AttrStrAttributes) {
+	public init(strResolvingInfo: Str2StrXibLocInfo, boldType: BoldOrItalicType? = nil, italicType: BoldOrItalicType? = nil, link: URL? = nil, baseFont: XibLocFont?, baseColor: XibLocColor?, returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedStringKey: Any]? = di.defaultStr2AttrStrAttributes) {
 		var defaultAttributesBuilding = defaultAttributes ?? [:]
 		if let f = baseFont  {defaultAttributesBuilding[.font] = f}
 		if let c = baseColor {defaultAttributesBuilding[.foregroundColor] = c}
@@ -36,6 +36,9 @@ public extension XibLocResolvingInfo where SourceType == String, ReturnType == N
 		case .default?:          attributesReplacementsBuilding[OneWordTokens(token: "_")] = StringAttributesChangesDescription(changes: [.setItalic])
 		case .custom(let font)?: attributesReplacementsBuilding[OneWordTokens(token: "_")] = StringAttributesChangesDescription(changes: [.changeFont(newFont: font, preserveSizes: true, preserveBold: true, preserveItalic: false)])
 		default: (/*nop*/)
+		}
+		if let link = link {
+			attributesReplacementsBuilding[OneWordTokens(token: "^")] = StringAttributesChangesDescription(changes: [.addLink(link)])
 		}
 		
 		self.init(strResolvingInfo: strResolvingInfo, attributesReplacements: attributesReplacementsBuilding, returnTypeReplacements: returnTypeReplacements, defaultAttributes: defaultAttributesBuilding)
