@@ -51,13 +51,21 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 			
 			if       transformedString.hasPrefix("^+") {transformedString.remove(at: transformedString.index(after: transformedString.startIndex))} /* We remove the "+" */
 			else if !transformedString.hasPrefix("^-") {transformedString.insert(contentsOf: "-?+", at: transformedString.index(after: transformedString.startIndex))}
-//			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }}
-//			else                                                          {NSLog("Glob language to regex conversion: “%@” --> “%@”", string, transformedString)}
+//			#if canImport(os)
+//				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }}
+//				else                                                          {NSLog("Glob language to regex conversion: “%@” --> “%@”", string, transformedString)}
+//			#else
+//				NSLogString("Glob language to regex conversion: “\(string)” --> “\(transformedString)”", log: di.log)
+//			#endif
 			
 			do {value = .regex(try NSRegularExpression(pattern: string, options: []))}
 			catch {
-				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Cannot create regular expression from string “%@” (original was “%@”); got error %@", log: $0, type: .info, transformedString, string, String(describing: error)) }}
-				else                                                          {NSLog("Cannot create regular expression from string “%@” (original was “%@”); got error %@", transformedString, string, String(describing: error))}
+				#if canImport(os)
+					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Cannot create regular expression from string “%@” (original was “%@”); got error %@", log: $0, type: .info, transformedString, string, String(describing: error)) }}
+					else                                                          {NSLog("Cannot create regular expression from string “%@” (original was “%@”); got error %@", transformedString, string, String(describing: error))}
+				#else
+					NSLogString("Cannot create regular expression from string “\(transformedString)” (original was “\(string)”); got error \(String(describing: error))", log: di.log)
+				#endif
 				return nil
 			}
 		}

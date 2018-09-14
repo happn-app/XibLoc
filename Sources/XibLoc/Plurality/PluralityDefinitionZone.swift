@@ -49,8 +49,12 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 		scanner.scanCharacters(from: CharacterSet(charactersIn: "?"), into: &optionalities)
 		
 		if !scanner.isAtEnd {
-			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got garbage after end of plurality definition zone string: %@", log: $0, type: .info, (scanner.string as NSString).substring(from: scanner.scanLocation)) }}
-			else                                                          {NSLog("Got garbage after end of plurality definition zone string: %@", (scanner.string as NSString).substring(from: scanner.scanLocation))}
+			#if canImport(os)
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got garbage after end of plurality definition zone string: %@", log: $0, type: .info, (scanner.string as NSString).substring(from: scanner.scanLocation)) }}
+				else                                                          {NSLog("Got garbage after end of plurality definition zone string: %@", (scanner.string as NSString).substring(from: scanner.scanLocation))}
+			#else
+				NSLogString("Got garbage after end of plurality definition zone string: \((scanner.string as NSString).substring(from: scanner.scanLocation))", log: di.log)
+			#endif
 		}
 		
 		index = i
@@ -66,8 +70,12 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 			else                                                                     {ret = nil}
 			if ret == nil {
 				let v = $0
-				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ l in os_log("Cannot parse zone value string “%@”. Skipping...", log: l, type: .info, v) }}
-				else                                                          {NSLog("Cannot parse zone value string “%@”. Skipping...", v)}
+				#if canImport(os)
+					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ l in os_log("Cannot parse zone value string “%@”. Skipping...", log: l, type: .info, v) }}
+					else                                                          {NSLog("Cannot parse zone value string “%@”. Skipping...", v)}
+				#else
+					NSLogString("Cannot parse zone value string “\(v)”. Skipping...", log: di.log)
+				#endif
 			}
 			return ret
 		}
