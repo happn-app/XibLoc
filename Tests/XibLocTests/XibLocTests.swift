@@ -228,10 +228,14 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
-	#if !os(Linux)
-	/* ********************************
-	   MARK: - Linux Incompatible Tests
-	   ******************************** */
+	#if os(macOS)
+	/* ************************
+	   MARK: - macOS Only Tests
+	   ************************ */
+	
+	/* The tests below are only macOS compatible. Other oses either do not have
+	 * NSAttributedString (Linux), or do not have the necessary attributes to
+	 * test attributed strings (we could find one, be there is no need, really). */
 	
 	func testOneOrderedReplacementAndIdentityAttributeModification1() {
 		let info = XibLocResolvingInfo<String, NSMutableAttributedString>(
