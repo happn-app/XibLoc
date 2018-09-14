@@ -581,8 +581,8 @@ class XibLocTests: XCTestCase {
 		attributedString.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
 	}
 	
-	lazy var docCasesInfo: (Str2AttrStrXibLocInfo, [NSAttributedStringKey: Any]) = {
-		let baseAttributes: [NSAttributedStringKey: Any] = [.font: XibLocFont.systemFont(ofSize: 14), .foregroundColor: XibLocColor.black]
+	lazy var docCasesInfo: (Str2AttrStrXibLocInfo, [NSAttributedString.Key: Any]) = {
+		let baseAttributes: [NSAttributedString.Key: Any] = [.font: XibLocFont.systemFont(ofSize: 14), .foregroundColor: XibLocColor.black]
 		let info = Str2AttrStrXibLocInfo(
 			escapeToken: nil,
 			simpleSourceTypeReplacements: [OneWordTokens(token: "|"): { _ in "replacement_value" }],
