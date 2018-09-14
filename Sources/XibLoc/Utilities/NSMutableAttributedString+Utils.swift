@@ -6,7 +6,11 @@
  * Copyright © 2018 happn. All rights reserved.
  */
 
-import CoreGraphics /* CGFloat */
+#if canImport(CoreGraphics)
+	import CoreGraphics /* CGFloat */
+#else
+	typealias CGFloat = Double
+#endif
 import Foundation
 #if canImport(os)
 	import os.log
