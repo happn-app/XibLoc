@@ -6,11 +6,9 @@
  * Copyright © 2018 happn. All rights reserved.
  */
 
-#if canImport(CoreGraphics)
-	import CoreGraphics /* CGFloat */
-#else
-	typealias CGFloat = Double
-#endif
+#if !os(Linux)
+
+import CoreGraphics /* CGFloat */
 import Foundation
 #if canImport(os)
 	import os.log
@@ -151,3 +149,5 @@ extension NSMutableAttributedString {
 	}
 	
 }
+
+#endif

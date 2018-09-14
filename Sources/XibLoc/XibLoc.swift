@@ -16,6 +16,8 @@ public extension String {
 		return ParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: StringParserHelper.self)
 	}
 	
+	#if !os(Linux)
+	
 	public func applying(xibLocInfo: XibLocResolvingInfo<String, NSMutableAttributedString>) -> NSMutableAttributedString {
 		return ParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
 	}
@@ -24,7 +26,12 @@ public extension String {
 		return NSMutableAttributedString(string: self, attributes: defaultAttributes).applying(xibLocInfo: xibLocInfo)
 	}
 	
+	#endif
+	
 }
+
+
+#if !os(Linux)
 
 public extension NSAttributedString {
 	
@@ -46,3 +53,5 @@ public extension NSMutableAttributedString {
 	}
 	
 }
+
+#endif

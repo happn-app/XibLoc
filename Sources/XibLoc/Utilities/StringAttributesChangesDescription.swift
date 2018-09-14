@@ -6,6 +6,8 @@
  * Copyright © 2018 happn. All rights reserved.
  */
 
+#if !os(Linux)
+
 import Foundation
 
 #if os(OSX)
@@ -80,3 +82,5 @@ public struct StringAttributesChangesDescription {
 	}
 	
 }
+
+#endif

@@ -29,7 +29,9 @@ public struct DependencyInjection {
 	public var defaultEscapeToken: String? = nil
 	public var defaultPluralityDefinition = PluralityDefinition()
 	
+	#if !os(Linux)
 	public var defaultStr2AttrStrAttributes: [NSAttributedString.Key: Any]? = nil
+	#endif
 	
 }
 

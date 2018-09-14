@@ -6,6 +6,8 @@
  * Copyright © 2018 happn. All rights reserved.
  */
 
+#if !os(Linux)
+
 import Foundation
 
 
@@ -70,3 +72,5 @@ public extension XibLocResolvingInfo where SourceType == String, ReturnType == N
 	}
 	
 }
+
+#endif

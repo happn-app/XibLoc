@@ -190,6 +190,49 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	func testInvalidOverlappingReplacements() {
+		let info = XibLocResolvingInfo<String, String>(
+			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
+			simpleSourceTypeReplacements: [OneWordTokens(token: "*"): { w in "<b>" + w + "</b>" }, OneWordTokens(token: "_"): { w in "<i>" + w + "</i>" }],
+			orderedReplacements: [:], pluralGroups: [], attributesModifications: [:], simpleReturnTypeReplacements: [:],
+			dictionaryReplacements: nil,
+			identityReplacement: { $0 }
+		)
+		let r = "the *bold _and* italic_".applying(xibLocInfo: info)
+		XCTAssertTrue(r == "the *bold <i>and* italic</i>" || r == "the <b>bold _and</b> italic_")
+	}
+	
+	func testTwoVariablesChangesInOrderedReplacementGroup() {
+		let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: NumberAndFormat(42))
+		let result = "42 months for sᴉoɔuɐɹℲ/month"
+		XCTAssertEqual(
+			"<#n# month for |string var|/month:#n# months for |string var|/month>".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testTwoVariablesChangesAndGenderInOrderedReplacementGroup() {
+		let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: NumberAndFormat(42), genderOtherIsMale: false)
+		let result = "42 months for sᴉoɔuɐɹℲ/year"
+		XCTAssertEqual(
+			"<#n# month for |string var|/month:#n# months for |string var|/`month¦year´>".applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testEmbeddedSimpleReplacements() {
+		let info = Str2StrXibLocInfo(replacements: ["#": "42", "|": "replacement_value"])
+		XCTAssertEqual(
+			"Let's replace |#some text#|".applying(xibLocInfo: info),
+			"Let's replace replacement_value"
+		)
+	}
+	
+	#if !os(Linux)
+	/* ********************************
+	   MARK: - Linux Incompatible Tests
+	   ******************************** */
+	
 	func testOneOrderedReplacementAndIdentityAttributeModification1() {
 		let info = XibLocResolvingInfo<String, NSMutableAttributedString>(
 			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
@@ -346,18 +389,6 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
-	func testInvalidOverlappingReplacements() {
-		let info = XibLocResolvingInfo<String, String>(
-			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
-			simpleSourceTypeReplacements: [OneWordTokens(token: "*"): { w in "<b>" + w + "</b>" }, OneWordTokens(token: "_"): { w in "<i>" + w + "</i>" }],
-			orderedReplacements: [:], pluralGroups: [], attributesModifications: [:], simpleReturnTypeReplacements: [:],
-			dictionaryReplacements: nil,
-			identityReplacement: { $0 }
-		)
-		let r = "the *bold _and* italic_".applying(xibLocInfo: info)
-		XCTAssertTrue(r == "the *bold <i>and* italic</i>" || r == "the <b>bold _and</b> italic_")
-	}
-	
 	func testVariableChangeAfterAttrChangeInOrderedReplacementGroup1() {
 		let baseColor = XibLocColor.black
 		let baseFont = XibLocFont.systemFont(ofSize: 14)
@@ -393,32 +424,6 @@ class XibLocTests: XCTestCase {
 		XCTAssertEqual(
 			"`*Hey* |username|!¦*Yo* |username|´".applying(xibLocInfo: info),
 			result
-		)
-	}
-	
-	func testTwoVariablesChangesInOrderedReplacementGroup() {
-		let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: NumberAndFormat(42))
-		let result = "42 months for sᴉoɔuɐɹℲ/month"
-		XCTAssertEqual(
-			"<#n# month for |string var|/month:#n# months for |string var|/month>".applying(xibLocInfo: info),
-			result
-		)
-	}
-	
-	func testTwoVariablesChangesAndGenderInOrderedReplacementGroup() {
-		let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: NumberAndFormat(42), genderOtherIsMale: false)
-		let result = "42 months for sᴉoɔuɐɹℲ/year"
-		XCTAssertEqual(
-			"<#n# month for |string var|/month:#n# months for |string var|/`month¦year´>".applying(xibLocInfo: info),
-			result
-		)
-	}
-	
-	func testEmbeddedSimpleReplacements() {
-		let info = Str2StrXibLocInfo(replacements: ["#": "42", "|": "replacement_value"])
-		XCTAssertEqual(
-			"Let's replace |#some text#|".applying(xibLocInfo: info),
-			"Let's replace replacement_value"
 		)
 	}
 	
@@ -596,6 +601,8 @@ class XibLocTests: XCTestCase {
 		return (info, baseAttributes)
 	}()
 	
+	#endif
+	
 	
 	/* Fill this array with all the tests to have Linux testing compatibility. */
 	static var allTests = [
@@ -612,33 +619,36 @@ class XibLocTests: XCTestCase {
 		("testOneOrderedReplacementAndSimpleReplacement2", testOneOrderedReplacementAndSimpleReplacement2),
 		("testThaiGender", testThaiGender),
 		("testEmojiGender", testEmojiGender),
-		("testOneOrderedReplacementAndIdentityAttributeModification1", testOneOrderedReplacementAndIdentityAttributeModification1),
-		("testOneOrderedReplacementAndIdentityAttributeModification2", testOneOrderedReplacementAndIdentityAttributeModification2),
-		("testOneOrderedReplacementAndIdentityAttributeModification3", testOneOrderedReplacementAndIdentityAttributeModification3),
-		("testOneOrderedReplacementAndIdentityAttributeModification4", testOneOrderedReplacementAndIdentityAttributeModification4),
-		("testOneAttributesChange", testOneAttributesChange),
-		("testOneAttributesChangeTwice", testOneAttributesChangeTwice),
-		("testTwoOverlappingAttributesChange", testTwoOverlappingAttributesChange),
-		("testApplyingOnStringTwice", testApplyingOnStringTwice),
-		("testApplyingOnMutableAttributedStringTwice", testApplyingOnMutableAttributedStringTwice),
 		("testInvalidOverlappingReplacements", testInvalidOverlappingReplacements),
-		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup1", testVariableChangeAfterAttrChangeInOrderedReplacementGroup1),
-		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup2", testVariableChangeAfterAttrChangeInOrderedReplacementGroup2),
 		("testTwoVariablesChangesInOrderedReplacementGroup", testTwoVariablesChangesInOrderedReplacementGroup),
 		("testTwoVariablesChangesAndGenderInOrderedReplacementGroup", testTwoVariablesChangesAndGenderInOrderedReplacementGroup),
-		("testDocCase1", testDocCase1),
-		("testDocCase2", testDocCase2),
-		("testDocCase3", testDocCase3),
-		("testDocCase4", testDocCase4),
-		("testDocCase5", testDocCase5),
-		("testDocCase6", testDocCase6),
-		("testDocCase6Variant", testDocCase6Variant),
-		("testDocCase7", testDocCase7),
-		("testDocCase8", testDocCase8),
-		("testDocCase9", testDocCase9),
-		("testDocCase10", testDocCase10),
-		("testDocCase11", testDocCase11),
-		("testDocCase12", testDocCase12),
+		("testEmbeddedSimpleReplacements", testEmbeddedSimpleReplacements),
+		
+		/* Not Linux compatible. */
+//		("testOneOrderedReplacementAndIdentityAttributeModification1", testOneOrderedReplacementAndIdentityAttributeModification1),
+//		("testOneOrderedReplacementAndIdentityAttributeModification2", testOneOrderedReplacementAndIdentityAttributeModification2),
+//		("testOneOrderedReplacementAndIdentityAttributeModification3", testOneOrderedReplacementAndIdentityAttributeModification3),
+//		("testOneOrderedReplacementAndIdentityAttributeModification4", testOneOrderedReplacementAndIdentityAttributeModification4),
+//		("testOneAttributesChange", testOneAttributesChange),
+//		("testOneAttributesChangeTwice", testOneAttributesChangeTwice),
+//		("testTwoOverlappingAttributesChange", testTwoOverlappingAttributesChange),
+//		("testApplyingOnStringTwice", testApplyingOnStringTwice),
+//		("testApplyingOnMutableAttributedStringTwice", testApplyingOnMutableAttributedStringTwice),
+//		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup1", testVariableChangeAfterAttrChangeInOrderedReplacementGroup1),
+//		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup2", testVariableChangeAfterAttrChangeInOrderedReplacementGroup2),
+//		("testDocCase1", testDocCase1),
+//		("testDocCase2", testDocCase2),
+//		("testDocCase3", testDocCase3),
+//		("testDocCase4", testDocCase4),
+//		("testDocCase5", testDocCase5),
+//		("testDocCase6", testDocCase6),
+//		("testDocCase6Variant", testDocCase6Variant),
+//		("testDocCase7", testDocCase7),
+//		("testDocCase8", testDocCase8),
+//		("testDocCase9", testDocCase9),
+//		("testDocCase10", testDocCase10),
+//		("testDocCase11", testDocCase11),
+//		("testDocCase12", testDocCase12),
 	]
 	
 }
