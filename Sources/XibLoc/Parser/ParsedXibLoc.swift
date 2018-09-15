@@ -37,7 +37,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	}
 	
 	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens], hasDictionaryReplacements: Bool, pluralityDefinitionsList: [PluralityDefinition?]) {
-		let warning = "todo: cache"
+		#warning("TODO: Cache")
 		assert(pluralityDefinitionsList.count >= pluralGroups.count)
 		assert(!hasDictionaryReplacements, "Not implemented: Creating a ParsedXibLoc with dictionary replacements")
 		/* First, let's make sure we are not overlapping tokens for our parsing:
