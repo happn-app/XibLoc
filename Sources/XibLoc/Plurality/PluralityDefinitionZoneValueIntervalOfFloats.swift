@@ -22,12 +22,7 @@ struct PluralityDefinitionZoneValueIntervalOfFloats : PluralityDefinitionZoneVal
 		var f: Float = 0
 		var bracket: NSString?
 		
-		#if !os(Linux)
-			guard scanner.scanCharacters(from: bracketsCharset, into: &bracket), bracket?.length == 1 else {return nil}
-		#else
-			bracket = scanner.scanCharactersFromSet(bracketsCharset) as NSString?
-			guard bracket?.length == 1 else {return nil}
-		#endif
+		guard scanner.scanCharacters(from: bracketsCharset, into: &bracket), bracket?.length == 1 else {return nil}
 		assert(bracket == "[" || bracket == "]")
 		
 		start = scanner.scanFloat(&f) ? (value: f, included: bracket == "[") : nil
@@ -36,12 +31,7 @@ struct PluralityDefinitionZoneValueIntervalOfFloats : PluralityDefinitionZoneVal
 		
 		let hasEnd = scanner.scanFloat(&f)
 		
-		#if !os(Linux)
-			guard scanner.scanCharacters(from: bracketsCharset, into: &bracket), bracket?.length == 1 else {return nil}
-		#else
-			bracket = scanner.scanCharactersFromSet(bracketsCharset) as NSString?
-			guard bracket?.length == 1 else {return nil}
-		#endif
+		guard scanner.scanCharacters(from: bracketsCharset, into: &bracket), bracket?.length == 1 else {return nil}
 		assert(bracket == "[" || bracket == "]")
 		
 		guard scanner.isAtEnd else {return nil}

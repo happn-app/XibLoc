@@ -40,23 +40,13 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 		guard scanner.scanString("(", into: nil) else {return nil}
 		
 		var zoneContent: NSString?
-		#if !os(Linux)
-			guard scanner.scanUpTo(")", into: &zoneContent) else {return nil}
-		#else
-			zoneContent = scanner.scanUpToString(")") as NSString?
-			guard zoneContent != nil else {return nil}
-		#endif
+		guard scanner.scanUpTo(")", into: &zoneContent) else {return nil}
 		guard scanner.scanString(")", into: nil) else {return nil}
 		
 		var optionalities: NSString?
 		var priorityDecreases: NSString?
-		#if !os(Linux)
-			scanner.scanCharacters(from: CharacterSet(charactersIn: "↓"), into: &priorityDecreases)
-			scanner.scanCharacters(from: CharacterSet(charactersIn: "?"), into: &optionalities)
-		#else
-			priorityDecreases = scanner.scanCharactersFromSet(CharacterSet(charactersIn: "↓")) as NSString?
-			optionalities     = scanner.scanCharactersFromSet(CharacterSet(charactersIn: "?")) as NSString?
-		#endif
+		scanner.scanCharacters(from: CharacterSet(charactersIn: "↓"), into: &priorityDecreases)
+		scanner.scanCharacters(from: CharacterSet(charactersIn: "?"), into: &optionalities)
 		
 		if !scanner.isAtEnd {
 			#if canImport(os)
