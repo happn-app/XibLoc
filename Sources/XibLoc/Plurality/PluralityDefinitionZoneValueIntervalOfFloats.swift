@@ -20,33 +20,22 @@ struct PluralityDefinitionZoneValueIntervalOfFloats : PluralityDefinitionZoneVal
 		let bracketsCharset = CharacterSet(charactersIn: "[]")
 		
 		var f: Float = 0
-		var bracket: NSString?
 		
-		#if !os(Linux)
-			guard scanner.scanCharacters(from: bracketsCharset, into: &bracket), bracket?.length == 1 else {return nil}
-		#else
-			bracket = scanner.scanCharactersFromSet(bracketsCharset) as NSString?
-			guard bracket?.length == 1 else {return nil}
-		#endif
-		assert(bracket == "[" || bracket == "]")
+		guard let bracket1 = scanner.scanCharactersFromSet(bracketsCharset), bracket1.count == 1 else {return nil}
+		assert(bracket1 == "[" || bracket1 == "]")
 		
-		start = scanner.scanFloat(&f) ? (value: f, included: bracket == "[") : nil
+		start = scanner.scanFloat(&f) ? (value: f, included: bracket1 == "[") : nil
 		
 		guard scanner.scanString("→", into: nil) else {return nil}
 		
 		let hasEnd = scanner.scanFloat(&f)
 		
-		#if !os(Linux)
-			guard scanner.scanCharacters(from: bracketsCharset, into: &bracket), bracket?.length == 1 else {return nil}
-		#else
-			bracket = scanner.scanCharactersFromSet(bracketsCharset) as NSString?
-			guard bracket?.length == 1 else {return nil}
-		#endif
-		assert(bracket == "[" || bracket == "]")
+		guard let bracket2 = scanner.scanCharactersFromSet(bracketsCharset), bracket2.count == 1 else {return nil}
+		assert(bracket2 == "[" || bracket2 == "]")
 		
 		guard scanner.isAtEnd else {return nil}
 		
-		end = hasEnd ? (value: f, included: bracket == "]") : nil
+		end = hasEnd ? (value: f, included: bracket2 == "]") : nil
 		
 		guard start != nil || end != nil else {return nil}
 		if let start = start, let end = end, start.value > end.value {return nil}

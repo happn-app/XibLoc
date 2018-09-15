@@ -58,34 +58,18 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		var idx = 0
 		var zonesBuilding = [PluralityDefinitionZone]()
 		repeat {
-			let foundGarbage: Bool
-			var garbage: NSString?
-			#if !os(Linux)
-				foundGarbage = scanner.scanUpTo("(", into: &garbage)
-			#else
-				garbage = scanner.scanUpToString("(") as NSString?
-				foundGarbage = (garbage != nil)
-			#endif
-			if foundGarbage {
+			if let garbage = scanner.scanUpToString("(") {
 				#if canImport(os)
-					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", log: $0, type: .info, garbage!, string) }}
-					else                                                          {NSLog("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", garbage!, string)}
+					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", log: $0, type: .info, garbage, string) }}
+					else                                                          {NSLog("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", garbage, string)}
 				#else
-					NSLogString("Got garbage (\(garbage!)) while parsing plurality definition string “\(string)”. Ignoring...", log: di.log)
+					NSLogString("Got garbage (\(garbage)) while parsing plurality definition string “\(string)”. Ignoring...", log: di.log)
 				#endif
 			}
 			
 			guard scanner.scanString("(", into: nil) else {break}
 			
-			let foundCurZoneStrMinusOpeningParenthesis: Bool
-			var curZoneStrMinusOpeningParenthesis: NSString?
-			#if !os(Linux)
-				foundCurZoneStrMinusOpeningParenthesis = scanner.scanUpTo("(", into: &curZoneStrMinusOpeningParenthesis)
-			#else
-				curZoneStrMinusOpeningParenthesis = scanner.scanUpToString("(") as NSString?
-				foundCurZoneStrMinusOpeningParenthesis = (curZoneStrMinusOpeningParenthesis != nil)
-			#endif
-			guard foundCurZoneStrMinusOpeningParenthesis else {
+			guard let curZoneStrMinusOpeningParenthesis = scanner.scanUpToString("(") else {
 				#if canImport(os)
 					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got malformed plurality definition string “%@”. Attempting to continue anyway...", log: $0, type: .info, string) }}
 					else                                                          {NSLog("Got malformed plurality definition string “%@”. Attempting to continue anyway...", string)}
@@ -95,15 +79,15 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 				continue
 			}
 			
-			if let curZone = PluralityDefinitionZone(string: "(" + (curZoneStrMinusOpeningParenthesis! as String), index: idx) {
+			if let curZone = PluralityDefinitionZone(string: "(" + curZoneStrMinusOpeningParenthesis, index: idx) {
 				zonesBuilding.append(curZone)
 				idx += 1
 			} else {
 				#if canImport(os)
-					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got zone str (%@), which I cannot parse into a zone", log: $0, type: .info, curZoneStrMinusOpeningParenthesis!) }}
-					else                                                          {NSLog("Got zone str (%@), which I cannot parse into a zone", curZoneStrMinusOpeningParenthesis!)}
+					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got zone str (%@), which I cannot parse into a zone", log: $0, type: .info, curZoneStrMinusOpeningParenthesis) }}
+					else                                                          {NSLog("Got zone str (%@), which I cannot parse into a zone", curZoneStrMinusOpeningParenthesis)}
 				#else
-					NSLogString("Got zone str (\(curZoneStrMinusOpeningParenthesis!)), which I cannot parse into a zone", log: di.log)
+					NSLogString("Got zone str (\(curZoneStrMinusOpeningParenthesis)), which I cannot parse into a zone", log: di.log)
 				#endif
 			}
 		} while !scanner.isAtEnd

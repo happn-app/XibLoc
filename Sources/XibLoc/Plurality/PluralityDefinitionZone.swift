@@ -39,25 +39,12 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 		
 		guard scanner.scanString("(", into: nil) else {return nil}
 		
-		var zoneContent: NSString?
-		#if !os(Linux)
-			guard scanner.scanUpTo(")", into: &zoneContent) else {return nil}
-		#else
-			zoneContent = scanner.scanUpToString(")") as NSString?
-			guard zoneContent != nil else {return nil}
-		#endif
+		guard let zoneContent = scanner.scanUpToString(")") else {return nil}
 		guard scanner.scanString(")", into: nil) else {return nil}
 		
-		var optionalities: NSString?
-		var priorityDecreases: NSString?
-		#if !os(Linux)
-			scanner.scanCharacters(from: CharacterSet(charactersIn: "↓"), into: &priorityDecreases)
-			scanner.scanCharacters(from: CharacterSet(charactersIn: "?"), into: &optionalities)
-		#else
-			priorityDecreases = scanner.scanCharactersFromSet(CharacterSet(charactersIn: "↓")) as NSString?
-			optionalities     = scanner.scanCharactersFromSet(CharacterSet(charactersIn: "?")) as NSString?
-		#endif
-		
+		let priorityDecreases = scanner.scanCharactersFromSet(CharacterSet(charactersIn: "↓"))
+		let optionalities     = scanner.scanCharactersFromSet(CharacterSet(charactersIn: "?"))
+
 		if !scanner.isAtEnd {
 			#if canImport(os)
 				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got garbage after end of plurality definition zone string: %@", log: $0, type: .info, (scanner.string as NSString).substring(from: scanner.scanLocation)) }}
@@ -68,10 +55,10 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 		}
 		
 		index = i
-		optionalityLevel = optionalities?.length ?? 0
-		priorityDecreaseLevel = priorityDecreases?.length ?? 0
+		optionalityLevel = optionalities?.count ?? 0
+		priorityDecreaseLevel = priorityDecreases?.count ?? 0
 		
-		zoneValues = zoneContent!.components(separatedBy: ":").compactMap{
+		zoneValues = zoneContent.components(separatedBy: ":").compactMap{
 			let ret: PluralityDefinitionZoneValue?
 			if      let v = PluralityDefinitionZoneValueNumber(string: $0)           {ret = v}
 			else if let v = PluralityDefinitionZoneValueIntervalOfInts(string: $0)   {ret = v}

@@ -28,6 +28,10 @@
 		7B04C92F20166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
 		7B04C93020166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
 		7B04C93120166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
+		7B266297214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
+		7B266298214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
+		7B266299214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
+		7B26629A214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
 		7B353B832017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
 		7B353B842017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
 		7B353B852017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
@@ -177,6 +181,7 @@
 		7B21BACE2003B2C600DFF758 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		7B21BAD02003BBC700DFF758 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		7B21BAD12003BF0600DFF758 /* License.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
+		7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Scanner+LinuxCompat.swift"; sourceTree = "<group>"; };
 		7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Str2StrXibLocInfo.swift; sourceTree = "<group>"; };
 		7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberAndFormat.swift; sourceTree = "<group>"; };
 		7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Str2AttrStrXibLocInfo.swift; sourceTree = "<group>"; };
@@ -285,6 +290,7 @@
 				7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */,
 				7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */,
 				7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */,
+				7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -701,6 +707,7 @@
 				7B8A96F3201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB149201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
 				7BCBB155201634E4008A3FC0 /* XibLoc.swift in Sources */,
+				7B266298214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -738,6 +745,7 @@
 				7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB148201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
 				7BCBB154201634E4008A3FC0 /* XibLoc.swift in Sources */,
+				7B266297214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -775,6 +783,7 @@
 				7B8A96F5201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB14B201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
 				7BCBB157201634E4008A3FC0 /* XibLoc.swift in Sources */,
+				7B26629A214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,6 +813,7 @@
 				7B8A96F4201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB14A201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
 				7BCBB156201634E4008A3FC0 /* XibLoc.swift in Sources */,
+				7B266299214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
