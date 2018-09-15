@@ -4,6 +4,9 @@ import PackageDescription
 
 let package = Package(
 	name: "XibLoc",
+	products: [
+		.library(name: "XibLoc", targets: ["XibLoc"])
+	],
 	dependencies: [
 		.package(url: "git@github.com:happn-app/DummyLinuxOSLog.git", from: "1.0.0")
 	],
