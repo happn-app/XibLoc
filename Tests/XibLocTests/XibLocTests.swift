@@ -190,6 +190,15 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	func testEmojiGenderBis() {
+		let str = "`a¦b´🧒🏻`a¦b´"
+		let info = Str2StrXibLocInfo(genderOtherIsMale: true)
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			"a🧒🏻a"
+		)
+	}
+	
 	func testInvalidOverlappingReplacements() {
 		let info = XibLocResolvingInfo<String, String>(
 			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
@@ -442,6 +451,108 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	func testFromHappn1() {
+		let str = "{*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+			boldType: .default, baseFont: baseFont, baseColor: baseColor
+		)
+		let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: 15))
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testFromHappn1Bis() {
+		let str = "{CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+			boldType: .default, baseFont: baseFont, baseColor: baseColor
+		)
+		let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: [.font: baseFont, .foregroundColor: baseColor])
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testFromHappn1Ter() {
+		let str = "*लें*"
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+			boldType: .default, baseFont: baseFont, baseColor: baseColor
+		)
+		let resultStr = "लें"
+		let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	/* Same as Ter TBH… */
+	func testFromHappn1Quater() {
+		let str = "*🧒🏻*"
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+			boldType: .default, baseFont: baseFont, baseColor: baseColor
+		)
+		let resultStr = "🧒🏻"
+		let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testFromHappn1Quinquies() {
+		let str = "🧒🏻*🧒🏻"
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(identityReplacement: { $0 }),
+			attributesReplacements: [OneWordTokens(token: "🧒🏻"): StringAttributesChangesDescription(changes: [.setBold])], returnTypeReplacements: nil,
+			defaultAttributes: [.font: baseFont, .foregroundColor: baseColor]
+		)
+		let resultStr = "*"
+		let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testFromHappn1Sexies() {
+		let str = "🧒🏻👳🏿‍♀️🧒🏻"
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(identityReplacement: { $0 }),
+			attributesReplacements: [OneWordTokens(token: "🧒🏻"): StringAttributesChangesDescription(changes: [.setBold])], returnTypeReplacements: nil,
+			defaultAttributes: [.font: baseFont, .foregroundColor: baseColor]
+		)
+		let resultStr = "👳🏿‍♀️"
+		let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			result
+		)
+	}
+	
 	/* ***** Doc Cases Tests ***** */
 	/* Config:
 	 *    "*" is a left and right token for an attributes modification
@@ -623,6 +734,7 @@ class XibLocTests: XCTestCase {
 		("testOneOrderedReplacementAndSimpleReplacement2", testOneOrderedReplacementAndSimpleReplacement2),
 		("testThaiGender", testThaiGender),
 		("testEmojiGender", testEmojiGender),
+		("testEmojiGenderBis", testEmojiGenderBis),
 		("testInvalidOverlappingReplacements", testInvalidOverlappingReplacements),
 		("testTwoVariablesChangesInOrderedReplacementGroup", testTwoVariablesChangesInOrderedReplacementGroup),
 		("testTwoVariablesChangesAndGenderInOrderedReplacementGroup", testTwoVariablesChangesAndGenderInOrderedReplacementGroup),
@@ -640,6 +752,13 @@ class XibLocTests: XCTestCase {
 //		("testApplyingOnMutableAttributedStringTwice", testApplyingOnMutableAttributedStringTwice),
 //		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup1", testVariableChangeAfterAttrChangeInOrderedReplacementGroup1),
 //		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup2", testVariableChangeAfterAttrChangeInOrderedReplacementGroup2),
+//		("testOverlappingAttributesChangesWithPluralInTheMiddle", testOverlappingAttributesChangesWithPluralInTheMiddle),
+//		("testFromHappn1", testFromHappn1),
+//		("testFromHappn1Bis", testFromHappn1Bis),
+//		("testFromHappn1Ter", testFromHappn1Ter),
+//		("testFromHappn1Quater", testFromHappn1Quater),
+//		("testFromHappn1Quinquies", testFromHappn1Quinquies),
+//		("testFromHappn1Sexies", testFromHappn1Sexies),
 //		("testDocCase1", testDocCase1),
 //		("testDocCase2", testDocCase2),
 //		("testDocCase3", testDocCase3),

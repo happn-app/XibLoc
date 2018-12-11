@@ -471,24 +471,21 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			let adjustUpperBound = (originalString.distance(from: range.upperBound, to: removedRange.upperBound) <= 0)
 			guard adjustLowerBound || adjustUpperBound else {return range}
 			
+			let removedEncodedDistance: Int
 			if let (addedDistance, newString) = addedDistance {
 				let addedRange = Range<String.Index>(uncheckedBounds: (lower: removedRange.lowerBound, upper: newString.index(removedRange.lowerBound, offsetBy: addedDistance)))
-				let removedEncodedDistance = removedRange.upperBound.encodedOffset - addedRange.upperBound.encodedOffset
+				removedEncodedDistance = removedRange.upperBound.encodedOffset - addedRange.upperBound.encodedOffset
 				/* The two asserts below make sure the new indexes returned in the new range are at the start of an extended grapheme cluster.
 				 * We verified we were at the start of cluster in input, we must return something at the start of a cluster in output! */
 				assert(!adjustLowerBound || String.Index(String.Index(encodedOffset: range.lowerBound.encodedOffset - removedEncodedDistance), within: newString) != nil)
 				assert(!adjustUpperBound || String.Index(String.Index(encodedOffset: range.upperBound.encodedOffset - removedEncodedDistance), within: newString) != nil)
-				return Range<String.Index>(uncheckedBounds:
-					(lower: !adjustLowerBound ? range.lowerBound : String.Index(encodedOffset: range.lowerBound.encodedOffset - removedEncodedDistance),
-					 upper: !adjustUpperBound ? range.upperBound : String.Index(encodedOffset: range.upperBound.encodedOffset - removedEncodedDistance))
-				)
 			} else {
-				let removedDistance = originalString.distance(from: removedRange.lowerBound, to: removedRange.upperBound)
-				return Range<String.Index>(uncheckedBounds:
-					(lower: !adjustLowerBound ? range.lowerBound : originalString.index(range.lowerBound, offsetBy: -removedDistance),
-					 upper: !adjustUpperBound ? range.upperBound : originalString.index(range.upperBound, offsetBy: -removedDistance))
-				)
+				removedEncodedDistance = removedRange.upperBound.encodedOffset - removedRange.lowerBound.encodedOffset
 			}
+			return Range<String.Index>(uncheckedBounds:
+				(lower: !adjustLowerBound ? range.lowerBound : String.Index(encodedOffset: range.lowerBound.encodedOffset - removedEncodedDistance),
+				 upper: !adjustUpperBound ? range.upperBound : String.Index(encodedOffset: range.upperBound.encodedOffset - removedEncodedDistance))
+			)
 		}
 		
 		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with distance: Int?, in replacements: inout [Replacement], originalString: String, newString: String) {
