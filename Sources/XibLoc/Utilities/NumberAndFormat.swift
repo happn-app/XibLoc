@@ -13,21 +13,27 @@ import Foundation
 public struct NumberAndFormat {
 	
 	public var number: PluralValue
-	public var format: NumberFormatter.Style
+	public var formatter: NumberFormatter
 	
-	public init(_ i: Int, format fmt: NumberFormatter.Style = .none) {
+	public init(_ i: Int, formatter fmt: NumberFormatter = NumberFormatter()) {
 		number = .int(i)
-		format = fmt
+		fmt.locale = NSLocale.current
+		/* `none` currently is the default type but, in order to be sure, we
+		 * manually define the value. */
+		fmt.numberStyle = .none
+		formatter = fmt
 	}
 	
-	public init(_ f: Float, pluralityPrecision: Float? = nil, format fmt: NumberFormatter.Style = .decimal) {
+	public init(_ f: Float, pluralityPrecision: Float? = nil, formatter fmt: NumberFormatter = NumberFormatter()) {
 		if let p = pluralityPrecision {number = .floatCustomPrecision(value: f, precision: p)}
 		else                          {number = .float(f)}
-		format = fmt
+		fmt.locale = NSLocale.current
+		fmt.numberStyle = .decimal
+		formatter = fmt
 	}
 	
 	public func asString() -> String {
-		return NumberFormatter.localizedString(from: number.asNumber(), number: format)
+		return formatter.string(from: number.asNumber()) ?? ""
 	}
 	
 }
