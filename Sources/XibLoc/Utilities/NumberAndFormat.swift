@@ -12,34 +12,30 @@ import Foundation
 
 public struct NumberAndFormat {
 	
+	public static let defaultNumberFormatterInt: NumberFormatter = {
+		let f = NumberFormatter()
+		f.numberStyle = .none
+		return f
+	}()
+	
+	public static let defaultNumberFormatterFloat: NumberFormatter = {
+		let f = NumberFormatter()
+		f.numberStyle = .decimal
+		return f
+	}()
+	
 	public var number: PluralValue
 	public var formatter: NumberFormatter
 	
-	public init(_ i: Int, formatter fmt: NumberFormatter? = nil) {
+	public init(_ i: Int, formatter fmt: NumberFormatter = NumberAndFormat.defaultNumberFormatterInt) {
 		number = .int(i)
-		if let nFormatter = fmt {
-			formatter = nFormatter
-		} else {
-			let nFormatter = NumberFormatter()
-			/* `none` currently is the default type but, in order to be sure, we
-			 * manually define the value. */
-			nFormatter.numberStyle = .none
-			formatter = nFormatter
-		}
+		formatter = fmt
 	}
 	
-	public init(_ f: Float, pluralityPrecision: Float? = nil, formatter fmt: NumberFormatter? = nil) {
+	public init(_ f: Float, pluralityPrecision: Float? = nil, formatter fmt: NumberFormatter = NumberAndFormat.defaultNumberFormatterFloat) {
 		if let p = pluralityPrecision {number = .floatCustomPrecision(value: f, precision: p)}
 		else                          {number = .float(f)}
-		if let nFormatter = fmt {
-			formatter = nFormatter
-		} else {
-			let nFormatter = NumberFormatter()
-			/* `none` currently is the default type but, in order to be sure, we
-			 * manually define the value. */
-			nFormatter.numberStyle = .decimal
-			formatter = nFormatter
-		}
+		formatter = fmt
 	}
 	
 	public func asString() -> String {
