@@ -15,21 +15,31 @@ public struct NumberAndFormat {
 	public var number: PluralValue
 	public var formatter: NumberFormatter
 	
-	public init(_ i: Int, formatter fmt: NumberFormatter = NumberFormatter()) {
+	public init(_ i: Int, formatter fmt: NumberFormatter? = nil) {
 		number = .int(i)
-		fmt.locale = NSLocale.current
-		/* `none` currently is the default type but, in order to be sure, we
-		 * manually define the value. */
-		fmt.numberStyle = .none
-		formatter = fmt
+		if let nFormatter = fmt {
+			formatter = nFormatter
+		} else {
+			let nFormatter = NumberFormatter()
+			/* `none` currently is the default type but, in order to be sure, we
+			 * manually define the value. */
+			nFormatter.numberStyle = .none
+			formatter = nFormatter
+		}
 	}
 	
-	public init(_ f: Float, pluralityPrecision: Float? = nil, formatter fmt: NumberFormatter = NumberFormatter()) {
+	public init(_ f: Float, pluralityPrecision: Float? = nil, formatter fmt: NumberFormatter? = nil) {
 		if let p = pluralityPrecision {number = .floatCustomPrecision(value: f, precision: p)}
 		else                          {number = .float(f)}
-		fmt.locale = NSLocale.current
-		fmt.numberStyle = .decimal
-		formatter = fmt
+		if let nFormatter = fmt {
+			formatter = nFormatter
+		} else {
+			let nFormatter = NumberFormatter()
+			/* `none` currently is the default type but, in order to be sure, we
+			 * manually define the value. */
+			nFormatter.numberStyle = .decimal
+			formatter = nFormatter
+		}
 	}
 	
 	public func asString() -> String {
