@@ -12,22 +12,34 @@ import Foundation
 
 public struct NumberAndFormat {
 	
-	public var number: PluralValue
-	public var format: NumberFormatter.Style
+	public static let defaultNumberFormatterInt: NumberFormatter = {
+		let f = NumberFormatter()
+		f.numberStyle = .none
+		return f
+	}()
 	
-	public init(_ i: Int, format fmt: NumberFormatter.Style = .none) {
+	public static let defaultNumberFormatterFloat: NumberFormatter = {
+		let f = NumberFormatter()
+		f.numberStyle = .decimal
+		return f
+	}()
+	
+	public var number: PluralValue
+	public var formatter: NumberFormatter
+	
+	public init(_ i: Int, formatter fmt: NumberFormatter = NumberAndFormat.defaultNumberFormatterInt) {
 		number = .int(i)
-		format = fmt
+		formatter = fmt
 	}
 	
-	public init(_ f: Float, pluralityPrecision: Float? = nil, format fmt: NumberFormatter.Style = .decimal) {
+	public init(_ f: Float, pluralityPrecision: Float? = nil, formatter fmt: NumberFormatter = NumberAndFormat.defaultNumberFormatterFloat) {
 		if let p = pluralityPrecision {number = .floatCustomPrecision(value: f, precision: p)}
 		else                          {number = .float(f)}
-		format = fmt
+		formatter = fmt
 	}
 	
 	public func asString() -> String {
-		return NumberFormatter.localizedString(from: number.asNumber(), number: format)
+		return formatter.string(from: number.asNumber()) ?? ""
 	}
 	
 }
