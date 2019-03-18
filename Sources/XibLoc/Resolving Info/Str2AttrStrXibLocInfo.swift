@@ -14,7 +14,7 @@ import Foundation
 
 public typealias Str2AttrStrXibLocInfo = XibLocResolvingInfo<String, NSMutableAttributedString>
 
-public extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutableAttributedString {
+extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutableAttributedString {
 	
 	public enum BoldOrItalicType {
 		

@@ -22,10 +22,8 @@ public struct OneWordTokens : Hashable {
 	public init(leftToken lt: String, rightToken rt: String) {
 		leftToken = lt
 		rightToken = rt
-		hashValue = (leftToken + rightToken).hashValue
 	}
 	
-	public var hashValue: Int
 	public static func ==(lhs: OneWordTokens, rhs: OneWordTokens) -> Bool {
 		return lhs.leftToken == rhs.leftToken && lhs.rightToken == rhs.rightToken
 	}
