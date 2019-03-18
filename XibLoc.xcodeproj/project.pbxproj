@@ -101,6 +101,7 @@
 		7BCBB122201634E4008A3FC0 /* XibLoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLoc.swift; sourceTree = "<group>"; };
 		7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocResolvingInfo.swift; sourceTree = "<group>"; };
 		7BCBB15D2016354F008A3FC0 /* XibLocTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocTests.swift; sourceTree = "<group>"; };
+		7BF5336022404C4300A141BB /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,6 +248,7 @@
 			isa = PBXGroup;
 			children = (
 				7BCBB15D2016354F008A3FC0 /* XibLocTests.swift */,
+				7BF5336022404C4300A141BB /* XCTestManifests.swift */,
 			);
 			path = XibLocTests;
 			sourceTree = "<group>";

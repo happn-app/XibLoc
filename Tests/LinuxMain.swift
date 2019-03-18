@@ -1,8 +1,8 @@
 import XCTest
-@testable import XibLocTests
 
+import XibLocTests
 
+var tests = [XCTestCaseEntry]()
+tests += XibLocTests.__allTests()
 
-XCTMain([
-	testCase(XibLocTests.allTests)
-])
+XCTMain(tests)
