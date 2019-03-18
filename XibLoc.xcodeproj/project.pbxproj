@@ -6,173 +6,64 @@
 	objectVersion = 48;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		7B639D8D2002CDE70079C664 /* All */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 7B639D902002CDE70079C664 /* Build configuration list for PBXAggregateTarget "All" */;
-			buildPhases = (
-			);
-			dependencies = (
-				7B639D922002CDF40079C664 /* PBXTargetDependency */,
-				7B639D942002CDF40079C664 /* PBXTargetDependency */,
-				7B639D962002CDF40079C664 /* PBXTargetDependency */,
-				7B639D982002CDF40079C664 /* PBXTargetDependency */,
-			);
-			name = All;
-			productName = All;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		7B04C92E20166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
-		7B04C92F20166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
-		7B04C93020166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
-		7B04C93120166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
 		7B266297214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
-		7B266298214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
-		7B266299214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
-		7B26629A214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
 		7B353B832017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
-		7B353B842017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
-		7B353B852017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
-		7B353B862017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
 		7B5BF7B82084E0EF006AAB6A /* NumberAndFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */; };
-		7B5BF7B92084E0EF006AAB6A /* NumberAndFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */; };
-		7B5BF7BA2084E0EF006AAB6A /* NumberAndFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */; };
-		7B5BF7BB2084E0EF006AAB6A /* NumberAndFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */; };
 		7B5BF7C22084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */; };
-		7B5BF7C32084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */; };
-		7B5BF7C42084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */; };
-		7B5BF7C52084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */; };
-		7B7A34C820027B4700348DF4 /* XibLoc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7A34BF20027B4600348DF4 /* XibLoc.framework */; };
 		7B8A96ED2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
-		7B8A96EE2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
-		7B8A96EF2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
-		7B8A96F02017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
 		7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */; };
-		7B8A96F3201752B400481B45 /* MultipleWordsTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */; };
-		7B8A96F4201752B400481B45 /* MultipleWordsTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */; };
-		7B8A96F5201752B400481B45 /* MultipleWordsTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */; };
 		7B8BD02320026E8C009BE667 /* XibLoc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B8BD01A20026E8C009BE667 /* XibLoc.framework */; };
+		7BB9A93E2240226D00932FD5 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
+		7BB9A93F2240226D00932FD5 /* NumberAndFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */; };
+		7BB9A9402240226D00932FD5 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
+		7BB9A9412240226D00932FD5 /* PluralityDefinitionZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11B201634E4008A3FC0 /* PluralityDefinitionZone.swift */; };
+		7BB9A9422240226D00932FD5 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
+		7BB9A9432240226D00932FD5 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
+		7BB9A9442240226D00932FD5 /* Str2AttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */; };
+		7BB9A9452240226D00932FD5 /* RandomAccessCollection+StableSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */; };
+		7BB9A9462240226D00932FD5 /* PluralityDefinitionZoneValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11C201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift */; };
+		7BB9A9472240226D00932FD5 /* PluralityDefinitionZoneValueNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB120201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift */; };
+		7BB9A9482240226D00932FD5 /* ParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelper.swift */; };
+		7BB9A9492240226D00932FD5 /* PluralityDefinitionZoneValueGlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11D201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift */; };
+		7BB9A94A2240226D00932FD5 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11E201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift */; };
+		7BB9A94B2240226D00932FD5 /* PluralityDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11A201634E4008A3FC0 /* PluralityDefinition.swift */; };
+		7BB9A94C2240226D00932FD5 /* XibLocResolvingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */; };
+		7BB9A94D2240226D00932FD5 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
+		7BB9A94E2240226D00932FD5 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
+		7BB9A94F2240226D00932FD5 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
+		7BB9A9502240226D00932FD5 /* ParserHelper+NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */; };
+		7BB9A9512240226D00932FD5 /* MultipleWordsTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */; };
+		7BB9A9522240226D00932FD5 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11F201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift */; };
+		7BB9A9532240226D00932FD5 /* XibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB122201634E4008A3FC0 /* XibLoc.swift */; };
+		7BB9A9542240226D00932FD5 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
 		7BC4590C20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
-		7BC4590D20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
-		7BC4590E20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
-		7BC4590F20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
 		7BC4591120B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
-		7BC4591220B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
-		7BC4591320B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
-		7BC4591420B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
-		7BC696DE2002775C007BC3E9 /* XibLoc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BC696D52002775C007BC3E9 /* XibLoc.framework */; };
 		7BCBB124201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
-		7BCBB125201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
-		7BCBB126201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
-		7BCBB127201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
 		7BCBB128201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */; };
-		7BCBB129201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */; };
-		7BCBB12A201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */; };
-		7BCBB12B201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */; };
 		7BCBB12C201634E4008A3FC0 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
-		7BCBB12D201634E4008A3FC0 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
-		7BCBB12E201634E4008A3FC0 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
-		7BCBB12F201634E4008A3FC0 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
 		7BCBB130201634E4008A3FC0 /* ParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelper.swift */; };
-		7BCBB131201634E4008A3FC0 /* ParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelper.swift */; };
-		7BCBB132201634E4008A3FC0 /* ParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelper.swift */; };
-		7BCBB133201634E4008A3FC0 /* ParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB118201634E4008A3FC0 /* ParserHelper.swift */; };
 		7BCBB134201634E4008A3FC0 /* PluralityDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11A201634E4008A3FC0 /* PluralityDefinition.swift */; };
-		7BCBB135201634E4008A3FC0 /* PluralityDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11A201634E4008A3FC0 /* PluralityDefinition.swift */; };
-		7BCBB136201634E4008A3FC0 /* PluralityDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11A201634E4008A3FC0 /* PluralityDefinition.swift */; };
-		7BCBB137201634E4008A3FC0 /* PluralityDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11A201634E4008A3FC0 /* PluralityDefinition.swift */; };
 		7BCBB138201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11B201634E4008A3FC0 /* PluralityDefinitionZone.swift */; };
-		7BCBB139201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11B201634E4008A3FC0 /* PluralityDefinitionZone.swift */; };
-		7BCBB13A201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11B201634E4008A3FC0 /* PluralityDefinitionZone.swift */; };
-		7BCBB13B201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11B201634E4008A3FC0 /* PluralityDefinitionZone.swift */; };
 		7BCBB13C201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11C201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift */; };
-		7BCBB13D201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11C201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift */; };
-		7BCBB13E201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11C201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift */; };
-		7BCBB13F201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11C201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift */; };
 		7BCBB140201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11D201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift */; };
-		7BCBB141201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11D201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift */; };
-		7BCBB142201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11D201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift */; };
-		7BCBB143201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11D201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift */; };
 		7BCBB144201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11E201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift */; };
-		7BCBB145201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11E201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift */; };
-		7BCBB146201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11E201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift */; };
-		7BCBB147201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11E201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift */; };
 		7BCBB148201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11F201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift */; };
-		7BCBB149201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11F201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift */; };
-		7BCBB14A201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11F201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift */; };
-		7BCBB14B201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11F201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift */; };
 		7BCBB14C201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB120201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift */; };
-		7BCBB14D201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB120201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift */; };
-		7BCBB14E201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB120201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift */; };
-		7BCBB14F201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB120201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift */; };
 		7BCBB150201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */; };
-		7BCBB151201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */; };
-		7BCBB152201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */; };
-		7BCBB153201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */; };
 		7BCBB154201634E4008A3FC0 /* XibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB122201634E4008A3FC0 /* XibLoc.swift */; };
-		7BCBB155201634E4008A3FC0 /* XibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB122201634E4008A3FC0 /* XibLoc.swift */; };
-		7BCBB156201634E4008A3FC0 /* XibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB122201634E4008A3FC0 /* XibLoc.swift */; };
-		7BCBB157201634E4008A3FC0 /* XibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB122201634E4008A3FC0 /* XibLoc.swift */; };
 		7BCBB158201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */; };
-		7BCBB159201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */; };
-		7BCBB15A201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */; };
-		7BCBB15B201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */; };
 		7BCBB16220163612008A3FC0 /* XibLocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB15D2016354F008A3FC0 /* XibLocTests.swift */; };
-		7BCBB16320163612008A3FC0 /* XibLocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB15D2016354F008A3FC0 /* XibLocTests.swift */; };
-		7BCBB16420163612008A3FC0 /* XibLocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB15D2016354F008A3FC0 /* XibLocTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7B639D912002CDF40079C664 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7B661F9320026ACC00486182 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7B8BD01920026E8C009BE667;
-			remoteInfo = "happnLogger-macOS";
-		};
-		7B639D932002CDF40079C664 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7B661F9320026ACC00486182 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7B7A34BE20027B4600348DF4;
-			remoteInfo = "happnLogger-tvOS";
-		};
-		7B639D952002CDF40079C664 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7B661F9320026ACC00486182 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7BC696D42002775C007BC3E9;
-			remoteInfo = "happnLogger-iOS";
-		};
-		7B639D972002CDF40079C664 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7B661F9320026ACC00486182 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7BB52E42200279EA007CAD7B;
-			remoteInfo = "happnLogger-watchOS";
-		};
-		7B7A34C920027B4700348DF4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7B661F9320026ACC00486182 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7B7A34BE20027B4600348DF4;
-			remoteInfo = "happnLogger-tvOS";
-		};
 		7B8BD02420026E8C009BE667 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7B661F9320026ACC00486182 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7B8BD01920026E8C009BE667;
 			remoteInfo = "happnLogger-macOS";
-		};
-		7BC696DF2002775C007BC3E9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7B661F9320026ACC00486182 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7BC696D42002775C007BC3E9;
-			remoteInfo = "happnLogger-iOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -185,20 +76,16 @@
 		7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Str2StrXibLocInfo.swift; sourceTree = "<group>"; };
 		7B5BF7B72084E0EF006AAB6A /* NumberAndFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberAndFormat.swift; sourceTree = "<group>"; };
 		7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Str2AttrStrXibLocInfo.swift; sourceTree = "<group>"; };
-		7B7A34BF20027B4600348DF4 /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B7A34C720027B4700348DF4 /* XibLoc-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XibLoc-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B8A96EC2017528C00481B45 /* OneWordTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneWordTokens.swift; sourceTree = "<group>"; };
 		7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleWordsTokens.swift; sourceTree = "<group>"; };
 		7B8BD01A20026E8C009BE667 /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B8BD01D20026E8C009BE667 /* Framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Framework-Info.plist"; sourceTree = "<group>"; };
-		7B8BD02220026E8C009BE667 /* XibLoc-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XibLoc-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B8BD02220026E8C009BE667 /* XibLocTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XibLocTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B8BD02920026E8C009BE667 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		7B8BD032200274B9009BE667 /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
-		7BB52E43200279EA007CAD7B /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BB9A95B2240226D00932FD5 /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringAttributesChangesDescription.swift; sourceTree = "<group>"; };
 		7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Utils.swift"; sourceTree = "<group>"; };
-		7BC696D52002775C007BC3E9 /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7BC696DD2002775C007BC3E9 /* XibLoc-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XibLoc-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParsedXibLoc.swift; sourceTree = "<group>"; };
 		7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParserHelper+NSMutableAttributedString.swift"; sourceTree = "<group>"; };
 		7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParserHelper+String.swift"; sourceTree = "<group>"; };
@@ -217,21 +104,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		7B7A34BB20027B4600348DF4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7B7A34C420027B4700348DF4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7B7A34C820027B4700348DF4 /* XibLoc.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7B8BD01620026E8C009BE667 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -247,25 +119,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7BB52E3F200279EA007CAD7B /* Frameworks */ = {
+		7BB9A9552240226D00932FD5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BC696D12002775C007BC3E9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BC696DA2002775C007BC3E9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7BC696DE2002775C007BC3E9 /* XibLoc.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,12 +172,8 @@
 			isa = PBXGroup;
 			children = (
 				7B8BD01A20026E8C009BE667 /* XibLoc.framework */,
-				7B8BD02220026E8C009BE667 /* XibLoc-macOSTests.xctest */,
-				7B7A34BF20027B4600348DF4 /* XibLoc.framework */,
-				7B7A34C720027B4700348DF4 /* XibLoc-tvOSTests.xctest */,
-				7BC696D52002775C007BC3E9 /* XibLoc.framework */,
-				7BC696DD2002775C007BC3E9 /* XibLoc-iOSTests.xctest */,
-				7BB52E43200279EA007CAD7B /* XibLoc.framework */,
+				7B8BD02220026E8C009BE667 /* XibLocTests.xctest */,
+				7BB9A95B2240226D00932FD5 /* XibLoc.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -401,13 +254,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		7B7A34BC20027B4600348DF4 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7B8BD01720026E8C009BE667 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -415,14 +261,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7BB52E40200279EA007CAD7B /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BC696D22002775C007BC3E9 /* Headers */ = {
+		7BB9A9562240226D00932FD5 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -432,45 +271,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		7B7A34BE20027B4600348DF4 /* XibLoc-tvOS */ = {
+		7B8BD01920026E8C009BE667 /* XibLoc */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7B7A34D420027B4700348DF4 /* Build configuration list for PBXNativeTarget "XibLoc-tvOS" */;
-			buildPhases = (
-				7B7A34BA20027B4600348DF4 /* Sources */,
-				7B7A34BB20027B4600348DF4 /* Frameworks */,
-				7B7A34BC20027B4600348DF4 /* Headers */,
-				7B7A34BD20027B4600348DF4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "XibLoc-tvOS";
-			productName = "happnLogger-tvOS";
-			productReference = 7B7A34BF20027B4600348DF4 /* XibLoc.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		7B7A34C620027B4700348DF4 /* XibLoc-tvOSTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7B7A34D520027B4700348DF4 /* Build configuration list for PBXNativeTarget "XibLoc-tvOSTests" */;
-			buildPhases = (
-				7B7A34C320027B4700348DF4 /* Sources */,
-				7B7A34C420027B4700348DF4 /* Frameworks */,
-				7B7A34C520027B4700348DF4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7B7A34CA20027B4700348DF4 /* PBXTargetDependency */,
-			);
-			name = "XibLoc-tvOSTests";
-			productName = "happnLogger-tvOSTests";
-			productReference = 7B7A34C720027B4700348DF4 /* XibLoc-tvOSTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		7B8BD01920026E8C009BE667 /* XibLoc-macOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7B8BD02B20026E8C009BE667 /* Build configuration list for PBXNativeTarget "XibLoc-macOS" */;
+			buildConfigurationList = 7B8BD02B20026E8C009BE667 /* Build configuration list for PBXNativeTarget "XibLoc" */;
 			buildPhases = (
 				7B8BD01520026E8C009BE667 /* Sources */,
 				7B8BD01620026E8C009BE667 /* Frameworks */,
@@ -481,14 +284,14 @@
 			);
 			dependencies = (
 			);
-			name = "XibLoc-macOS";
+			name = XibLoc;
 			productName = "happnLogger-macOS";
 			productReference = 7B8BD01A20026E8C009BE667 /* XibLoc.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		7B8BD02120026E8C009BE667 /* XibLoc-macOSTests */ = {
+		7B8BD02120026E8C009BE667 /* XibLocTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7B8BD02E20026E8C009BE667 /* Build configuration list for PBXNativeTarget "XibLoc-macOSTests" */;
+			buildConfigurationList = 7B8BD02E20026E8C009BE667 /* Build configuration list for PBXNativeTarget "XibLocTests" */;
 			buildPhases = (
 				7B8BD01E20026E8C009BE667 /* Sources */,
 				7B8BD01F20026E8C009BE667 /* Frameworks */,
@@ -499,64 +302,28 @@
 			dependencies = (
 				7B8BD02520026E8C009BE667 /* PBXTargetDependency */,
 			);
-			name = "XibLoc-macOSTests";
+			name = XibLocTests;
 			productName = "happnLogger-macOSTests";
-			productReference = 7B8BD02220026E8C009BE667 /* XibLoc-macOSTests.xctest */;
+			productReference = 7B8BD02220026E8C009BE667 /* XibLocTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		7BB52E42200279EA007CAD7B /* XibLoc-watchOS */ = {
+		7BB9A93C2240226D00932FD5 /* XibLoc-Static */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7BB52E48200279EA007CAD7B /* Build configuration list for PBXNativeTarget "XibLoc-watchOS" */;
+			buildConfigurationList = 7BB9A9582240226D00932FD5 /* Build configuration list for PBXNativeTarget "XibLoc-Static" */;
 			buildPhases = (
-				7BB52E3E200279EA007CAD7B /* Sources */,
-				7BB52E3F200279EA007CAD7B /* Frameworks */,
-				7BB52E40200279EA007CAD7B /* Headers */,
-				7BB52E41200279EA007CAD7B /* Resources */,
+				7BB9A93D2240226D00932FD5 /* Sources */,
+				7BB9A9552240226D00932FD5 /* Frameworks */,
+				7BB9A9562240226D00932FD5 /* Headers */,
+				7BB9A9572240226D00932FD5 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "XibLoc-watchOS";
-			productName = "happnLogger-watchOS";
-			productReference = 7BB52E43200279EA007CAD7B /* XibLoc.framework */;
+			name = "XibLoc-Static";
+			productName = "happnLogger-macOS";
+			productReference = 7BB9A95B2240226D00932FD5 /* XibLoc.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		7BC696D42002775C007BC3E9 /* XibLoc-iOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7BC696E62002775C007BC3E9 /* Build configuration list for PBXNativeTarget "XibLoc-iOS" */;
-			buildPhases = (
-				7BC696D02002775C007BC3E9 /* Sources */,
-				7BC696D12002775C007BC3E9 /* Frameworks */,
-				7BC696D22002775C007BC3E9 /* Headers */,
-				7BC696D32002775C007BC3E9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "XibLoc-iOS";
-			productName = "happnLogger-iOS";
-			productReference = 7BC696D52002775C007BC3E9 /* XibLoc.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		7BC696DC2002775C007BC3E9 /* XibLoc-iOSTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7BC696E92002775C007BC3E9 /* Build configuration list for PBXNativeTarget "XibLoc-iOSTests" */;
-			buildPhases = (
-				7BC696D92002775C007BC3E9 /* Sources */,
-				7BC696DA2002775C007BC3E9 /* Frameworks */,
-				7BC696DB2002775C007BC3E9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7BC696E02002775C007BC3E9 /* PBXTargetDependency */,
-			);
-			name = "XibLoc-iOSTests";
-			productName = "happnLogger-iOSTests";
-			productReference = 7BC696DD2002775C007BC3E9 /* XibLoc-iOSTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -568,18 +335,6 @@
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = happn;
 				TargetAttributes = {
-					7B639D8D2002CDE70079C664 = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
-					};
-					7B7A34BE20027B4600348DF4 = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
-					};
-					7B7A34C620027B4700348DF4 = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
-					};
 					7B8BD01920026E8C009BE667 = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1000;
@@ -590,16 +345,7 @@
 						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
-					7BB52E42200279EA007CAD7B = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
-					};
-					7BC696D42002775C007BC3E9 = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
-					};
-					7BC696DC2002775C007BC3E9 = {
-						CreatedOnToolsVersion = 9.2;
+					7BB9A93C2240226D00932FD5 = {
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -616,33 +362,14 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7B639D8D2002CDE70079C664 /* All */,
-				7B8BD01920026E8C009BE667 /* XibLoc-macOS */,
-				7B7A34BE20027B4600348DF4 /* XibLoc-tvOS */,
-				7BC696D42002775C007BC3E9 /* XibLoc-iOS */,
-				7BB52E42200279EA007CAD7B /* XibLoc-watchOS */,
-				7B8BD02120026E8C009BE667 /* XibLoc-macOSTests */,
-				7BC696DC2002775C007BC3E9 /* XibLoc-iOSTests */,
-				7B7A34C620027B4700348DF4 /* XibLoc-tvOSTests */,
+				7B8BD01920026E8C009BE667 /* XibLoc */,
+				7BB9A93C2240226D00932FD5 /* XibLoc-Static */,
+				7B8BD02120026E8C009BE667 /* XibLocTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		7B7A34BD20027B4600348DF4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7B7A34C520027B4700348DF4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7B8BD01820026E8C009BE667 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -657,21 +384,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7BB52E41200279EA007CAD7B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BC696D32002775C007BC3E9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BC696DB2002775C007BC3E9 /* Resources */ = {
+		7BB9A9572240226D00932FD5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -681,44 +394,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		7B7A34BA20027B4600348DF4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7B8A96EE2017528C00481B45 /* OneWordTokens.swift in Sources */,
-				7B5BF7B92084E0EF006AAB6A /* NumberAndFormat.swift in Sources */,
-				7BCBB12D201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
-				7BCBB139201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
-				7B04C92F20166897002F9F52 /* Config.swift in Sources */,
-				7BCBB125201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */,
-				7B5BF7C32084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */,
-				7BCBB151201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */,
-				7BCBB13D201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */,
-				7BCBB14D201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
-				7BCBB131201634E4008A3FC0 /* ParserHelper.swift in Sources */,
-				7BCBB141201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */,
-				7BCBB145201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
-				7BCBB135201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
-				7BCBB159201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
-				7B353B842017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
-				7BC4591220B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */,
-				7BC4590D20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
-				7BCBB129201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
-				7B8A96F3201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
-				7BCBB149201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
-				7BCBB155201634E4008A3FC0 /* XibLoc.swift in Sources */,
-				7B266298214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7B7A34C320027B4700348DF4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7BCBB16420163612008A3FC0 /* XibLocTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7B8BD01520026E8C009BE667 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -757,129 +432,47 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7BB52E3E200279EA007CAD7B /* Sources */ = {
+		7BB9A93D2240226D00932FD5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B8A96F02017528C00481B45 /* OneWordTokens.swift in Sources */,
-				7B5BF7BB2084E0EF006AAB6A /* NumberAndFormat.swift in Sources */,
-				7BCBB12F201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
-				7BCBB13B201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
-				7B04C93120166897002F9F52 /* Config.swift in Sources */,
-				7BCBB127201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */,
-				7B5BF7C52084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */,
-				7BCBB153201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */,
-				7BCBB13F201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */,
-				7BCBB14F201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
-				7BCBB133201634E4008A3FC0 /* ParserHelper.swift in Sources */,
-				7BCBB143201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */,
-				7BCBB147201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
-				7BCBB137201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
-				7BCBB15B201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
-				7B353B862017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
-				7BC4591420B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */,
-				7BC4590F20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
-				7BCBB12B201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
-				7B8A96F5201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
-				7BCBB14B201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
-				7BCBB157201634E4008A3FC0 /* XibLoc.swift in Sources */,
-				7B26629A214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BC696D02002775C007BC3E9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7B8A96EF2017528C00481B45 /* OneWordTokens.swift in Sources */,
-				7B5BF7BA2084E0EF006AAB6A /* NumberAndFormat.swift in Sources */,
-				7BCBB12E201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
-				7BCBB13A201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
-				7B04C93020166897002F9F52 /* Config.swift in Sources */,
-				7BCBB126201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */,
-				7B5BF7C42084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */,
-				7BCBB152201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */,
-				7BCBB13E201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */,
-				7BCBB14E201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
-				7BCBB132201634E4008A3FC0 /* ParserHelper.swift in Sources */,
-				7BCBB142201634E4008A3FC0 /* PluralityDefinitionZoneValueGlob.swift in Sources */,
-				7BCBB146201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
-				7BCBB136201634E4008A3FC0 /* PluralityDefinition.swift in Sources */,
-				7BCBB15A201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */,
-				7B353B852017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */,
-				7BC4591320B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */,
-				7BC4590E20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
-				7BCBB12A201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
-				7B8A96F4201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
-				7BCBB14A201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
-				7BCBB156201634E4008A3FC0 /* XibLoc.swift in Sources */,
-				7B266299214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BC696D92002775C007BC3E9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7BCBB16320163612008A3FC0 /* XibLocTests.swift in Sources */,
+				7BB9A93E2240226D00932FD5 /* OneWordTokens.swift in Sources */,
+				7BB9A93F2240226D00932FD5 /* NumberAndFormat.swift in Sources */,
+				7BB9A9402240226D00932FD5 /* ParserHelper+String.swift in Sources */,
+				7BB9A9412240226D00932FD5 /* PluralityDefinitionZone.swift in Sources */,
+				7BB9A9422240226D00932FD5 /* Config.swift in Sources */,
+				7BB9A9432240226D00932FD5 /* ParsedXibLoc.swift in Sources */,
+				7BB9A9442240226D00932FD5 /* Str2AttrStrXibLocInfo.swift in Sources */,
+				7BB9A9452240226D00932FD5 /* RandomAccessCollection+StableSort.swift in Sources */,
+				7BB9A9462240226D00932FD5 /* PluralityDefinitionZoneValue.swift in Sources */,
+				7BB9A9472240226D00932FD5 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
+				7BB9A9482240226D00932FD5 /* ParserHelper.swift in Sources */,
+				7BB9A9492240226D00932FD5 /* PluralityDefinitionZoneValueGlob.swift in Sources */,
+				7BB9A94A2240226D00932FD5 /* PluralityDefinitionZoneValueIntervalOfFloats.swift in Sources */,
+				7BB9A94B2240226D00932FD5 /* PluralityDefinition.swift in Sources */,
+				7BB9A94C2240226D00932FD5 /* XibLocResolvingInfo.swift in Sources */,
+				7BB9A94D2240226D00932FD5 /* Str2StrXibLocInfo.swift in Sources */,
+				7BB9A94E2240226D00932FD5 /* NSMutableAttributedString+Utils.swift in Sources */,
+				7BB9A94F2240226D00932FD5 /* StringAttributesChangesDescription.swift in Sources */,
+				7BB9A9502240226D00932FD5 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
+				7BB9A9512240226D00932FD5 /* MultipleWordsTokens.swift in Sources */,
+				7BB9A9522240226D00932FD5 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
+				7BB9A9532240226D00932FD5 /* XibLoc.swift in Sources */,
+				7BB9A9542240226D00932FD5 /* Scanner+LinuxCompat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7B639D922002CDF40079C664 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7B8BD01920026E8C009BE667 /* XibLoc-macOS */;
-			targetProxy = 7B639D912002CDF40079C664 /* PBXContainerItemProxy */;
-		};
-		7B639D942002CDF40079C664 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7B7A34BE20027B4600348DF4 /* XibLoc-tvOS */;
-			targetProxy = 7B639D932002CDF40079C664 /* PBXContainerItemProxy */;
-		};
-		7B639D962002CDF40079C664 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7BC696D42002775C007BC3E9 /* XibLoc-iOS */;
-			targetProxy = 7B639D952002CDF40079C664 /* PBXContainerItemProxy */;
-		};
-		7B639D982002CDF40079C664 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7BB52E42200279EA007CAD7B /* XibLoc-watchOS */;
-			targetProxy = 7B639D972002CDF40079C664 /* PBXContainerItemProxy */;
-		};
-		7B7A34CA20027B4700348DF4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7B7A34BE20027B4600348DF4 /* XibLoc-tvOS */;
-			targetProxy = 7B7A34C920027B4700348DF4 /* PBXContainerItemProxy */;
-		};
 		7B8BD02520026E8C009BE667 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7B8BD01920026E8C009BE667 /* XibLoc-macOS */;
+			target = 7B8BD01920026E8C009BE667 /* XibLoc */;
 			targetProxy = 7B8BD02420026E8C009BE667 /* PBXContainerItemProxy */;
-		};
-		7BC696E02002775C007BC3E9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7BC696D42002775C007BC3E9 /* XibLoc-iOS */;
-			targetProxy = 7BC696DF2002775C007BC3E9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		7B639D8E2002CDE70079C664 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		7B639D8F2002CDE70079C664 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		7B661FA220026ACC00486182 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -911,10 +504,16 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 0.9.6;
+				DYLIB_CURRENT_VERSION = 0.9.6;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -929,13 +528,19 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = HPN;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
@@ -971,10 +576,16 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 0.9.6;
+				DYLIB_CURRENT_VERSION = 0.9.6;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -983,96 +594,19 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.2;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = HPN;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Release;
-		};
-		7B7A34D020027B4700348DF4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Xcode Supporting Files/Framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-tvOS";
-				PRODUCT_NAME = XibLoc;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				TARGETED_DEVICE_FAMILY = 3;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		7B7A34D120027B4700348DF4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Xcode Supporting Files/Framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-tvOS";
-				PRODUCT_NAME = XibLoc;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 3;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		7B7A34D220027B4700348DF4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Xcode Supporting Files/Test-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-tvOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 3;
-			};
-			name = Debug;
-		};
-		7B7A34D320027B4700348DF4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Xcode Supporting Files/Test-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-tvOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Release;
 		};
@@ -1081,24 +615,11 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Xcode Supporting Files/Framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-macOS";
+				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLoc;
 				PRODUCT_NAME = XibLoc;
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
@@ -1107,23 +628,11 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Xcode Supporting Files/Framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-macOS";
+				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLoc;
 				PRODUCT_NAME = XibLoc;
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = macosx;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -1133,15 +642,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "Xcode Supporting Files/Test-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-macOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLocTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -1151,158 +656,41 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "Xcode Supporting Files/Test-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-macOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLocTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
-		7BB52E49200279EA007CAD7B /* Debug */ = {
+		7BB9A9592240226D00932FD5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Xcode Supporting Files/Framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-watchOS";
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLoc;
 				PRODUCT_NAME = XibLoc;
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				TARGETED_DEVICE_FAMILY = 4;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		7BB52E4A200279EA007CAD7B /* Release */ = {
+		7BB9A95A2240226D00932FD5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Xcode Supporting Files/Framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-watchOS";
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLoc;
 				PRODUCT_NAME = XibLoc;
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		7BC696E72002775C007BC3E9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Xcode Supporting Files/Framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-iOS";
-				PRODUCT_NAME = XibLoc;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		7BC696E82002775C007BC3E9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Xcode Supporting Files/Framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-iOS";
-				PRODUCT_NAME = XibLoc;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		7BC696EA2002775C007BC3E9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Xcode Supporting Files/Test-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-iOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = Debug;
-		};
-		7BC696EB2002775C007BC3E9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Xcode Supporting Files/Test-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-iOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7B639D902002CDE70079C664 /* Build configuration list for PBXAggregateTarget "All" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7B639D8E2002CDE70079C664 /* Debug */,
-				7B639D8F2002CDE70079C664 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		7B661F9620026ACC00486182 /* Build configuration list for PBXProject "XibLoc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1312,25 +700,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7B7A34D420027B4700348DF4 /* Build configuration list for PBXNativeTarget "XibLoc-tvOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7B7A34D020027B4700348DF4 /* Debug */,
-				7B7A34D120027B4700348DF4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7B7A34D520027B4700348DF4 /* Build configuration list for PBXNativeTarget "XibLoc-tvOSTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7B7A34D220027B4700348DF4 /* Debug */,
-				7B7A34D320027B4700348DF4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7B8BD02B20026E8C009BE667 /* Build configuration list for PBXNativeTarget "XibLoc-macOS" */ = {
+		7B8BD02B20026E8C009BE667 /* Build configuration list for PBXNativeTarget "XibLoc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7B8BD02C20026E8C009BE667 /* Debug */,
@@ -1339,7 +709,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7B8BD02E20026E8C009BE667 /* Build configuration list for PBXNativeTarget "XibLoc-macOSTests" */ = {
+		7B8BD02E20026E8C009BE667 /* Build configuration list for PBXNativeTarget "XibLocTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7B8BD02F20026E8C009BE667 /* Debug */,
@@ -1348,29 +718,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7BB52E48200279EA007CAD7B /* Build configuration list for PBXNativeTarget "XibLoc-watchOS" */ = {
+		7BB9A9582240226D00932FD5 /* Build configuration list for PBXNativeTarget "XibLoc-Static" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7BB52E49200279EA007CAD7B /* Debug */,
-				7BB52E4A200279EA007CAD7B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7BC696E62002775C007BC3E9 /* Build configuration list for PBXNativeTarget "XibLoc-iOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7BC696E72002775C007BC3E9 /* Debug */,
-				7BC696E82002775C007BC3E9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7BC696E92002775C007BC3E9 /* Build configuration list for PBXNativeTarget "XibLoc-iOSTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7BC696EA2002775C007BC3E9 /* Debug */,
-				7BC696EB2002775C007BC3E9 /* Release */,
+				7BB9A9592240226D00932FD5 /* Debug */,
+				7BB9A95A2240226D00932FD5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
