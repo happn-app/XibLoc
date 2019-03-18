@@ -54,7 +54,9 @@
 		7BCBB150201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */; };
 		7BCBB154201634E4008A3FC0 /* XibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB122201634E4008A3FC0 /* XibLoc.swift */; };
 		7BCBB158201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */; };
-		7BCBB16220163612008A3FC0 /* XibLocTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB15D2016354F008A3FC0 /* XibLocTests.swift */; };
+		7BCBB16220163612008A3FC0 /* XibLocTestsSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB15D2016354F008A3FC0 /* XibLocTestsSwift.swift */; };
+		7BF53365224050F300A141BB /* XibLocTestsObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF53364224050F300A141BB /* XibLocTestsObjC.m */; };
+		7BF53368224052C800A141BB /* XibLoc4ObjCHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF53367224052C800A141BB /* XibLoc4ObjCHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,8 +102,11 @@
 		7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+StableSort.swift"; sourceTree = "<group>"; };
 		7BCBB122201634E4008A3FC0 /* XibLoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLoc.swift; sourceTree = "<group>"; };
 		7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocResolvingInfo.swift; sourceTree = "<group>"; };
-		7BCBB15D2016354F008A3FC0 /* XibLocTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocTests.swift; sourceTree = "<group>"; };
+		7BCBB15D2016354F008A3FC0 /* XibLocTestsSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocTestsSwift.swift; sourceTree = "<group>"; };
 		7BF5336022404C4300A141BB /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
+		7BF53362224050F300A141BB /* XibLocTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XibLocTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		7BF53364224050F300A141BB /* XibLocTestsObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XibLocTestsObjC.m; sourceTree = "<group>"; };
+		7BF53367224052C800A141BB /* XibLoc4ObjCHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLoc4ObjCHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +207,7 @@
 		7B8BD01B20026E8C009BE667 /* Xcode Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7BF53362224050F300A141BB /* XibLocTests-Bridging-Header.h */,
 				7B8BD01D20026E8C009BE667 /* Framework-Info.plist */,
 				7B8BD02920026E8C009BE667 /* Test-Info.plist */,
 			);
@@ -247,10 +253,20 @@
 		7BCBB15C2016354F008A3FC0 /* XibLocTests */ = {
 			isa = PBXGroup;
 			children = (
-				7BCBB15D2016354F008A3FC0 /* XibLocTests.swift */,
+				7BF533662240526A00A141BB /* Helpers */,
+				7BF53364224050F300A141BB /* XibLocTestsObjC.m */,
+				7BCBB15D2016354F008A3FC0 /* XibLocTestsSwift.swift */,
 				7BF5336022404C4300A141BB /* XCTestManifests.swift */,
 			);
 			path = XibLocTests;
+			sourceTree = "<group>";
+		};
+		7BF533662240526A00A141BB /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				7BF53367224052C800A141BB /* XibLoc4ObjCHelper.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -344,7 +360,7 @@
 					};
 					7B8BD02120026E8C009BE667 = {
 						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					7BB9A93C2240226D00932FD5 = {
@@ -430,7 +446,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7BCBB16220163612008A3FC0 /* XibLocTests.swift in Sources */,
+				7BF53368224052C800A141BB /* XibLoc4ObjCHelper.swift in Sources */,
+				7BCBB16220163612008A3FC0 /* XibLocTestsSwift.swift in Sources */,
+				7BF53365224050F300A141BB /* XibLocTestsObjC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -649,6 +667,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLocTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Xcode Supporting Files/XibLocTests-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -663,6 +682,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLocTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Xcode Supporting Files/XibLocTests-Bridging-Header.h";
 			};
 			name = Release;
 		};
