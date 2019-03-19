@@ -556,6 +556,43 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	/* Copied from ObjC tests. */
+	func testFromHappn1Septies() {
+		let str = "🧔🏻*🧒🏻*"
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+			boldType: .default, baseFont: baseFont, baseColor: baseColor
+		)
+		let resultStr = "🧔🏻🧒🏻"
+		let objcStart = ("🧔🏻" as NSString).length
+		let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: objcStart, length: (resultStr as NSString).length - objcStart))
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testFromHappn1Octies() {
+		let str = "🧔🏻*a*"
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+			boldType: .default, baseFont: baseFont, baseColor: baseColor
+		)
+		let resultStr = "🧔🏻a"
+		let objcStart = ("🧔🏻" as NSString).length
+		let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: objcStart, length: (resultStr as NSString).length - objcStart))
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			result
+		)
+	}
+	
 	/* ***** Doc Cases Tests ***** */
 	/* Config:
 	 *    "*" is a left and right token for an attributes modification

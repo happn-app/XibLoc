@@ -28,9 +28,10 @@
 
 #if TARGET_OS_OSX
 
-/* Same as testFromHappn1TerObjC, but was the original issue raised when
- * migrating happn to Xcode 10.2 (w/ the Swift 5 runtime). */
-- (void)testHappnCrashObjC
+/* Same as testFromHappn1SeptiesObjC, but was the original issue raised when
+ * migrating happn to Xcode 10.2 (w/ the Swift 5 runtime). The equivalent test
+ * has been added afterwards. */
+- (void)testFromHappn2ObjC
 {
 	NSColor *baseColor = NSColor.blackColor;
 	NSFont *baseFont = [NSFont systemFontOfSize:12];
@@ -40,7 +41,7 @@
 																																						 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES];
 	
 	NSMutableAttributedString *ref = [[NSMutableAttributedString alloc] initWithString:@"   Play CrushTime and see if you can guess who Liked you!" attributes:@{NSFontAttributeName: baseFont, NSForegroundColorAttributeName: baseColor}];
-	[ref setAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:12]} range:NSMakeRange(3, 14)];
+	[ObjCXibLoc setBoldOrItalicIn:ref bold:1 italic:-1 range:NSMakeRange(3, 14)];
 	
 	XCTAssertEqualObjects(tested, ref);
 }
@@ -60,7 +61,7 @@
 	
 	NSString *resultStr = @"CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!";
 	NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:resultStr attributes:@{NSFontAttributeName: baseFont, NSForegroundColorAttributeName: baseColor}];
-	[result setAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:12]} range:NSMakeRange(0, 15)];
+	[ObjCXibLoc setBoldOrItalicIn:result bold:1 italic:-1 range:NSMakeRange(0, 15)];
 	
 	XCTAssertEqualObjects(tested, result);
 }
@@ -78,7 +79,7 @@
 	
 	NSString *resultStr = @"लें";
 	NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:resultStr attributes:@{NSFontAttributeName: baseFont, NSForegroundColorAttributeName: baseColor}];
-	[result setAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:12]} range:NSMakeRange(0, result.string.length)];
+	[ObjCXibLoc setBoldOrItalicIn:result bold:1 italic:-1 range:NSMakeRange(0, result.string.length)];
 	
 	XCTAssertEqualObjects(tested, result);
 }
@@ -94,7 +95,45 @@
 	
 	NSString *resultStr = @"👳🏿‍♀️";
 	NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:resultStr attributes:@{NSFontAttributeName: baseFont, NSForegroundColorAttributeName: baseColor}];
-	[result setAttributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:12]} range:NSMakeRange(0, result.string.length)];
+	[ObjCXibLoc setBoldOrItalicIn:result bold:1 italic:-1 range:NSMakeRange(0, result.string.length)];
+	
+	XCTAssertEqualObjects(tested, result);
+}
+
+/* Also exists in Swift */
+- (void)testFromHappn1SeptiesObjC
+{
+	NSString *str = @"🧔🏻*🧒🏻*";
+	NSColor *baseColor = NSColor.blackColor;
+	NSFont *baseFont = [NSFont systemFontOfSize:12];
+	
+	NSMutableAttributedString *tested = [ObjCXibLoc objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPluralWithBase:str
+																																							 baseFont:baseFont baseColor:baseColor
+																																						 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES];
+	
+	NSString *resultStr = @"🧔🏻🧒🏻";
+	NSInteger start = @"🧔🏻".length;
+	NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:resultStr attributes:@{NSFontAttributeName: baseFont, NSForegroundColorAttributeName: baseColor}];
+	[ObjCXibLoc setBoldOrItalicIn:result bold:1 italic:-1 range:NSMakeRange(start, result.string.length - start)];
+	
+	XCTAssertEqualObjects(tested, result);
+}
+
+/* Also exists in Swift */
+- (void)testFromHappn1OctiesObjC
+{
+	NSString *str = @"🧔🏻*a*";
+	NSColor *baseColor = NSColor.blackColor;
+	NSFont *baseFont = [NSFont systemFontOfSize:12];
+	
+	NSMutableAttributedString *tested = [ObjCXibLoc objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPluralWithBase:str
+																																							 baseFont:baseFont baseColor:baseColor
+																																						 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES];
+	
+	NSString *resultStr = @"🧔🏻a";
+	NSInteger start = @"🧔🏻".length;
+	NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:resultStr attributes:@{NSFontAttributeName: baseFont, NSForegroundColorAttributeName: baseColor}];
+	[ObjCXibLoc setBoldOrItalicIn:result bold:1 italic:-1 range:NSMakeRange(start, result.string.length - start)];
 	
 	XCTAssertEqualObjects(tested, result);
 }
