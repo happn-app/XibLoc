@@ -451,6 +451,7 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	/* Also exists in ObjC */
 	func testFromHappn1() {
 		let str = "{*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
 		let baseColor = XibLocColor.black
@@ -482,6 +483,7 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	/* Also exists in ObjC */
 	func testFromHappn1Ter() {
 		let str = "*लें*"
 		let baseColor = XibLocColor.black
@@ -535,6 +537,7 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	/* Also exists in ObjC */
 	func testFromHappn1Sexies() {
 		let str = "🧒🏻👳🏿‍♀️🧒🏻"
 		let baseColor = XibLocColor.black

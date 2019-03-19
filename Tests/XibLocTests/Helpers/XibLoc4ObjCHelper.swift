@@ -28,6 +28,15 @@ final class ObjCXibLoc : NSObject {
 		))
 	}
 	
+	@objc
+	static func objc_applyingXibLocTransformForCustomBold(base: String, baseFont: XibLocFont, baseColor: XibLocColor, boldToken: String) -> NSMutableAttributedString {
+		return base.applying(xibLocInfo: Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(identityReplacement: { $0 }),
+			attributesReplacements: [OneWordTokens(token: boldToken): StringAttributesChangesDescription(changes: [.setBold])], returnTypeReplacements: nil,
+			defaultAttributes: [.font: baseFont, .foregroundColor: baseColor]
+		))
+	}
+	
 	private override init() {}
 	
 }
