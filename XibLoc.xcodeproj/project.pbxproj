@@ -694,7 +694,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Xcode Supporting Files/Framework-Info.plist";
 				MACH_O_TYPE = staticlib;
-				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLoc;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-Static";
 				PRODUCT_NAME = XibLoc;
 			};
 			name = Debug;
@@ -706,7 +706,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Xcode Supporting Files/Framework-Info.plist";
 				MACH_O_TYPE = staticlib;
-				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLoc;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.happn.XibLoc-Static";
 				PRODUCT_NAME = XibLoc;
 			};
 			name = Release;
