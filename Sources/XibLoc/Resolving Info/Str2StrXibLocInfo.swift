@@ -12,7 +12,7 @@ import Foundation
 
 public typealias Str2StrXibLocInfo = XibLocResolvingInfo<String, String>
 
-public extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
+extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 	
 	public init(simpleReplacementWithToken token: String, value: String, escapeToken e: String? = di.defaultEscapeToken) {
 		self.init(replacements: [token: value], escapeToken: e)

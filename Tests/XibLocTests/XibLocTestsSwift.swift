@@ -451,6 +451,7 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	/* Also exists in ObjC */
 	func testFromHappn1() {
 		let str = "{*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
 		let baseColor = XibLocColor.black
@@ -482,6 +483,7 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	/* Also exists in ObjC */
 	func testFromHappn1Ter() {
 		let str = "*लें*"
 		let baseColor = XibLocColor.black
@@ -535,6 +537,7 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	/* Also exists in ObjC */
 	func testFromHappn1Sexies() {
 		let str = "🧒🏻👳🏿‍♀️🧒🏻"
 		let baseColor = XibLocColor.black
@@ -547,6 +550,43 @@ class XibLocTests: XCTestCase {
 		let resultStr = "👳🏿‍♀️"
 		let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
 		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	/* Copied from ObjC tests. */
+	func testFromHappn1Septies() {
+		let str = "🧔🏻*🧒🏻*"
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+			boldType: .default, baseFont: baseFont, baseColor: baseColor
+		)
+		let resultStr = "🧔🏻🧒🏻"
+		let objcStart = ("🧔🏻" as NSString).length
+		let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: objcStart, length: (resultStr as NSString).length - objcStart))
+		XCTAssertEqual(
+			str.applying(xibLocInfo: info),
+			result
+		)
+	}
+	
+	func testFromHappn1Octies() {
+		let str = "🧔🏻*a*"
+		let baseColor = XibLocColor.black
+		let baseFont = XibLocFont.systemFont(ofSize: 14)
+		let info = Str2AttrStrXibLocInfo(
+			strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+			boldType: .default, baseFont: baseFont, baseColor: baseColor
+		)
+		let resultStr = "🧔🏻a"
+		let objcStart = ("🧔🏻" as NSString).length
+		let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+		result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: objcStart, length: (resultStr as NSString).length - objcStart))
 		XCTAssertEqual(
 			str.applying(xibLocInfo: info),
 			result
@@ -717,61 +757,5 @@ class XibLocTests: XCTestCase {
 	}()
 	
 	#endif
-	
-	
-	/* Fill this array with all the tests to have Linux testing compatibility. */
-	static var allTests = [
-		("testEscapedSimpleReplacement", testEscapedSimpleReplacement),
-		("testNonEscapedButPrecededByEscapeTokenSimpleReplacement", testNonEscapedButPrecededByEscapeTokenSimpleReplacement),
-		("testOneSimpleReplacement", testOneSimpleReplacement),
-		("testOneOrderedReplacement1", testOneOrderedReplacement1),
-		("testOneOrderedReplacement2", testOneOrderedReplacement2),
-		("testOneOrderedReplacementTwice", testOneOrderedReplacementTwice),
-		("testOneOrderedReplacementAboveMax", testOneOrderedReplacementAboveMax),
-		("testOnePluralReplacement", testOnePluralReplacement),
-		("testOnePluralReplacementMissingOneZone", testOnePluralReplacementMissingOneZone),
-		("testOneOrderedReplacementAndSimpleReplacement1", testOneOrderedReplacementAndSimpleReplacement1),
-		("testOneOrderedReplacementAndSimpleReplacement2", testOneOrderedReplacementAndSimpleReplacement2),
-		("testThaiGender", testThaiGender),
-		("testEmojiGender", testEmojiGender),
-		("testEmojiGenderBis", testEmojiGenderBis),
-		("testInvalidOverlappingReplacements", testInvalidOverlappingReplacements),
-		("testTwoVariablesChangesInOrderedReplacementGroup", testTwoVariablesChangesInOrderedReplacementGroup),
-		("testTwoVariablesChangesAndGenderInOrderedReplacementGroup", testTwoVariablesChangesAndGenderInOrderedReplacementGroup),
-		("testEmbeddedSimpleReplacements", testEmbeddedSimpleReplacements),
-		
-		/* Not Linux compatible. */
-//		("testOneOrderedReplacementAndIdentityAttributeModification1", testOneOrderedReplacementAndIdentityAttributeModification1),
-//		("testOneOrderedReplacementAndIdentityAttributeModification2", testOneOrderedReplacementAndIdentityAttributeModification2),
-//		("testOneOrderedReplacementAndIdentityAttributeModification3", testOneOrderedReplacementAndIdentityAttributeModification3),
-//		("testOneOrderedReplacementAndIdentityAttributeModification4", testOneOrderedReplacementAndIdentityAttributeModification4),
-//		("testOneAttributesChange", testOneAttributesChange),
-//		("testOneAttributesChangeTwice", testOneAttributesChangeTwice),
-//		("testTwoOverlappingAttributesChange", testTwoOverlappingAttributesChange),
-//		("testApplyingOnStringTwice", testApplyingOnStringTwice),
-//		("testApplyingOnMutableAttributedStringTwice", testApplyingOnMutableAttributedStringTwice),
-//		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup1", testVariableChangeAfterAttrChangeInOrderedReplacementGroup1),
-//		("testVariableChangeAfterAttrChangeInOrderedReplacementGroup2", testVariableChangeAfterAttrChangeInOrderedReplacementGroup2),
-//		("testOverlappingAttributesChangesWithPluralInTheMiddle", testOverlappingAttributesChangesWithPluralInTheMiddle),
-//		("testFromHappn1", testFromHappn1),
-//		("testFromHappn1Bis", testFromHappn1Bis),
-//		("testFromHappn1Ter", testFromHappn1Ter),
-//		("testFromHappn1Quater", testFromHappn1Quater),
-//		("testFromHappn1Quinquies", testFromHappn1Quinquies),
-//		("testFromHappn1Sexies", testFromHappn1Sexies),
-//		("testDocCase1", testDocCase1),
-//		("testDocCase2", testDocCase2),
-//		("testDocCase3", testDocCase3),
-//		("testDocCase4", testDocCase4),
-//		("testDocCase5", testDocCase5),
-//		("testDocCase6", testDocCase6),
-//		("testDocCase6Variant", testDocCase6Variant),
-//		("testDocCase7", testDocCase7),
-//		("testDocCase8", testDocCase8),
-//		("testDocCase9", testDocCase9),
-//		("testDocCase10", testDocCase10),
-//		("testDocCase11", testDocCase11),
-//		("testDocCase12", testDocCase12),
-	]
 	
 }

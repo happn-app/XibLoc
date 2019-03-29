@@ -76,7 +76,7 @@ public struct StringAttributesChangesDescription {
 	}
 	
 	/* IF the NSMutableAttributedString had been modified to be Swifty, we would have used the declaration below... */
-//	func apply(to attributedString: inout AttributedString, range: Range<AttributedString.Index> /* An ObjC range */) {
+//	func apply(to attributedString: inout AttributedString, range: Range<AttributedString.Index>) {
 	func apply(to attributedString: NSMutableAttributedString, range: NSRange /* An ObjC range */) {
 		for h in changes {h(attributedString, range)}
 	}

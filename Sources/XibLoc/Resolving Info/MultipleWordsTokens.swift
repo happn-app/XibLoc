@@ -24,10 +24,8 @@ public struct MultipleWordsTokens : Hashable {
 		leftToken = lt
 		interiorToken = it
 		rightToken = rt
-		hashValue = (leftToken + interiorToken + rightToken).hashValue
 	}
 	
-	public var hashValue: Int
 	public static func ==(lhs: MultipleWordsTokens, rhs: MultipleWordsTokens) -> Bool {
 		return lhs.leftToken == rhs.leftToken && lhs.interiorToken == rhs.interiorToken && lhs.rightToken == rhs.rightToken
 	}

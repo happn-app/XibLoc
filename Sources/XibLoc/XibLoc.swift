@@ -10,7 +10,7 @@ import Foundation
 
 
 
-public extension String {
+extension String {
 	
 	public func applying(xibLocInfo: XibLocResolvingInfo<String, String>) -> String {
 		return ParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: StringParserHelper.self)
@@ -33,7 +33,7 @@ public extension String {
 
 #if !os(Linux)
 
-public extension NSAttributedString {
+extension NSAttributedString {
 	
 	public func applying(xibLocInfo: XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>) -> NSMutableAttributedString {
 		let mutableAttrStr: NSMutableAttributedString
@@ -45,7 +45,7 @@ public extension NSAttributedString {
 	
 }
 
-public extension NSMutableAttributedString {
+extension NSMutableAttributedString {
 	
 	public func apply(xibLocInfo: XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>) {
 		let resolved = applying(xibLocInfo: xibLocInfo)
