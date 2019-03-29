@@ -575,6 +575,7 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	/* Copied from ObjC tests. */
 	func testFromHappn1Octies() {
 		let str = "🧔🏻*a*"
 		let baseColor = XibLocColor.black
