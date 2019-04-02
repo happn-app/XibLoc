@@ -12,6 +12,7 @@ import Foundation
 
 
 
+#if !os(Linux)
 @objc
 final class ObjCXibLoc : NSObject {
 	
@@ -54,3 +55,4 @@ final class ObjCXibLoc : NSObject {
 	private override init() {}
 	
 }
+#endif

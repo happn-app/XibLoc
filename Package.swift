@@ -12,6 +12,6 @@ let package = Package(
 	],
 	targets: [
 		.target(name: "XibLoc", dependencies: ["DummyLinuxOSLog"]),
-		.testTarget(name: "XibLocTests", dependencies: ["XibLoc"])
+		.testTarget(name: "XibLocTests", dependencies: ["XibLoc"], exclude: ["XibLocTestsObjC.m"])
 	]
 )
