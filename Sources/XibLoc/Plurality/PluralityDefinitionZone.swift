@@ -89,8 +89,8 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 		return zoneValues.first{ $0.matches(int: int) } != nil
 	}
 	
-	func matches(float: Float, precision: Float) -> Bool {
-		return zoneValues.first{ $0.matches(float: float, precision: precision) } != nil
+	func matches(float: Float, characteristics: PluralValue.FloatCharacteristics) -> Bool {
+		return zoneValues.first{ $0.matches(float: float, characteristics: characteristics) } != nil
 	}
 	
 	var debugDescription: String {

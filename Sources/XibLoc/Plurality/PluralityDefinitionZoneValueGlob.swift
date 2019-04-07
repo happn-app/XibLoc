@@ -86,13 +86,20 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 		}
 	}
 	
-	func matches(float: Float, precision: Float) -> Bool {
+	func matches(float: Float, characteristics: PluralValue.FloatCharacteristics) -> Bool {
 		switch value {
 		case .anyNumber, .anyFloat: return true
 			
 		case .regex:
-			var stringValue = String(format: "%.15f", float)
-			while stringValue.hasSuffix("0") {stringValue = String(stringValue.dropLast())}
+			var stringValue = String(format: "%.*f", float, characteristics.maxFractionDigits)
+			let components = stringValue.split(separator: ".", omittingEmptySubsequences: false)
+			assert(components.count == 2)
+			
+			let delta = components[0].count + 1 /* size of the integer part + the decimal separator */
+			while stringValue.hasSuffix("0") && stringValue.count - delta > characteristics.minFractionDigits {
+				stringValue = String(stringValue.dropLast())
+			}
+			
 			return matches(string: stringValue)
 		}
 	}

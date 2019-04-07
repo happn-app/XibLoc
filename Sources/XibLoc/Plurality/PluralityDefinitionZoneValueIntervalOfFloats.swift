@@ -49,21 +49,21 @@ struct PluralityDefinitionZoneValueIntervalOfFloats : PluralityDefinitionZoneVal
 	}
 	
 	func matches(int: Int) -> Bool {
-		return matches(float: Float(int), precision: 0)
+		return matches(float: Float(int), characteristics: .init(precision: 0))
 	}
 	
-	func matches(float: Float, precision: Float) -> Bool {
-		assert(precision >= 0)
+	func matches(float: Float, characteristics: PluralValue.FloatCharacteristics) -> Bool {
 		assert(start != nil || end != nil)
+		assert(characteristics.precision >= 0)
 		
 		if let start = start {
-			guard (start.included && float - start.value >= -precision) || (!start.included && float - start.value > -precision) else {
+			guard (start.included && float - start.value >= -characteristics.precision) || (!start.included && float - start.value > -characteristics.precision) else {
 				return false
 			}
 		}
 		
 		if let end = end {
-			guard (end.included && float - end.value <= precision) || (!end.included && float - end.value < precision) else {
+			guard (end.included && float - end.value <= characteristics.precision) || (!end.included && float - end.value < characteristics.precision) else {
 				return false
 			}
 		}

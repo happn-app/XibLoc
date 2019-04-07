@@ -22,6 +22,6 @@ protocol PluralityDefinitionZoneValue : CustomDebugStringConvertible {
 	init?(string: String)
 	
 	func matches(int: Int) -> Bool
-	func matches(float: Float, precision: Float) -> Bool
+	func matches(float: Float, characteristics: PluralValue.FloatCharacteristics) -> Bool
 	
 }

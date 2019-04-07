@@ -51,15 +51,15 @@ struct PluralityDefinitionZoneValueNumber : PluralityDefinitionZoneValue {
 		}
 	}
 	
-	func matches(float: Float, precision: Float) -> Bool {
-		assert(precision >= 0)
+	func matches(float: Float, characteristics: PluralValue.FloatCharacteristics) -> Bool {
+		assert(characteristics.precision >= 0)
 		
 		let cmp: Float
 		switch value {
 		case .int(let i): cmp = Float(i)
 		case .float(let f): cmp = f
 		}
-		return abs(cmp - float) <= precision
+		return abs(cmp - float) <= characteristics.precision
 	}
 	
 	var debugDescription: String {

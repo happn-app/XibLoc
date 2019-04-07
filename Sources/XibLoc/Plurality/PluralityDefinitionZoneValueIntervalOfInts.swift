@@ -42,7 +42,7 @@ struct PluralityDefinitionZoneValueIntervalOfInts : PluralityDefinitionZoneValue
 		return true
 	}
 	
-	func matches(float: Float, precision: Float) -> Bool {
+	func matches(float: Float, characteristics: PluralValue.FloatCharacteristics) -> Bool {
 		return false
 	}
 	

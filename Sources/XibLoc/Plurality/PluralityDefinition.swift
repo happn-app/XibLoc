@@ -26,15 +26,33 @@ import Foundation
 
 public enum PluralValue {
 	
+	public struct FloatCharacteristics {
+		
+		/** The precision to use when comparing floats numerically
+		(`abs(float1 - float2) <= precision`). */
+		public var precision: Float
+		public var minFractionDigits: Int
+		public var maxFractionDigits: Int
+		
+		public init(precision p: Float, minFractionDigits minD: Int = 0, maxFractionDigits maxD: Int = 3) {
+			assert(minD >= 0 && maxD >= minD)
+			
+			precision = p
+			minFractionDigits = minD
+			maxFractionDigits = maxD
+		}
+		
+	}
+	
 	case int(Int)
 	case float(Float)
-	case floatCustomPrecision(value: Float, precision: Float)
+	case floatCustomCharacteristics(value: Float, characteristics: FloatCharacteristics)
 	
 	public func asNumber() -> NSNumber {
 		switch self {
-		case .int(let i):                     return NSNumber(value: i)
-		case .float(let f):                   return NSNumber(value: f)
-		case .floatCustomPrecision(let f, _): return NSNumber(value: f)
+		case .int(let i):                           return NSNumber(value: i)
+		case .float(let f):                         return NSNumber(value: f)
+		case .floatCustomCharacteristics(let f, _): return NSNumber(value: f)
 		}
 	}
 	
@@ -108,11 +126,11 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		}
 	}
 	
-	func indexOfVersionToUse(forValue value: PluralValue, defaultFloatPrecision: Float = 0.00001, numberOfVersions: Int) -> Int {
+	func indexOfVersionToUse(forValue value: PluralValue, defaultFloatCharacteristics: PluralValue.FloatCharacteristics = .init(precision: 0.00001), numberOfVersions: Int) -> Int {
 		switch value {
-		case .int(let int):                                                     return indexOfVersionToUse(matchingZonePredicate: { $0.matches(int: int) }, numberOfVersions: numberOfVersions)
-		case .float(let float):                                                 return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, precision: defaultFloatPrecision) }, numberOfVersions: numberOfVersions)
-		case .floatCustomPrecision(value: let float, precision: let precision): return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, precision: precision) }, numberOfVersions: numberOfVersions)
+		case .int(let int):                                               return indexOfVersionToUse(matchingZonePredicate: { $0.matches(int: int) }, numberOfVersions: numberOfVersions)
+		case .float(let float):                                           return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, characteristics: defaultFloatCharacteristics) }, numberOfVersions: numberOfVersions)
+		case .floatCustomCharacteristics(let float, let characteristics): return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, characteristics: characteristics) }, numberOfVersions: numberOfVersions)
 		}
 	}
 	
@@ -120,8 +138,8 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		return indexOfVersionToUse(matchingZonePredicate: { $0.matches(int: int) }, numberOfVersions: numberOfVersions)
 	}
 	
-	func indexOfVersionToUse(forValue float: Float, precision: Float, numberOfVersions: Int) -> Int {
-		return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, precision: precision) }, numberOfVersions: numberOfVersions)
+	func indexOfVersionToUse(forValue float: Float, characteristics: PluralValue.FloatCharacteristics, numberOfVersions: Int) -> Int {
+		return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, characteristics: characteristics) }, numberOfVersions: numberOfVersions)
 	}
 	
 	public var debugDescription: String {
