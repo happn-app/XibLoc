@@ -24,6 +24,7 @@ import Foundation
 
 
 
+#warning("TODO: Some floats are acutally ints depending on their characteristics! And some ints are floats depending on the formatter (which cannot even be specified at the moment…)")
 public enum PluralValue {
 	
 	public struct FloatCharacteristics {
@@ -57,6 +58,7 @@ public enum PluralValue {
 	}
 	
 }
+
 
 public struct PluralityDefinition : CustomDebugStringConvertible {
 	

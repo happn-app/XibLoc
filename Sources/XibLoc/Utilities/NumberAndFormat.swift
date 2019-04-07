@@ -39,6 +39,7 @@ public struct NumberAndFormat {
 		formatter = fmt
 	}
 	
+	#warning("TODO: Find a way to init a NumberAndFormat with an appropriate float characteristics from the number formatter (hint: minimumFractionDigits and maximumFractionDigits). Currently difficult because the precision is in FloatCharacteristics and has no relation to the number formatter.")
 	public init(_ f: Float, characteristics: PluralValue.FloatCharacteristics? = nil, formatter fmt: NumberFormatter = NumberAndFormat.defaultNumberFormatterFloat) {
 		if let c = characteristics {number = .floatCustomCharacteristics(value: f, characteristics: c)}
 		else                       {number = .float(f)}
