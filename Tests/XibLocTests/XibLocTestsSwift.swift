@@ -237,6 +237,15 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
+	/* Also exists in ObjC */
+	func testFromHappn3() {
+		let info = Str2StrXibLocInfo(replacement: "", genderMeIsMale: false, genderOtherIsMale: false, escapeToken: "~")
+		XCTAssertEqual(
+			"{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}".applying(xibLocInfo: info),
+			"Vous vous êtes croisées"
+		)
+	}
+	
 	#if os(macOS)
 	/* ************************
 	   MARK: - macOS Only Tests

@@ -10,6 +10,7 @@ extension XibLocTests {
         ("testEmojiGender", testEmojiGender),
         ("testEmojiGenderBis", testEmojiGenderBis),
         ("testEscapedSimpleReplacement", testEscapedSimpleReplacement),
+        ("testFromHappn3", testFromHappn3),
         ("testInvalidOverlappingReplacements", testInvalidOverlappingReplacements),
         ("testNonEscapedButPrecededByEscapeTokenSimpleReplacement", testNonEscapedButPrecededByEscapeTokenSimpleReplacement),
         ("testOneOrderedReplacement1", testOneOrderedReplacement1),

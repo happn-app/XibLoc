@@ -22,6 +22,11 @@ final class ObjCXibLoc : NSObject {
 	}
 	
 	@objc
+	static func objc_applyingXibLocSimpleReplacementAndGenderLocString(base: String, replacement: String, genderMeIsMale: Bool, genderOtherIsMale: Bool) -> String {
+		return base.applying(xibLocInfo: Str2StrXibLocInfo(replacement: replacement, genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale))
+	}
+	
+	@objc
 	static func objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPlural(base: String, baseFont: XibLocFont, baseColor: XibLocColor, replacement: String, pluralValue: Int, genderMeIsMale: Bool, genderOtherIsMale: Bool) -> NSMutableAttributedString {
 		return base.applying(xibLocInfo: Str2AttrStrXibLocInfo(
 			strResolvingInfo: Str2StrXibLocInfo(replacement: replacement, pluralValue: NumberAndFormat(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale),

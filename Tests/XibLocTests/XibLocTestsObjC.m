@@ -26,6 +26,14 @@
 	XCTAssertEqualObjects(tested, @"the replacement");
 }
 
+/* Copied from Swift tests. */
+- (void)testFromHappn3ObjC
+{
+	NSString *tested = [ObjCXibLoc objc_applyingXibLocSimpleReplacementAndGenderLocStringWithBase:@"{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}"
+																												 replacement:@"replacement" genderMeIsMale: NO genderOtherIsMale: YES];
+	XCTAssertEqualObjects(tested, @"Vous vous êtes croisés");
+}
+
 #if TARGET_OS_OSX
 
 /* Same as testFromHappn1SeptiesObjC, but was the original issue raised when
