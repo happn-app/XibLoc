@@ -446,7 +446,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		func replace(rangeInText replacedRange: Range<String.Index>, with string: String) {
 			let originalString = refString
 			refString.replaceSubrange(replacedRange, with: string)
-			ReplacementsIterator.adjustReplacementRanges(replacedRange: replacedRange, with: string.count, in: &adjustedReplacements, originalString: originalString, newString: refString)
+			ReplacementsIterator.adjustReplacementRanges(replacedRange: replacedRange, with: string, in: &adjustedReplacements, originalString: originalString, newString: refString)
 		}
 		
 		func delete(rangeInText replacedRange: Range<String.Index>) {
@@ -461,7 +461,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		 *
 		 * The original range that will be adjusted MUST start and end with
 		 * indexes that are at the start of an extended grapheme cluster. */
-		private static func adjustedRange(from adjustedRange: Range<String.Index>, byReplacing removedRange: Range<String.Index>, in originalString: String, with addedDistance: Int, newString: String) -> Range<String.Index> {
+		private static func adjustedRange(from adjustedRange: Range<String.Index>, byReplacing removedRange: Range<String.Index>, in originalString: String, with addedString: String, newString: String) -> Range<String.Index> {
 			/* Let's verify we're indeed at the start of a cluster for the lower
 			 * and upper bounds of the adjusted range. */
 			assert(String.Index(adjustedRange.lowerBound, within: originalString) != nil)
@@ -471,12 +471,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			let adjustUpperBound = (originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0)
 			guard adjustLowerBound || adjustUpperBound else {return adjustedRange}
 			
-			var removedUTF16Distance = removedRange.upperBound.utf16Offset(in: originalString) - removedRange.lowerBound.utf16Offset(in: originalString)
-			if addedDistance > 0 { /* The if is not really needed, but let’s not convert String indexes if it is not needed… */
-				let addedRange = Range<String.Index>(uncheckedBounds: (lower: removedRange.lowerBound, upper: newString.index(removedRange.lowerBound, offsetBy: addedDistance)))
-				removedUTF16Distance -= addedRange.upperBound.utf16Offset(in: newString) - addedRange.lowerBound.utf16Offset(in: newString)
-			}
-			
+			let removedUTF16Distance = removedRange.upperBound.utf16Offset(in: originalString) - removedRange.lowerBound.utf16Offset(in: originalString) - addedString.utf16.count
 			/* The two asserts below make sure the new indexes returned in the new range are at the start of an extended grapheme cluster.
 			 * We verified we were at the start of cluster in input, we must return something at the start of a cluster in output! */
 			let newLowerBound = String.Index(utf16Offset: adjustedRange.lowerBound.utf16Offset(in: originalString) - (adjustLowerBound ? removedUTF16Distance : 0), in: newString)
@@ -487,16 +482,16 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			return Range<String.Index>(uncheckedBounds: (lower: newLowerBound, upper: newUpperBound))
 		}
 		
-		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with distance: Int, in replacements: inout [Replacement], originalString: String, newString: String) {
+		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with string: String, in replacements: inout [Replacement], originalString: String, newString: String) {
 			for (idx, var replacement) in replacements.enumerated() {
 				/* We make sure range is contained by the container range of the
 				 * replacement, or that both do not overlap. */
 				assert(!replacement.containerRange.overlaps(replacedRange) || replacement.containerRange.clamped(to: replacedRange) == replacedRange)
 				
-				replacement.range          = ReplacementsIterator.adjustedRange(from: replacement.range,          byReplacing: replacedRange, in: originalString, with: distance, newString: newString)
-				replacement.containerRange = ReplacementsIterator.adjustedRange(from: replacement.containerRange, byReplacing: replacedRange, in: originalString, with: distance, newString: newString)
+				replacement.range          = ReplacementsIterator.adjustedRange(from: replacement.range,          byReplacing: replacedRange, in: originalString, with: string, newString: newString)
+				replacement.containerRange = ReplacementsIterator.adjustedRange(from: replacement.containerRange, byReplacing: replacedRange, in: originalString, with: string, newString: newString)
 				
-				adjustReplacementRanges(replacedRange: replacedRange, with: distance, in: &replacement.children, originalString: originalString, newString: newString)
+				adjustReplacementRanges(replacedRange: replacedRange, with: string, in: &replacement.children, originalString: originalString, newString: newString)
 				replacements[idx] = replacement
 			}
 		}
