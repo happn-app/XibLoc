@@ -237,15 +237,18 @@ class XibLocTests: XCTestCase {
 		)
 	}
 	
-	/* Also exists in ObjC */
+	/* Also exists in ObjC (only ever failed in ObjC) */
 	func testFromHappn3() {
-		let info = Str2StrXibLocInfo(replacement: "", genderMeIsMale: true, genderOtherIsMale: false)
-		XCTAssertEqual(
-			"{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}".applying(xibLocInfo: info),
-			"Vous vous êtes croisés"
-		)
+		for _ in 0..<150 {
+			let info = Str2StrXibLocInfo(replacement: "", genderMeIsMale: true, genderOtherIsMale: false)
+			XCTAssertEqual(
+				"{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}".applying(xibLocInfo: info),
+				"Vous vous êtes croisés"
+			)
+		}
 	}
 	
+	/* Actually, the same as testFromHappn3ObjC */
 	func testFromHappn4() {
 		/* Run a certain number of time to get the crash at each test run (the
 		 * crash is not systematic… */

@@ -29,9 +29,11 @@
 /* Copied from Swift tests. */
 - (void)testFromHappn3ObjC
 {
-	NSString *tested = [ObjCXibLoc objc_applyingXibLocSimpleReplacementAndGenderLocStringWithBase:@"{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}"
-																												 replacement:@"replacement" genderMeIsMale: NO genderOtherIsMale: YES];
-	XCTAssertEqualObjects(tested, @"Vous vous êtes croisés");
+	for (NSUInteger i = 0; i<150; ++i) {
+		NSString *tested = [ObjCXibLoc objc_applyingXibLocSimpleReplacementAndGenderLocStringWithBase:@"{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}"
+																													 replacement:@"replacement" genderMeIsMale:YES genderOtherIsMale: NO];
+		XCTAssertEqualObjects(tested, @"Vous vous êtes croisés");
+	}
 }
 
 #if TARGET_OS_OSX
