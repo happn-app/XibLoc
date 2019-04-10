@@ -248,6 +248,8 @@ class XibLocTests: XCTestCase {
 		}
 	}
 	
+	#if !os(Linux)
+	
 	/* Actually, the same as testFromHappn3ObjC */
 	func testFromHappn4() {
 		/* Run a certain number of time to get the crash at each test run (the
@@ -260,6 +262,13 @@ class XibLocTests: XCTestCase {
 			)
 		}
 	}
+	
+	private func localized(_ key: String) -> String {
+		let testBundle = Bundle(for: XibLocTests.self)
+		return NSLocalizedString(key, bundle: testBundle, comment: "Crash test")
+	}
+	
+	#endif
 	
 	#if os(macOS)
 	/* ************************
@@ -758,15 +767,15 @@ class XibLocTests: XCTestCase {
 	}
 	
 	
-	func helperAddTestAttributeLevel(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
+	private func helperAddTestAttributeLevel(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
 		attributedString.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
 	}
 	
-	func helperAddTestAttributeIndex(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
+	private func helperAddTestAttributeIndex(to attributedString: inout NSMutableAttributedString, strRange: Range<String.Index>, refStr: String) {
 		attributedString.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(strRange, in: refStr))
 	}
 	
-	lazy var docCasesInfo: (Str2AttrStrXibLocInfo, [NSAttributedString.Key: Any]) = {
+	private lazy var docCasesInfo: (Str2AttrStrXibLocInfo, [NSAttributedString.Key: Any]) = {
 		let baseAttributes: [NSAttributedString.Key: Any] = [.font: XibLocFont.systemFont(ofSize: 14), .foregroundColor: XibLocColor.black]
 		let info = Str2AttrStrXibLocInfo(
 			escapeToken: nil,
@@ -782,10 +791,5 @@ class XibLocTests: XCTestCase {
 	}()
 	
 	#endif
-	
-	private func localized(_ key: String) -> String {
-		let uiTestBundle = Bundle(for: XibLocTests.self)
-		return NSLocalizedString(key, bundle: uiTestBundle, comment: "Crash test")
-	}
 	
 }
