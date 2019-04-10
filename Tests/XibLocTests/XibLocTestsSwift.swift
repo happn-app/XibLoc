@@ -239,11 +239,23 @@ class XibLocTests: XCTestCase {
 	
 	/* Also exists in ObjC */
 	func testFromHappn3() {
-		let info = Str2StrXibLocInfo(replacement: "", genderMeIsMale: false, genderOtherIsMale: false, escapeToken: "~")
+		let info = Str2StrXibLocInfo(replacement: "", genderMeIsMale: true, genderOtherIsMale: false)
 		XCTAssertEqual(
 			"{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}".applying(xibLocInfo: info),
-			"Vous vous êtes croisées"
+			"Vous vous êtes croisés"
 		)
+	}
+	
+	func testFromHappn4() {
+		/* Run a certain number of time to get the crash at each test run (the
+		 * crash is not systematic… */
+		for _ in 0..<150 {
+			let info = Str2StrXibLocInfo(replacement: "", genderMeIsMale: true, genderOtherIsMale: false)
+			XCTAssertEqual(
+				localized("crossed path for the first time").applying(xibLocInfo: info),
+				"Vous vous êtes croisés"
+			)
+		}
 	}
 	
 	#if os(macOS)
@@ -767,5 +779,10 @@ class XibLocTests: XCTestCase {
 	}()
 	
 	#endif
+	
+	private func localized(_ key: String) -> String {
+		let uiTestBundle = Bundle(for: XibLocTests.self)
+		return NSLocalizedString(key, bundle: uiTestBundle, comment: "Crash test")
+	}
 	
 }
