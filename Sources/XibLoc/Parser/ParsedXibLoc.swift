@@ -446,7 +446,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		func replace(rangeInText replacedRange: Range<String.Index>, with string: String) {
 			let originalString = refString
 			refString.replaceSubrange(replacedRange, with: string)
-			ReplacementsIterator.adjustReplacementRanges(replacedRange: replacedRange, with: string.count, in: &adjustedReplacements, originalString: originalString, newString: refString)
+			ReplacementsIterator.adjustReplacementRanges(replacedRange: replacedRange, with: string, in: &adjustedReplacements, originalString: originalString, newString: refString)
 		}
 		
 		func delete(rangeInText replacedRange: Range<String.Index>) {
@@ -456,47 +456,97 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		private var currentIndexPath = IndexPath()
 		private var wentIn = false
 		
-		/* range and removedRange are relative to originalString. addedDistance is
-		 * relative to newString.
+		private static func convert(range: Range<String.Index>, from originalString: String, to newString: String, searchAnchorInNewString: String.Index) -> Range<String.Index> {
+			let fragment = originalString[range]
+			guard !fragment.isEmpty else {return searchAnchorInNewString..<searchAnchorInNewString}
+			return newString.range(of: fragment, options: [.anchored, .literal], range: searchAnchorInNewString..<newString.endIndex)! /* Not sure about the literal… */
+		}
+		
+		/* adjustedRange and removedRange are relative to originalString.
+		 * addedDistance is relative to newString.
 		 *
 		 * The original range that will be adjusted MUST start and end with
 		 * indexes that are at the start of an extended grapheme cluster. */
-		private static func adjustedRange(from adjustedRange: Range<String.Index>, byReplacing removedRange: Range<String.Index>, in originalString: String, with addedDistance: Int, newString: String) -> Range<String.Index> {
+		private static func adjustedRange(from adjustedRange: Range<String.Index>, byReplacing removedRange: Range<String.Index>, in originalString: String, with addedString: String, newString: String) -> Range<String.Index> {
 			/* Let's verify we're indeed at the start of a cluster for the lower
 			 * and upper bounds of the adjusted range. */
 			assert(String.Index(adjustedRange.lowerBound, within: originalString) != nil)
 			assert(String.Index(adjustedRange.upperBound, within: originalString) != nil)
 			
+			/* We make sure that the removed range does not overlap with the
+			 * adjusted range or the adjusted range contains the removed range
+			 * fully. */
+			assert(!adjustedRange.overlaps(removedRange) || adjustedRange.clamped(to: removedRange) == removedRange)
+			
 			let adjustLowerBound = (originalString.distance(from: adjustedRange.lowerBound, to: removedRange.upperBound) <= 0)
 			let adjustUpperBound = (originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0)
-			guard adjustLowerBound || adjustUpperBound else {return adjustedRange}
 			
-			var removedUTF16Distance = removedRange.upperBound.utf16Offset(in: originalString) - removedRange.lowerBound.utf16Offset(in: originalString)
-			if addedDistance > 0 { /* The if is not really needed, but let’s not convert String indexes if it is not needed… */
-				let addedRange = Range<String.Index>(uncheckedBounds: (lower: removedRange.lowerBound, upper: newString.index(removedRange.lowerBound, offsetBy: addedDistance)))
-				removedUTF16Distance -= addedRange.upperBound.utf16Offset(in: newString) - addedRange.lowerBound.utf16Offset(in: newString)
+			#if !USE_UTF16_OFFSETS
+			/* With this version of the algorithm we play it safe and re-compute
+			 * the ranges by searching for partial strings from the original string
+			 * in the new string. This has a small performance impact on some ObjC
+			 * strings, but in most of the cases it’s completely negligible. */
+			let newLowerBound: String.Index
+			let newUpperBound: String.Index
+			
+			if adjustLowerBound {
+				/* We must adjust the lower bound of the adjusted range. */
+				let prefixRangeInNewString = convert(range: originalString.startIndex..<removedRange.lowerBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
+				let suffixRangeInNewString = convert(range: removedRange.upperBound..<adjustedRange.lowerBound,  from: originalString, to: newString, searchAnchorInNewString: newString.index(prefixRangeInNewString.upperBound, offsetBy: addedString.count))
+				newLowerBound = suffixRangeInNewString.upperBound
+			} else {
+				/* Technically we shouldn’t have to adjust the lower bound of the
+				 * range. However, it seems the bound can become invalid, so we’ll
+				 * recalculate it anyway. */
+				let prefixRangeInNewString = convert(range: originalString.startIndex..<adjustedRange.lowerBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
+				newLowerBound = prefixRangeInNewString.upperBound
 			}
 			
+			if adjustUpperBound {
+				/* We must adjust the upper bound of the adjusted range. */
+				let prefixRangeInNewString = convert(range: originalString.startIndex..<removedRange.lowerBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
+				let suffixRangeInNewString = convert(range: removedRange.upperBound..<adjustedRange.upperBound,  from: originalString, to: newString, searchAnchorInNewString: newString.index(prefixRangeInNewString.upperBound, offsetBy: addedString.count))
+				newUpperBound = suffixRangeInNewString.upperBound
+			} else {
+				/* Technically we shouldn’t have to adjust the upper bound of the
+				 * range. However, it seems the bound can become invalid, so we’ll
+				 * recalculate it anyway. */
+				let prefixRangeInNewString = convert(range: originalString.startIndex..<adjustedRange.upperBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
+				newUpperBound = prefixRangeInNewString.upperBound
+			}
+			
+			#else
+			/* This version of the algorithm, though slightly faster in some
+			 * circumstances, crashes _randomly_ for some ObjC strings. It is kept
+			 * for posterity mainly, and for performance test comparison with the
+			 * other version of the algorithm. */
+			guard adjustLowerBound || adjustUpperBound else {return adjustedRange}
+			
+			let removedUTF16Distance = removedRange.upperBound.utf16Offset(in: originalString) - removedRange.lowerBound.utf16Offset(in: originalString) - addedString.utf16.count
 			/* The two asserts below make sure the new indexes returned in the new range are at the start of an extended grapheme cluster.
 			 * We verified we were at the start of cluster in input, we must return something at the start of a cluster in output! */
 			let newLowerBound = String.Index(utf16Offset: adjustedRange.lowerBound.utf16Offset(in: originalString) - (adjustLowerBound ? removedUTF16Distance : 0), in: newString)
 			let newUpperBound = String.Index(utf16Offset: adjustedRange.upperBound.utf16Offset(in: originalString) - (adjustUpperBound ? removedUTF16Distance : 0), in: newString)
+			
+			#endif
+			
+			/* Let's verify we're still at the start of a cluster for the lower and
+			 * upper bounds of the new range. */
 			assert(String.Index(newLowerBound, within: newString) != nil)
 			assert(String.Index(newUpperBound, within: newString) != nil)
-			
 			return Range<String.Index>(uncheckedBounds: (lower: newLowerBound, upper: newUpperBound))
 		}
 		
-		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with distance: Int, in replacements: inout [Replacement], originalString: String, newString: String) {
+		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with string: String, in replacements: inout [Replacement], originalString: String, newString: String) {
 			for (idx, var replacement) in replacements.enumerated() {
 				/* We make sure range is contained by the container range of the
 				 * replacement, or that both do not overlap. */
 				assert(!replacement.containerRange.overlaps(replacedRange) || replacement.containerRange.clamped(to: replacedRange) == replacedRange)
 				
-				replacement.range          = ReplacementsIterator.adjustedRange(from: replacement.range,          byReplacing: replacedRange, in: originalString, with: distance, newString: newString)
-				replacement.containerRange = ReplacementsIterator.adjustedRange(from: replacement.containerRange, byReplacing: replacedRange, in: originalString, with: distance, newString: newString)
+				replacement.range          = ReplacementsIterator.adjustedRange(from: replacement.range,          byReplacing: replacedRange, in: originalString, with: string, newString: newString)
+				replacement.containerRange = ReplacementsIterator.adjustedRange(from: replacement.containerRange, byReplacing: replacedRange, in: originalString, with: string, newString: newString)
 				
-				adjustReplacementRanges(replacedRange: replacedRange, with: distance, in: &replacement.children, originalString: originalString, newString: newString)
+				adjustReplacementRanges(replacedRange: replacedRange, with: string, in: &replacement.children, originalString: originalString, newString: newString)
 				replacements[idx] = replacement
 			}
 		}

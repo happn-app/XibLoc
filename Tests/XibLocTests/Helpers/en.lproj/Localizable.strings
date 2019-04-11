@@ -1,0 +1,2 @@
+/* French string that crashes randomly… only when coming from a strings file! */
+"crossed path for the first time" = "{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}";

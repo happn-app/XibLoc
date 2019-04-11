@@ -57,6 +57,7 @@
 		7BCBB16220163612008A3FC0 /* XibLocTestsSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB15D2016354F008A3FC0 /* XibLocTestsSwift.swift */; };
 		7BF53365224050F300A141BB /* XibLocTestsObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF53364224050F300A141BB /* XibLocTestsObjC.m */; };
 		7BF53368224052C800A141BB /* XibLoc4ObjCHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF53367224052C800A141BB /* XibLoc4ObjCHelper.swift */; };
+		B168DD33225E45C90006FC54 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B168DD35225E45C90006FC54 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +108,7 @@
 		7BF53362224050F300A141BB /* XibLocTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XibLocTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		7BF53364224050F300A141BB /* XibLocTestsObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XibLocTestsObjC.m; sourceTree = "<group>"; };
 		7BF53367224052C800A141BB /* XibLoc4ObjCHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLoc4ObjCHelper.swift; sourceTree = "<group>"; };
+		B168DD34225E45C90006FC54 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,6 +266,7 @@
 		7BF533662240526A00A141BB /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				B168DD35225E45C90006FC54 /* Localizable.strings */,
 				7BF53367224052C800A141BB /* XibLoc4ObjCHelper.swift */,
 			);
 			path = Helpers;
@@ -400,6 +403,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B168DD33225E45C90006FC54 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,6 +496,17 @@
 			targetProxy = 7B8BD02420026E8C009BE667 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B168DD35225E45C90006FC54 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B168DD34225E45C90006FC54 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		7B661FA220026ACC00486182 /* Debug */ = {
