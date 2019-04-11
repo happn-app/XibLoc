@@ -32,18 +32,18 @@ class XibLocTests: XCTestCase {
 		for _ in 0..<nRepeats {
 			let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement")
 			XCTAssertEqual(
-				"the \\|replaced\\|".applying(xibLocInfo: info),
-				"the |replaced|"
+				#"the \|replaced\|"#.applying(xibLocInfo: info),
+				#"the |replaced|"#
 			)
 		}
 	}
 	
 	func testNonEscapedButPrecededByEscapeTokenSimpleReplacement() {
 		for _ in 0..<nRepeats {
-			let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement")
+			let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement", escapeToken: "~")
 			XCTAssertEqual(
-				"the \\\\|replaced|".applying(xibLocInfo: info),
-				"the \\replacement"
+				#"the ~~|replaced|"#.applying(xibLocInfo: info),
+				#"the ~replacement"#
 			)
 		}
 	}

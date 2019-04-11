@@ -456,8 +456,14 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		private var currentIndexPath = IndexPath()
 		private var wentIn = false
 		
-		/* range and removedRange are relative to originalString. addedDistance is
-		 * relative to newString.
+		private static func convert(range: Range<String.Index>, from originalString: String, to newString: String, searchAnchorInNewString: String.Index) -> Range<String.Index> {
+			let fragment = originalString[range]
+			guard !fragment.isEmpty else {return searchAnchorInNewString..<searchAnchorInNewString}
+			return newString.range(of: fragment, options: [.anchored, .literal], range: searchAnchorInNewString..<newString.endIndex)! /* Not sure about the literal… */
+		}
+		
+		/* adjustedRange and removedRange are relative to originalString.
+		 * addedDistance is relative to newString.
 		 *
 		 * The original range that will be adjusted MUST start and end with
 		 * indexes that are at the start of an extended grapheme cluster. */
@@ -467,6 +473,42 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			assert(String.Index(adjustedRange.lowerBound, within: originalString) != nil)
 			assert(String.Index(adjustedRange.upperBound, within: originalString) != nil)
 			
+			/* We make sure that the removed range does not overlap with the
+			 * adjusted range or the adjusted range contains the removed range
+			 * fully. */
+			assert(!adjustedRange.overlaps(removedRange) || adjustedRange.clamped(to: removedRange) == removedRange)
+			
+			#if !USE_UTF16_OFFSETS
+			let newLowerBound: String.Index
+			let newUpperBound: String.Index
+			
+			if originalString.distance(from: adjustedRange.lowerBound, to: removedRange.upperBound) <= 0 {
+				/* We must adjust the lower bound of the adjusted range. */
+				let prefixRangeInNewString = convert(range: originalString.startIndex..<removedRange.lowerBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
+				let suffixRangeInNewString = convert(range: removedRange.upperBound..<adjustedRange.lowerBound,  from: originalString, to: newString, searchAnchorInNewString: newString.index(prefixRangeInNewString.upperBound, offsetBy: addedString.count))
+				newLowerBound = suffixRangeInNewString.upperBound
+			} else {
+				/* Technically we shouldn’t have to adjust the lower bound of the
+				 * range. However, it seems the bound can become invalid, so we’ll
+				 * recalculate it anyway. */
+				let prefixRangeInNewString = convert(range: originalString.startIndex..<adjustedRange.lowerBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
+				newLowerBound = prefixRangeInNewString.upperBound
+			}
+			
+			if originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0 {
+				/* We must adjust the upper bound of the adjusted range. */
+				let prefixRangeInNewString = convert(range: originalString.startIndex..<removedRange.lowerBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
+				let suffixRangeInNewString = convert(range: removedRange.upperBound..<adjustedRange.upperBound,  from: originalString, to: newString, searchAnchorInNewString: newString.index(prefixRangeInNewString.upperBound, offsetBy: addedString.count))
+				newUpperBound = suffixRangeInNewString.upperBound
+			} else {
+				/* Technically we shouldn’t have to adjust the upper bound of the
+				 * range. However, it seems the bound can become invalid, so we’ll
+				 * recalculate it anyway. */
+				let prefixRangeInNewString = convert(range: originalString.startIndex..<adjustedRange.upperBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
+				newUpperBound = prefixRangeInNewString.upperBound
+			}
+			
+			#else
 			let adjustLowerBound = (originalString.distance(from: adjustedRange.lowerBound, to: removedRange.upperBound) <= 0)
 			let adjustUpperBound = (originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0)
 			guard adjustLowerBound || adjustUpperBound else {return adjustedRange}
@@ -476,9 +518,13 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			 * We verified we were at the start of cluster in input, we must return something at the start of a cluster in output! */
 			let newLowerBound = String.Index(utf16Offset: adjustedRange.lowerBound.utf16Offset(in: originalString) - (adjustLowerBound ? removedUTF16Distance : 0), in: newString)
 			let newUpperBound = String.Index(utf16Offset: adjustedRange.upperBound.utf16Offset(in: originalString) - (adjustUpperBound ? removedUTF16Distance : 0), in: newString)
+			
+			#endif
+			
+			/* Let's verify we're still at the start of a cluster for the lower and
+			 * upper bounds of the new range. */
 			assert(String.Index(newLowerBound, within: newString) != nil)
 			assert(String.Index(newUpperBound, within: newString) != nil)
-			
 			return Range<String.Index>(uncheckedBounds: (lower: newLowerBound, upper: newUpperBound))
 		}
 		
