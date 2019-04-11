@@ -40,6 +40,11 @@
                BlueprintName = "XibLocTests"
                ReferencedContainer = "container:XibLoc.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "XibLocTests/testPerf2()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
