@@ -479,6 +479,10 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			assert(!adjustedRange.overlaps(removedRange) || adjustedRange.clamped(to: removedRange) == removedRange)
 			
 			#if !USE_UTF16_OFFSETS
+			/* With this version of the algorithm we play it safe and re-compute
+			 * the ranges by searching for partial strings from the original string
+			 * in the new string. This has a small performance impact on some ObjC
+			 * strings, but in most of the cases it’s completely negligible. */
 			let newLowerBound: String.Index
 			let newUpperBound: String.Index
 			
@@ -509,6 +513,10 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			}
 			
 			#else
+			/* This version of the algorithm, though slightly faster in some
+			 * circumstances, crashes _randomly_ for some ObjC strings. It is kept
+			 * for posterity mainly, and for performance test comparison with the
+			 * other version of the algorithm. */
 			let adjustLowerBound = (originalString.distance(from: adjustedRange.lowerBound, to: removedRange.upperBound) <= 0)
 			let adjustUpperBound = (originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0)
 			guard adjustLowerBound || adjustUpperBound else {return adjustedRange}

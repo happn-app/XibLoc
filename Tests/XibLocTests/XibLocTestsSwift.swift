@@ -289,6 +289,22 @@ class XibLocTests: XCTestCase {
 		}
 	}
 	
+	/* Baseline is set with XibLoc compiled with USE_UTF16_OFFSETS.
+	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash
+	 * for some Objective-C strings crash. See ParsedXibLoc.swift for more info. */
+	func testPerf1() {
+		measure{
+			for _ in 0..<nRepeats {
+				let info = Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true)
+				let str = "{CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
+				XCTAssertEqual(
+					str.applying(xibLocInfo: info),
+					"CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!"
+				)
+			}
+		}
+	}
+	
 	#if !os(Linux)
 	
 	/* Actually, the same as testFromHappn3ObjC */
@@ -868,6 +884,29 @@ class XibLocTests: XCTestCase {
 			result2.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 15, length: 16))
 			let processed = "Let's replace <*multiple:choices*:stuff>".applying(xibLocInfo: info)
 			XCTAssert(processed == result1 || processed == result2)
+		}
+	}
+	
+	/* Baseline is set with XibLoc compiled with USE_UTF16_OFFSETS.
+	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash
+	 * for some Objective-C strings crash. See ParsedXibLoc.swift for more info. */
+	func testPerf2() {
+		measure{
+			for _ in 0..<nRepeats {
+				let str = "{*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
+				let baseColor = XibLocColor.black
+				let baseFont = XibLocFont.systemFont(ofSize: 14)
+				let info = Str2AttrStrXibLocInfo(
+					strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+					boldType: .default, baseFont: baseFont, baseColor: baseColor
+				)
+				let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: [.font: baseFont, .foregroundColor: baseColor])
+				result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: 15))
+				XCTAssertEqual(
+					str.applying(xibLocInfo: info),
+					result
+				)
+			}
 		}
 	}
 	

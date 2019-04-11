@@ -22,6 +22,7 @@ extension XibLocTests {
         ("testOnePluralReplacement", testOnePluralReplacement),
         ("testOnePluralReplacementMissingOneZone", testOnePluralReplacementMissingOneZone),
         ("testOneSimpleReplacement", testOneSimpleReplacement),
+        ("testPerf1", testPerf1),
         ("testThaiGender", testThaiGender),
         ("testTwoVariablesChangesAndGenderInOrderedReplacementGroup", testTwoVariablesChangesAndGenderInOrderedReplacementGroup),
         ("testTwoVariablesChangesInOrderedReplacementGroup", testTwoVariablesChangesInOrderedReplacementGroup),
