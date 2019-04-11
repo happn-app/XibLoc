@@ -478,6 +478,9 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			 * fully. */
 			assert(!adjustedRange.overlaps(removedRange) || adjustedRange.clamped(to: removedRange) == removedRange)
 			
+			let adjustLowerBound = (originalString.distance(from: adjustedRange.lowerBound, to: removedRange.upperBound) <= 0)
+			let adjustUpperBound = (originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0)
+			
 			#if !USE_UTF16_OFFSETS
 			/* With this version of the algorithm we play it safe and re-compute
 			 * the ranges by searching for partial strings from the original string
@@ -486,7 +489,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			let newLowerBound: String.Index
 			let newUpperBound: String.Index
 			
-			if originalString.distance(from: adjustedRange.lowerBound, to: removedRange.upperBound) <= 0 {
+			if adjustLowerBound {
 				/* We must adjust the lower bound of the adjusted range. */
 				let prefixRangeInNewString = convert(range: originalString.startIndex..<removedRange.lowerBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
 				let suffixRangeInNewString = convert(range: removedRange.upperBound..<adjustedRange.lowerBound,  from: originalString, to: newString, searchAnchorInNewString: newString.index(prefixRangeInNewString.upperBound, offsetBy: addedString.count))
@@ -499,7 +502,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				newLowerBound = prefixRangeInNewString.upperBound
 			}
 			
-			if originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0 {
+			if adjustUpperBound {
 				/* We must adjust the upper bound of the adjusted range. */
 				let prefixRangeInNewString = convert(range: originalString.startIndex..<removedRange.lowerBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
 				let suffixRangeInNewString = convert(range: removedRange.upperBound..<adjustedRange.upperBound,  from: originalString, to: newString, searchAnchorInNewString: newString.index(prefixRangeInNewString.upperBound, offsetBy: addedString.count))
@@ -517,8 +520,6 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			 * circumstances, crashes _randomly_ for some ObjC strings. It is kept
 			 * for posterity mainly, and for performance test comparison with the
 			 * other version of the algorithm. */
-			let adjustLowerBound = (originalString.distance(from: adjustedRange.lowerBound, to: removedRange.upperBound) <= 0)
-			let adjustUpperBound = (originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0)
 			guard adjustLowerBound || adjustUpperBound else {return adjustedRange}
 			
 			let removedUTF16Distance = removedRange.upperBound.utf16Offset(in: originalString) - removedRange.lowerBound.utf16Offset(in: originalString) - addedString.utf16.count
