@@ -1,10 +1,17 @@
 /*
- * ParsedXibLoc.swift
- * XibLoc
- *
- * Created by François Lamboley on 8/26/17.
- * Copyright © 2017 happn. All rights reserved.
- */
+Copyright 2019 happn
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. */
 
 import Foundation
 #if canImport(os)
@@ -308,7 +315,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	}
 	
 	/* ***************
-      MARK: - Private
+	   MARK: - Private
 	   *************** */
 	
 	/* Would prefer embedded in Replacement, but makes Swift crash :( (Xcode 9.1/9B55) */
@@ -523,8 +530,6 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			guard adjustLowerBound || adjustUpperBound else {return adjustedRange}
 			
 			let removedUTF16Distance = removedRange.upperBound.utf16Offset(in: originalString) - removedRange.lowerBound.utf16Offset(in: originalString) - addedString.utf16.count
-			/* The two asserts below make sure the new indexes returned in the new range are at the start of an extended grapheme cluster.
-			 * We verified we were at the start of cluster in input, we must return something at the start of a cluster in output! */
 			let newLowerBound = String.Index(utf16Offset: adjustedRange.lowerBound.utf16Offset(in: originalString) - (adjustLowerBound ? removedUTF16Distance : 0), in: newString)
 			let newUpperBound = String.Index(utf16Offset: adjustedRange.upperBound.utf16Offset(in: originalString) - (adjustUpperBound ? removedUTF16Distance : 0), in: newString)
 			
@@ -598,7 +603,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	}
 	
 	/* **************************
-      MARK: → Parsing the XibLoc
+	   MARK: → Parsing the XibLoc
 	   ************************** */
 	
 	private static func remove(escapeToken: String?, in replacements: inout [Replacement], source: inout SourceType, stringSource: inout String, parserHelper: SourceTypeHelper.Type) {

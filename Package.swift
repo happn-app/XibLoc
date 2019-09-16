@@ -8,7 +8,7 @@ let package = Package(
 		.library(name: "XibLoc", targets: ["XibLoc"])
 	],
 	dependencies: [
-		.package(url: "git@github.com:happn-app/DummyLinuxOSLog.git", from: "1.0.0")
+		.package(url: "git@github.com:happn-tech/DummyLinuxOSLog.git", from: "1.0.0")
 	],
 	targets: [
 		.target(name: "XibLoc", dependencies: ["DummyLinuxOSLog"]),
