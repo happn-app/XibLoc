@@ -85,7 +85,6 @@
 		7B8BD01D20026E8C009BE667 /* Framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Framework-Info.plist"; sourceTree = "<group>"; };
 		7B8BD02220026E8C009BE667 /* XibLocTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XibLocTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B8BD02920026E8C009BE667 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
-		7B8BD032200274B9009BE667 /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		7BB9A95B2240226D00932FD5 /* XibLoc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibLoc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringAttributesChangesDescription.swift; sourceTree = "<group>"; };
 		7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Utils.swift"; sourceTree = "<group>"; };
@@ -104,7 +103,6 @@
 		7BCBB122201634E4008A3FC0 /* XibLoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLoc.swift; sourceTree = "<group>"; };
 		7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocResolvingInfo.swift; sourceTree = "<group>"; };
 		7BCBB15D2016354F008A3FC0 /* XibLocTestsSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocTestsSwift.swift; sourceTree = "<group>"; };
-		7BF5336022404C4300A141BB /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		7BF53362224050F300A141BB /* XibLocTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XibLocTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		7BF53364224050F300A141BB /* XibLocTestsObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XibLocTestsObjC.m; sourceTree = "<group>"; };
 		7BF53367224052C800A141BB /* XibLoc4ObjCHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLoc4ObjCHelper.swift; sourceTree = "<group>"; };
@@ -219,7 +217,6 @@
 		7B8BD031200274B9009BE667 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				7B8BD032200274B9009BE667 /* LinuxMain.swift */,
 				7BCBB15C2016354F008A3FC0 /* XibLocTests */,
 			);
 			path = Tests;
@@ -258,7 +255,6 @@
 				7BF533662240526A00A141BB /* Helpers */,
 				7BF53364224050F300A141BB /* XibLocTestsObjC.m */,
 				7BCBB15D2016354F008A3FC0 /* XibLocTestsSwift.swift */,
-				7BF5336022404C4300A141BB /* XCTestManifests.swift */,
 			);
 			path = XibLocTests;
 			sourceTree = "<group>";
