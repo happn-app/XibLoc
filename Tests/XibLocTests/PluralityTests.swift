@@ -203,4 +203,16 @@ class PluralityTests: XCTestCase {
 		XCTAssertNil(PluralityDefinitionZoneValueIntervalOfFloats(string: "]-2→3..]"))
 	}
 	
+	func testPluralityDefinitionGlob() {
+		XCTAssertNotNil(PluralityDefinitionZoneValueGlob(string: "^-42$"))
+		XCTAssertTrue(try PluralityDefinitionZoneValueGlob(string: "^-42$").get().matches(pluralValue: PluralValue(string: "-42").get()))
+		XCTAssertFalse(try PluralityDefinitionZoneValueGlob(string: "^-42$").get().matches(pluralValue: PluralValue(string: "-42.").get()))
+		XCTAssertFalse(try PluralityDefinitionZoneValueGlob(string: "^-42$").get().matches(pluralValue: PluralValue(string: "42").get()))
+		XCTAssertTrue(try PluralityDefinitionZoneValueGlob(string: "^-42.*$").get().matches(pluralValue: PluralValue(string: "-42.").get()))
+		XCTAssertFalse(try PluralityDefinitionZoneValueGlob(string: "^-42.*$").get().matches(pluralValue: PluralValue(string: "-42").get()))
+		XCTAssertTrue(try PluralityDefinitionZoneValueGlob(string: "^-42{.*}$").get().matches(pluralValue: PluralValue(string: "-42").get()))
+		XCTAssertTrue(try PluralityDefinitionZoneValueGlob(string: "^42{.*}$").get().matches(pluralValue: PluralValue(string: "-42").get()))
+		XCTAssertFalse(try PluralityDefinitionZoneValueGlob(string: "^+42{.*}$").get().matches(pluralValue: PluralValue(string: "-42").get()))
+	}
+	
 }

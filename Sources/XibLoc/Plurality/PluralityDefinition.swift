@@ -33,31 +33,29 @@ Here are the rules that are used:
   later and the number of “`?`” and “`↓`” ∈ ℕ (`↓`s must be before `?`s);
 - A plurality definition is a list of zones (concatenated zones);
 - In a zone, there is a list of values, separated by a colon. Values can be:
-   - A single number (int or float);
-   - An interval of ints, with this syntax: `n→m`, where `n` and `m` are ints;
-   - An continuous interval, with this syntax: `[n→m]`, where:
+   - A single number (int or float, no leading + or 0 allowed). If the number is
+     an int, only ints will match, otherwise ints and floats can match;
+   - An interval of ints, with this syntax: `n→m`, where `n` and `m` are ints.
+     Only ints can match;
+   - An continuous interval (can match ints and floats), with this syntax:
+     `[n→m]`, where:
       - `n` and `m` are floats (the decimal separator can be omitted);
       - the opening and closing separator regions can be either opening
-         or closing square brackets (to include or exclude the value)
+        or closing square brackets (to include or exclude the value)
    - A custom “globbing” expression:
-      - Starts with “`^`”, ends with “`$`”
-      - Must match the whole number as represented in a non-localized fashion
-        (e.g. `123456.789`). Floats always contain the decimal separator even if
-        value is integral (e.g. `123.`). Ints never contain the decimal
-        separator.
-        For floats, the matching is done on a representation with a maximum of
-        15 digits after the decimal separator.
+      - Must start with “`^`”, and end with “`$`”;
+      - Match is done on given plural value’s `fullStringValue`;
       - By default, the glob will match positive and negative numbers (the sign
         is ignored). To force positive or negative matching, you must add a
-        “`+`” or “`-`” resp. after the “`^`”
-      - Wildcard (both versions match only digits; not the decimal separator):
+        “`+`” or “`-`” resp. after the “`^`”;
+      - Wildcards (both versions match only digits; not the decimal separator):
          - “`*`” to match any number of digits (including none);
          - “`?`” to match exactly one digit
       - Range (same semantics as standard regex’s `[]` where `-` is replaced by
         `→`. “`→`” is specifically reserved for a “digit to digit” use. The
         decimal separator is NOT allowed in brackets.):
-         - “`[135]`” or “`[1→5]`” to match resp. 1, 3 or 5 and 1 to 5;
-         - “`[^135]`” or “`[^1→5]`” to match any digit except the above
+         - “`[135]`” or “`[1→57]`” to match resp. 1, 3 or 5 and 1 to 5 or 7;
+         - “`[^135]`” or “`[^1→57]`” to match any digit except the above
       - Optional: “`{1}`” to match what’s inside the curly brackets—or not;
       - No other characters than the one with meaning in regard to the above
         rules are allowed in a globbing expression. To summarize:
@@ -69,10 +67,10 @@ Here are the rules that are used:
             - and “`^`” and “`→`” inside a “`[]`” block
       - Example: “`^*3$`” matches all ints ending with 3
       - Example: “`^*3.*$`” matches all floats whose int value ends with 3
-      - Example: “`^*3{.*}$`” matches all floats or int whose int value
-                             ends with 3
-      - Example: “`^{*.}*3$`” matches any number (int or float) ending with
-                             3 (13, 1.53, etc.)
+      - Example: “`^*3{.*}$`” matches all floats or int whose int value ends
+                              with 3
+      - Example: “`^{*.}*3$`” matches any number (int or float) ending with 3
+                              (13, 1.53, etc.)
       - Example: “`^*[3→5]$`” matches all ints ending with 3, 4 or 5
       - Example: “`^-*3$`” matches all negative ints ending with 3
       - Example: “`^+*3$`” matches all positive ints ending with 3
