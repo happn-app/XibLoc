@@ -25,7 +25,7 @@ struct PluralityDefinitionZoneValueIntervalOfFloats : PluralityDefinitionZoneVal
 		scanner.locale = nil
 		
 		let bracketsCharset = CharacterSet(charactersIn: "[]")
-		let floatCharSet = CharacterSet(charactersIn: "+-.0123456789")
+		let floatCharSet = CharacterSet(charactersIn: "-.0123456789")
 		
 		guard let bracket1 = scanner.scanCharactersFromSet(bracketsCharset), bracket1.count == 1 else {return nil}
 		assert(bracket1 == "[" || bracket1 == "]")

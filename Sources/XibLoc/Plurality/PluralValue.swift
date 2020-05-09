@@ -226,7 +226,7 @@ public struct PluralValue {
 	
 	public init?(intPart i: String, fractionPart f: String?) {
 		let negative = (i.first == "-")
-		let i = ((negative || i.first == "+") ? String(i.dropFirst()) : i)
+		let i = (negative ? String(i.dropFirst()) : i)
 		self.init(
 			intPart: i,
 			fractionPart: f,

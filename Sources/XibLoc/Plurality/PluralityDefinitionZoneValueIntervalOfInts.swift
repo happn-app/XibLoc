@@ -24,7 +24,7 @@ struct PluralityDefinitionZoneValueIntervalOfInts : PluralityDefinitionZoneValue
 		scanner.charactersToBeSkipped = CharacterSet()
 		scanner.locale = nil
 		
-		let intCharSet = CharacterSet(charactersIn: "+-0123456789")
+		let intCharSet = CharacterSet(charactersIn: "-0123456789")
 		
 		let loc1 = scanner.scanLocation
 		startValue = scanner.scanCharactersFromSet(intCharSet).flatMap{ PluralValue(string: $0) }
