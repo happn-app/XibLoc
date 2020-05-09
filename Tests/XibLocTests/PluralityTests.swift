@@ -138,6 +138,25 @@ class PluralityTests: XCTestCase {
 		
 	}
 	
+	func testPluralityDefinitionSingleNumber() {
+		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "-2"))
+		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "-2."))
+		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "0"))
+		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "-0"))
+		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "2."))
+		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "2.0"))
+		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "2.000"))
+		XCTAssertNil(PluralityDefinitionZoneValueNumber(string: "-"))
+		XCTAssertNil(PluralityDefinitionZoneValueNumber(string: "-1.."))
+		XCTAssertNil(PluralityDefinitionZoneValueNumber(string: "."))
+		XCTAssertNil(PluralityDefinitionZoneValueNumber(string: "--0"))
+		XCTAssertNil(PluralityDefinitionZoneValueNumber(string: "1-0"))
+		XCTAssertTrue(try PluralityDefinitionZoneValueNumber(string: "-0").get().matches(pluralValue: PluralValue(string: "0").get()))
+		XCTAssertFalse(try PluralityDefinitionZoneValueNumber(string: "-0").get().matches(pluralValue: PluralValue(string: "0.000").get()))
+		XCTAssertTrue(try PluralityDefinitionZoneValueNumber(string: "-0.").get().matches(pluralValue: PluralValue(string: "0").get()))
+		XCTAssertTrue(try PluralityDefinitionZoneValueNumber(string: "-0.").get().matches(pluralValue: PluralValue(string: "0.000").get()))
+	}
+	
 	func testPluralityDefinitionIntervalOfIntsParsing() {
 		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfInts(string: "-2→3"))
 		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfInts(string: "-2→-1"))
@@ -146,7 +165,7 @@ class PluralityTests: XCTestCase {
 		XCTAssertNil(PluralityDefinitionZoneValueIntervalOfInts(string: "-2→3-"))
 	}
 	
-	func testPluralityDefinitionIntervalOfFloatsParsing() {
+	func testPluralityDefinitionIntervalOfFloats() {
 		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfFloats(string: "]-2→3]"))
 		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfFloats(string: "[-2.→1.000]"))
 		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfFloats(string: "[-2.→1.0001]"))

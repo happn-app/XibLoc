@@ -27,34 +27,20 @@ struct PluralityDefinitionZoneValueNumber : PluralityDefinitionZoneValue {
 	}
 	
 	func matches(pluralValue: PluralValue) -> Bool {
-		#warning("TODO: Use !<>")
-		/* First we check whether both have the same sign. */
-		guard pluralValue.isNegativeNonZero == refValue.isNegativeNonZero else {
+		/* If the ref value doesn’t have a decimal separator (is int), we need the
+		 * given value to also be an int. However, if the ref value is a float, it
+		 * can match an int.
+		 * This matches the behavior of the interval of ints zone matching only
+		 * ints while the interval of floats can match ints too.
+		 *
+		 * Note: Before the `PluralValue` rewrite, this zone did not behave like
+		 *       that: if the ref value was a float it required the matched value
+		 *       to be a float too. But it was not a correct behavior (and was
+		 *       very probably a bug actually). */
+		guard refValue.isFloat || pluralValue.isInt else {
 			return false
 		}
-		/* Then we check the int part of the given value. */
-		guard pluralValue.intPart == refValue.intPart else {
-			return false
-		}
-		/* If the given value doesn’t have a decimal separator (is int), we need
-		 * the ref value to also be an int. However, if the given value is a
-		 * float, it can match an int.
-		 * Note: The requirement of an int being able to match only an int is a
-		 *       bit weird and might be dropped at some point. It is left for the
-		 *       time being to keep the previous behavior before PluralValue was
-		 *       changed.
-		 *       Theorically dropping the requirement can be done by simply
-		 *       removing the guard below. */
-		guard pluralValue.isFloat || refValue.isInt else {
-			return false
-		}
-		/* Now, let’s check the fraction part of the given value. As we check for
-		 * a numeric value equality (as opposed to a strict string equality), we
-		 * remove the trailing zeros from the fraction parts we check. */
-		guard (pluralValue.fractionPartNoTrailingZeros ?? "") == (refValue.fractionPartNoTrailingZeros ?? "") else {
-			return false
-		}
-		return true
+		return pluralValue == refValue
 	}
 	
 	var debugDescription: String {
