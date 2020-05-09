@@ -29,14 +29,6 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 		self.init(replacements: ["|": replacement], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
 	}
 	
-	public init(numberReplacement: XibLocNumber, pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: ["#": numberReplacement.localizedString], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
-	}
-	
-	public init(numberReplacements: [String: XibLocNumber], pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: numberReplacements.mapValues{ $0.localizedString }, pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
-	}
-	
 	public init(replacements: [String: String] = [:], pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
 		defaultPluralityDefinition = di.defaultPluralityDefinition
 		escapeToken = e
