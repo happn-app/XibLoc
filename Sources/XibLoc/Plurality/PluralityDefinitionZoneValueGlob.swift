@@ -49,12 +49,12 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 			guard string.hasPrefix("^") && string.hasSuffix("$") else {return nil}
 			
 			var transformedString = string
-			transformedString = transformedString.replacingOccurrences(of: ".", with: "\\.")
-			transformedString = transformedString.replacingOccurrences(of: "?", with: "[0-9]")
-			transformedString = transformedString.replacingOccurrences(of: "*", with: "[0-9]*")
-			transformedString = transformedString.replacingOccurrences(of: "→", with: "-")
-			transformedString = transformedString.replacingOccurrences(of: "{", with: "(")
-			transformedString = transformedString.replacingOccurrences(of: "}", with: ")?")
+				.replacingOccurrences(of: ".", with: "\\.")
+				.replacingOccurrences(of: "?", with: "[0-9]")
+				.replacingOccurrences(of: "*", with: "[0-9]*")
+				.replacingOccurrences(of: "→", with: "-")
+				.replacingOccurrences(of: "{", with: "(")
+				.replacingOccurrences(of: "}", with: ")?")
 			
 			if       transformedString.hasPrefix("^+") {transformedString.remove(at: transformedString.index(after: transformedString.startIndex))} /* We remove the "+" */
 			else if !transformedString.hasPrefix("^-") {transformedString.insert(contentsOf: "-?+", at: transformedString.index(after: transformedString.startIndex))}
@@ -78,29 +78,16 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 		}
 	}
 	
-	func matches(int: Int) -> Bool {
+	func matches(pluralValue: PluralValue) -> Bool {
 		switch value {
 		case .anyNumber: return true
-		case .anyFloat:  return false
-		case .regex:     return matches(string: String(int))
-		}
-	}
-	
-	func matches(float: Float, characteristics: PluralValue.FloatCharacteristics) -> Bool {
-		switch value {
-		case .anyNumber, .anyFloat: return true
+		case .anyFloat:  return pluralValue.isFloat
 			
-		case .regex:
-			var stringValue = String(format: "%.*f", float, characteristics.maxFractionDigits)
-			let components = stringValue.split(separator: ".", omittingEmptySubsequences: false)
-			assert(components.count == 2)
-			
-			let delta = components[0].count + 1 /* size of the integer part + the decimal separator */
-			while stringValue.hasSuffix("0") && stringValue.count - delta > characteristics.minFractionDigits {
-				stringValue = String(stringValue.dropLast())
-			}
-			
-			return matches(string: stringValue)
+		case .regex(let regexp):
+			let stringValue = pluralValue.fullStringValue
+			guard let r = regexp.firstMatch(in: stringValue, options: [], range: NSRange(location: 0, length: (stringValue as NSString).length)) else {return false}
+			guard r.range.location != NSNotFound else {return false} /* Not sure if needed, but better safe than sorry... */
+			return true
 		}
 	}
 	
@@ -115,16 +102,5 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 	}
 	
 	private let value: ValueType
-	
-	private func matches(string: String) -> Bool {
-		switch value {
-		case .anyNumber, .anyFloat: return false
-			
-		case .regex(let regexp):
-			guard let r = regexp.firstMatch(in: string, options: [], range: NSRange(location: 0, length: (string as NSString).length)) else {return false}
-			guard r.range.location != NSNotFound else {return false} /* Not sure if needed, but better safe than sorry... */
-			return true
-		}
-	}
 	
 }

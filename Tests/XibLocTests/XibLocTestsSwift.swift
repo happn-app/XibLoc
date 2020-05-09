@@ -137,7 +137,7 @@ class XibLocTests: XCTestCase {
 				defaultPluralityDefinition: PluralityDefinition(string: "(1)(*)"), escapeToken: nil,
 				simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { o in nStr = o; return "\(n)" }],
 				orderedReplacements: [:],
-				pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), .int(n))], attributesModifications: [:], simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
+				pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
 				identityReplacement: { $0 }
 			)
 			XCTAssertEqual(
@@ -155,12 +155,79 @@ class XibLocTests: XCTestCase {
 				defaultPluralityDefinition: PluralityDefinition(string: "(1)(2→4:^*[^1][2→4]$)?(*)"), escapeToken: nil,
 				simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
 				orderedReplacements: [:],
-				pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), .int(n))], attributesModifications: [:], simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
+				pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
 				identityReplacement: { $0 }
 			)
 			XCTAssertEqual(
 				"#n# <house:houses>".applying(xibLocInfo: info),
 				"2 houses"
+			)
+		}
+	}
+	
+	func testPluralWithNegativeIntervalOfInts() {
+		for _ in 0..<nRepeats {
+			let n = 2
+			let info = XibLocResolvingInfo<String, String>(
+				defaultPluralityDefinition: PluralityDefinition(string: "(1)(-2→4)(*)"), escapeToken: nil,
+				simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
+				orderedReplacements: [:],
+				pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
+				identityReplacement: { $0 }
+			)
+			XCTAssertEqual(
+				"#n# <house:houses:housess>".applying(xibLocInfo: info),
+				"2 houses"
+			)
+		}
+	}
+	
+	func testPluralWithNonMatchingNegativeIntervalOfInts() {
+		for _ in 0..<nRepeats {
+			let n = -42
+			let info = XibLocResolvingInfo<String, String>(
+				defaultPluralityDefinition: PluralityDefinition(string: "(-42)(-2→4)(*)"), escapeToken: nil,
+				simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
+				orderedReplacements: [:],
+				pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
+				identityReplacement: { $0 }
+			)
+			XCTAssertEqual(
+				"#n# <house:houses:housess>".applying(xibLocInfo: info),
+				"-42 house"
+			)
+		}
+	}
+	
+	func testPluralWithInvalidIntervalOfInts() {
+		/* No need to repeat this test (and spam the logs) */
+		let n = 2
+		let info = XibLocResolvingInfo<String, String>(
+			defaultPluralityDefinition: PluralityDefinition(string: "(1)(2-6→4)(*)"), escapeToken: nil,
+			simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
+			orderedReplacements: [:],
+			pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
+			identityReplacement: { $0 }
+		)
+		XCTAssertEqual(
+			"#n# <house:houses:housess>".applying(xibLocInfo: info),
+			"2 housess"
+		)
+	}
+	
+	func testPluralWithIntervalOfIntsNoStart() {
+		for _ in 0..<nRepeats {
+			let n = 2
+			let info = XibLocResolvingInfo<String, String>(
+				defaultPluralityDefinition: PluralityDefinition(string: "(→4)(*)"), escapeToken: nil,
+				simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
+				orderedReplacements: [:],
+				pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:], dictionaryReplacements: nil,
+				identityReplacement: { $0 }
+			)
+			XCTAssertEqual(
+				"#n# <house:houses>".applying(xibLocInfo: info),
+				"2 house"
 			)
 		}
 	}
@@ -255,7 +322,7 @@ class XibLocTests: XCTestCase {
 	
 	func testTwoVariablesChangesInOrderedReplacementGroup() {
 		for _ in 0..<nRepeats {
-			let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: NumberAndFormat(42))
+			let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: XibLocNumber(42))
 			let result = "42 months for sᴉoɔuɐɹℲ/month"
 			XCTAssertEqual(
 				"<#n# month for |string var|/month:#n# months for |string var|/month>".applying(xibLocInfo: info),
@@ -266,7 +333,7 @@ class XibLocTests: XCTestCase {
 	
 	func testTwoVariablesChangesAndGenderInOrderedReplacementGroup() {
 		for _ in 0..<nRepeats {
-			let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: NumberAndFormat(42), genderOtherIsMale: false)
+			let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: XibLocNumber(42), genderOtherIsMale: false)
 			let result = "42 months for sᴉoɔuɐɹℲ/year"
 			XCTAssertEqual(
 				"<#n# month for |string var|/month:#n# months for |string var|/`month¦year´>".applying(xibLocInfo: info),
@@ -288,7 +355,7 @@ class XibLocTests: XCTestCase {
 	/* Also exists in ObjC (only ever failed in ObjC) */
 	func testFromHappn3() {
 		for _ in 0..<nRepeats {
-			let info = Str2StrXibLocInfo(replacement: "", genderMeIsMale: true, genderOtherIsMale: false)
+			let info = Str2StrXibLocInfo(genderMeIsMale: true, genderOtherIsMale: false)
 			XCTAssertEqual(
 				"{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}".applying(xibLocInfo: info),
 				"Vous vous êtes croisés"
@@ -302,7 +369,7 @@ class XibLocTests: XCTestCase {
 	func testPerf1() {
 		measure{
 			for _ in 0..<nRepeats {
-				let info = Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true)
+				let info = Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true)
 				let str = "{CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
 				XCTAssertEqual(
 					str.applying(xibLocInfo: info),
@@ -317,7 +384,7 @@ class XibLocTests: XCTestCase {
 	/* Actually, the same as testFromHappn3ObjC */
 	func testFromHappn4() {
 		for _ in 0..<nRepeats {
-			let info = Str2StrXibLocInfo(replacement: "", genderMeIsMale: true, genderOtherIsMale: false)
+			let info = Str2StrXibLocInfo(genderMeIsMale: true, genderOtherIsMale: false)
 			XCTAssertEqual(
 				localized("crossed path for the first time").applying(xibLocInfo: info),
 				"Vous vous êtes croisés"
@@ -577,7 +644,7 @@ class XibLocTests: XCTestCase {
 			let baseColor = XibLocColor.black
 			let baseFont = XibLocFont.systemFont(ofSize: 14)
 			let info = Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
 				boldType: .default, baseFont: baseFont, baseColor: baseColor
 			)
 			let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: [.font: baseFont, .foregroundColor: baseColor])
@@ -595,7 +662,7 @@ class XibLocTests: XCTestCase {
 			let baseColor = XibLocColor.black
 			let baseFont = XibLocFont.systemFont(ofSize: 14)
 			let info = Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
 				boldType: .default, baseFont: baseFont, baseColor: baseColor
 			)
 			let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: [.font: baseFont, .foregroundColor: baseColor])
@@ -613,7 +680,7 @@ class XibLocTests: XCTestCase {
 			let baseColor = XibLocColor.black
 			let baseFont = XibLocFont.systemFont(ofSize: 14)
 			let info = Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
 				boldType: .default, baseFont: baseFont, baseColor: baseColor
 			)
 			let resultStr = "लें"
@@ -633,7 +700,7 @@ class XibLocTests: XCTestCase {
 			let baseColor = XibLocColor.black
 			let baseFont = XibLocFont.systemFont(ofSize: 14)
 			let info = Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
 				boldType: .default, baseFont: baseFont, baseColor: baseColor
 			)
 			let resultStr = "🧒🏻"
@@ -694,7 +761,7 @@ class XibLocTests: XCTestCase {
 			let baseColor = XibLocColor.black
 			let baseFont = XibLocFont.systemFont(ofSize: 14)
 			let info = Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
 				boldType: .default, baseFont: baseFont, baseColor: baseColor
 			)
 			let resultStr = "🧔🏻🧒🏻"
@@ -715,7 +782,7 @@ class XibLocTests: XCTestCase {
 			let baseColor = XibLocColor.black
 			let baseFont = XibLocFont.systemFont(ofSize: 14)
 			let info = Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
 				boldType: .default, baseFont: baseFont, baseColor: baseColor
 			)
 			let resultStr = "🧔🏻a"
@@ -904,7 +971,7 @@ class XibLocTests: XCTestCase {
 				let baseColor = XibLocColor.black
 				let baseFont = XibLocFont.systemFont(ofSize: 14)
 				let info = Str2AttrStrXibLocInfo(
-					strResolvingInfo: Str2StrXibLocInfo(replacement: "", pluralValue: NumberAndFormat(0), genderMeIsMale: true, genderOtherIsMale: true),
+					strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
 					boldType: .default, baseFont: baseFont, baseColor: baseColor
 				)
 				let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: [.font: baseFont, .foregroundColor: baseColor])

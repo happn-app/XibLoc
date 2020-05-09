@@ -20,60 +20,47 @@ import Foundation
 struct PluralityDefinitionZoneValueNumber : PluralityDefinitionZoneValue {
 	
 	init?(string: String) {
-		let scanner = Scanner(string: string)
-		scanner.charactersToBeSkipped = CharacterSet()
-		scanner.locale = nil /* Doc says it's the default. Let's make sure we have a nil locale. */
-		
-		var n: Int = 0
-		let intSuccess = scanner.scanInt(&n)
-		if intSuccess && scanner.isAtEnd {
-			value = .int(n)
-			return
+		guard let pluralValue = PluralValue(string: string) else {
+			return nil
 		}
-		
-		/* If we can't parse an int, we won't be able to parse a double either. */
-		guard intSuccess else {return nil}
-		
-		var f: Float = 0
-		scanner.scanLocation = 0
-		if scanner.scanFloat(&f) && scanner.isAtEnd {
-			value = .float(f)
-			return
-		}
-		
-		return nil
+		refValue = pluralValue
 	}
 	
-	func matches(int: Int) -> Bool {
-		switch value {
-		case .int(let i): return i == int
-		case .float:      return false
+	func matches(pluralValue: PluralValue) -> Bool {
+		#warning("TODO: Use !<>")
+		/* First we check whether both have the same sign. */
+		guard pluralValue.isNegativeNonZero == refValue.isNegativeNonZero else {
+			return false
 		}
-	}
-	
-	func matches(float: Float, characteristics: PluralValue.FloatCharacteristics) -> Bool {
-		assert(characteristics.precision >= 0)
-		
-		let cmp: Float
-		switch value {
-		case .int(let i): cmp = Float(i)
-		case .float(let f): cmp = f
+		/* Then we check the int part of the given value. */
+		guard pluralValue.intPart == refValue.intPart else {
+			return false
 		}
-		return abs(cmp - float) <= characteristics.precision
+		/* If the given value doesn’t have a decimal separator (is int), we need
+		 * the ref value to also be an int. However, if the given value is a
+		 * float, it can match an int.
+		 * Note: The requirement of an int being able to match only an int is a
+		 *       bit weird and might be dropped at some point. It is left for the
+		 *       time being to keep the previous behavior before PluralValue was
+		 *       changed.
+		 *       Theorically dropping the requirement can be done by simply
+		 *       removing the guard below. */
+		guard pluralValue.isFloat || refValue.isInt else {
+			return false
+		}
+		/* Now, let’s check the fraction part of the given value. As we check for
+		 * a numeric value equality (as opposed to a strict string equality), we
+		 * remove the trailing zeros from the fraction parts we check. */
+		guard (pluralValue.fractionPartNoTrailingZeros ?? "") == (refValue.fractionPartNoTrailingZeros ?? "") else {
+			return false
+		}
+		return true
 	}
 	
 	var debugDescription: String {
-		switch value {
-		case .int(let i):   return "HCPluralityDefinitionZoneValueNumber: isInt = true, value = \(i)"
-		case .float(let f): return "HCPluralityDefinitionZoneValueNumber: isInt = false, value = \(f)"
-		}
+		return "HCPluralityDefinitionZoneValueNumber: value = \(refValue)"
 	}
 	
-	private enum IntOrFloat {
-		case int(Int)
-		case float(Float)
-	}
-	
-	private let value: IntOrFloat
+	private let refValue: PluralValue
 	
 }

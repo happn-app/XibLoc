@@ -25,60 +25,57 @@ struct PluralityDefinitionZoneValueIntervalOfFloats : PluralityDefinitionZoneVal
 		scanner.locale = nil
 		
 		let bracketsCharset = CharacterSet(charactersIn: "[]")
-		
-		var f: Float = 0
+		let floatCharSet = CharacterSet(charactersIn: "-.0123456789")
 		
 		guard let bracket1 = scanner.scanCharactersFromSet(bracketsCharset), bracket1.count == 1 else {return nil}
 		assert(bracket1 == "[" || bracket1 == "]")
 		
-		start = scanner.scanFloat(&f) ? (value: f, included: bracket1 == "[") : nil
+		let loc1 = scanner.scanLocation
+		start = scanner.scanCharactersFromSet(floatCharSet)
+			.flatMap{ PluralValue(string: $0) }
+			.flatMap{ (value: $0, included: bracket1 == "[") }
+		guard start != nil || scanner.scanLocation == loc1 else {return nil}
 		
 		guard scanner.scanString("→", into: nil) else {return nil}
 		
-		let hasEnd = scanner.scanFloat(&f)
+		let loc2 = scanner.scanLocation
+		let endValue = scanner.scanCharactersFromSet(floatCharSet).flatMap{ PluralValue(string: $0) }
+		guard endValue != nil || scanner.scanLocation == loc2 else {return nil}
 		
 		guard let bracket2 = scanner.scanCharactersFromSet(bracketsCharset), bracket2.count == 1 else {return nil}
 		assert(bracket2 == "[" || bracket2 == "]")
 		
 		guard scanner.isAtEnd else {return nil}
 		
-		end = hasEnd ? (value: f, included: bracket2 == "]") : nil
+		end = endValue.flatMap{ (value: $0, included: bracket2 == "]") }
 		
 		guard start != nil || end != nil else {return nil}
-		if let start = start, let end = end, start.value > end.value {return nil}
+		if let start = start, let end = end, start.value ≻ end.value {return nil}
 	}
 	
-	func matches(int: Int) -> Bool {
-		return matches(float: Float(int), characteristics: .init(precision: 0))
-	}
-	
-	func matches(float: Float, characteristics: PluralValue.FloatCharacteristics) -> Bool {
+	func matches(pluralValue f: PluralValue) -> Bool {
 		assert(start != nil || end != nil)
-		assert(characteristics.precision >= 0)
-		
 		if let start = start {
-			guard (start.included && float - start.value >= -characteristics.precision) || (!start.included && float - start.value > -characteristics.precision) else {
+			guard (start.included && f ≽ start.value) || (!start.included && f ≻ start.value) else {
 				return false
 			}
 		}
-		
 		if let end = end {
-			guard (end.included && float - end.value <= characteristics.precision) || (!end.included && float - end.value < characteristics.precision) else {
+			guard (end.included && f ≼ end.value) || (!end.included && f ≺ end.value) else {
 				return false
 			}
 		}
-		
 		return true
 	}
 	
 	var debugDescription: String {
 		var ret = "PluralityDefinitionZoneValueIntervalOfFloats: "
-		if let start = start          {ret.append("start = \(start.value) (\(start.included ? "incl." : "excl.")")}
+		if let start = start          {ret.append("start = \(start.value.fullStringValue) (\(start.included ? "incl." : "excl.")")}
 		if start != nil && end != nil {ret.append(", ")}
-		if let end = end              {ret.append("end = \(end.value) (\(end.included ? "incl." : "excl.")")}
+		if let end = end              {ret.append("end = \(end.value.fullStringValue) (\(end.included ? "incl." : "excl.")")}
 		return ret
 	}
 	
-	private let start, end: (value: Float, included: Bool)?
+	private let start, end: (value: PluralValue, included: Bool)?
 	
 }

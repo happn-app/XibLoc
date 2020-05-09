@@ -241,33 +241,10 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		}
 	}
 	
-	func indexOfVersionToUse(forValue value: PluralValue, defaultFloatCharacteristics: PluralValue.FloatCharacteristics = .init(precision: 0.00001), numberOfVersions: Int) -> Int {
-		switch value {
-		case .int(let int):                                               return indexOfVersionToUse(matchingZonePredicate: { $0.matches(int: int) }, numberOfVersions: numberOfVersions)
-		case .float(let float):                                           return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, characteristics: defaultFloatCharacteristics) }, numberOfVersions: numberOfVersions)
-		case .floatCustomCharacteristics(let float, let characteristics): return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, characteristics: characteristics) }, numberOfVersions: numberOfVersions)
-		}
-	}
-	
-	func indexOfVersionToUse(forValue int: Int, numberOfVersions: Int) -> Int {
-		return indexOfVersionToUse(matchingZonePredicate: { $0.matches(int: int) }, numberOfVersions: numberOfVersions)
-	}
-	
-	func indexOfVersionToUse(forValue float: Float, characteristics: PluralValue.FloatCharacteristics, numberOfVersions: Int) -> Int {
-		return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, characteristics: characteristics) }, numberOfVersions: numberOfVersions)
-	}
-	
-	public var debugDescription: String {
-		var ret = "PluralityDefinition: (\n"
-		zones.forEach{ ret.append("   \($0)\n") }
-		ret.append(")")
-		return ret
-	}
-	
-	private func indexOfVersionToUse(matchingZonePredicate: (PluralityDefinitionZone) -> Bool, numberOfVersions: Int) -> Int {
+	func indexOfVersionToUse(forValue value: PluralValue, numberOfVersions: Int) -> Int {
 		assert(numberOfVersions > 0)
 		
-		let matchingZones = zonesToTest(for: numberOfVersions).filter(matchingZonePredicate)
+		let matchingZones = zonesToTest(for: numberOfVersions).filter{ $0.matches(pluralValue: value) }
 		
 		if matchingZones.isEmpty {
 //			#if canImport(os)
@@ -280,6 +257,13 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		}
 		
 		return adjust(zoneIndex: bestMatchingZone(from: matchingZones).index, fromRemovalsDueToNumberOfVersions: numberOfVersions)
+	}
+	
+	public var debugDescription: String {
+		var ret = "PluralityDefinition: (\n"
+		zones.forEach{ ret.append("   \($0)\n") }
+		ret.append(")")
+		return ret
 	}
 	
 	private func zonesToTest(for numberOfVersions: Int) -> [PluralityDefinitionZone] {

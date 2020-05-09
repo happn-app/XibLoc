@@ -1,5 +1,5 @@
 /*
-Copyright 2019 happn
+Copyright 2020 happn
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,10 +17,15 @@ import Foundation
 
 
 
-protocol PluralityDefinitionZoneValue : CustomDebugStringConvertible {
+extension Optional {
 	
-	init?(string: String)
+	struct NoValue : Error {}
 	
-	func matches(pluralValue: PluralValue) -> Bool
+	func get() throws -> Wrapped {
+		guard let v = self else {
+			throw NoValue()
+		}
+		return v
+	}
 	
 }
