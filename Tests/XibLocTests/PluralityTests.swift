@@ -46,6 +46,19 @@ class PluralityTests: XCTestCase {
 		)
 	}
 	
+	func testPluralValuePositive() {
+		XCTAssertEqual(PluralValue(intPart: "0", fractionPart: nil)?.fullStringValue, "0")
+		XCTAssertEqual(PluralValue(intPart: "0", fractionPart: "")?.fullStringValue, "0.")
+		XCTAssertEqual(PluralValue(intPart: "1", fractionPart: nil)?.fullStringValue, "1")
+		XCTAssertEqual(PluralValue(intPart: "1", fractionPart: "")?.fullStringValue, "1.")
+		XCTAssertEqual(PluralValue(intPart: "1", fractionPart: "42")?.fullStringValue, "1.42")
+		XCTAssertEqual(PluralValue(intPart: "+0", fractionPart: nil)?.fullStringValue, "0")
+		XCTAssertEqual(PluralValue(string: "+0.")?.fullStringValue, "0.")
+		XCTAssertEqual(PluralValue(intPart: "+1", fractionPart: nil)?.fullStringValue, "1")
+		XCTAssertEqual(PluralValue(intPart: "+1", fractionPart: "")?.fullStringValue, "1.")
+		XCTAssertEqual(PluralValue(intPart: "+1", fractionPart: "42")?.fullStringValue, "1.42")
+	}
+	
 	func testPluralValueNegative() {
 		XCTAssertEqual(PluralValue(intPart: "-0", fractionPart: nil)?.fullStringValue, "-0")
 		XCTAssertEqual(PluralValue(intPart: "-0", fractionPart: "")?.fullStringValue, "-0.")
