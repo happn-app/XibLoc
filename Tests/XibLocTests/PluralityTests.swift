@@ -154,6 +154,7 @@ class PluralityTests: XCTestCase {
 	func testPluralityDefinitionSingleNumber() {
 		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "-2"))
 		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "-2."))
+		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "+0"))
 		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "0"))
 		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "-0"))
 		XCTAssertNotNil(PluralityDefinitionZoneValueNumber(string: "2."))
@@ -172,6 +173,8 @@ class PluralityTests: XCTestCase {
 	
 	func testPluralityDefinitionIntervalOfIntsParsing() {
 		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfInts(string: "-2→3"))
+		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfInts(string: "-2→+3"))
+		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfInts(string: "+2→+3"))
 		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfInts(string: "-2→-1"))
 		XCTAssertNil(PluralityDefinitionZoneValueIntervalOfInts(string: "-2→-3"))
 		XCTAssertNil(PluralityDefinitionZoneValueIntervalOfInts(string: "0-2→3"))
@@ -182,6 +185,9 @@ class PluralityTests: XCTestCase {
 		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfFloats(string: "]-2→3]"))
 		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfFloats(string: "[-2.→1.000]"))
 		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfFloats(string: "[-2.→1.0001]"))
+		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfFloats(string: "[-2.→+1.0001]"))
+		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfFloats(string: "[+2.→+3.0001]"))
+		XCTAssertNotNil(PluralityDefinitionZoneValueIntervalOfFloats(string: "[2→+3.0001]"))
 		XCTAssertTrue(try PluralityDefinitionZoneValueIntervalOfFloats(string: "[-2.→1.0001]").get().matches(pluralValue: PluralValue(string: "1.0001").get()))
 		XCTAssertFalse(try PluralityDefinitionZoneValueIntervalOfFloats(string: "[-2.→1.0001[").get().matches(pluralValue: PluralValue(string: "1.0001").get()))
 		XCTAssertFalse(try PluralityDefinitionZoneValueIntervalOfFloats(string: "[-2.→1.0001]").get().matches(pluralValue: PluralValue(string: "1.00011").get()))
