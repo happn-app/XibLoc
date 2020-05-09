@@ -41,14 +41,14 @@ struct PluralityDefinitionZoneValueIntervalOfInts : PluralityDefinitionZoneValue
 		
 		guard scanner.isAtEnd else {return nil}
 		guard startValue != nil || endValue != nil else {return nil}
-		if let start = startValue, let end = endValue, start ≻ end {return nil}
+		if let start = startValue, let end = endValue, start > end {return nil}
 	}
 	
 	func matches(pluralValue n: PluralValue) -> Bool {
 		assert(startValue != nil || endValue != nil)
 		guard n.isInt else {return false}
-		if let endValue   = endValue   {guard n ≼ endValue   else {return false}}
-		if let startValue = startValue {guard n ≽ startValue else {return false}}
+		if let endValue   = endValue   {guard n <= endValue   else {return false}}
+		if let startValue = startValue {guard n >= startValue else {return false}}
 		return true
 	}
 	

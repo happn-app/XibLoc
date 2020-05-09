@@ -17,28 +17,6 @@ import Foundation
 
 
 
-/* Comparison of `PluralValue`, not using the `Comparable` protocol.
-`PluralValue` cannot conform to `Comparable` because two PluralValue can
-represent the same number, in which case we could have
-   `!(pv1 < pv2)` and `!(pv1 > pv2)`
-but
-   `pv1 != pv2`
-(E.g. with `1` and `1.0`.)
-And this is forbidden by the `Comparable` protocol:
-   https://developer.apple.com/documentation/swift/comparable
-
-So to still have operators and have a beautiful code we define the following
-operators.
-But because we don’t really need to expose those operators to people using
-XibLoc, and because we cannot define a scope to an operator, we disable these
-operators… :(
-If ever Swift can define a scope to an operator definition, we’ll be able to put
-them back for use in just our module. */
-infix operator ≺: ComparisonPrecedence
-infix operator ≼: ComparisonPrecedence
-infix operator ≻: ComparisonPrecedence
-infix operator ≽: ComparisonPrecedence
-
 /** Defines a “plural value,” which is used when resolving a plurality
 definition, to choose the correct zone index to show.
 
@@ -49,7 +27,26 @@ Asturian language in which, providing I undestood Unicode’s specs correctly,
 a value is singular for `1`, and 1 _only_: a value of `1.0` would be plural.
 
 The `PluralValue` contains all the required information to correctly resolve the
-plural. */
+plural.
+
+- Important: `PluralValue` does **not** conform to `Comparable` nor `Equatable`
+but still implement the `==`, `<` and other comparison operators on
+`PluralValue`. These implementation compare the _numeric_ values represented by
+the `PluralValue`, which mean you can have two `PluralValue`s that are equal
+when using the `==` operator but do not have the same string representation. If
+you want to check for full equality, compare the `fullStringValue`s of your
+`PluralValue`s. See the note below for a rationale.
+
+- Note: This is important for people working on XibLoc: `PluralValue` cannot
+conform to `Comparable` (or `Equatable`) because two PluralValue can represent
+the same number, in which case we could have `!(pv1 < pv2)` and `!(pv1 > pv2)`
+but `pv1 != pv2` (e.g. with `pv1 = "1"` and `pv2 = 1.0`) and this is forbidden
+by the `Comparable` protocol.
+See [the doc](https://developer.apple.com/documentation/swift/comparable) for
+more info about the `Comparable` protocol.
+
+We still implement the `==`, `<` and other comparison operators on `PluralValue`
+just not using the `Comparable` protocol. */
 public struct PluralValue {
 	
 	public struct NumberFormat {
@@ -136,20 +133,24 @@ public struct PluralValue {
 		return .orderedSame
 	}
 	
-	public static func ≺(lhs: PluralValue, rhs: PluralValue) -> Bool {
+	public static func ==(lhs: PluralValue, rhs: PluralValue) -> Bool {
+		return PluralValue.compare(lhs, rhs) == .orderedSame
+	}
+	
+	public static func <(lhs: PluralValue, rhs: PluralValue) -> Bool {
 		return PluralValue.compare(lhs, rhs) == .orderedAscending
 	}
 	
-	public static func ≼(lhs: PluralValue, rhs: PluralValue) -> Bool {
+	public static func <=(lhs: PluralValue, rhs: PluralValue) -> Bool {
 		let c = PluralValue.compare(lhs, rhs)
 		return (c == .orderedAscending || c == .orderedSame)
 	}
 	
-	public static func ≻(lhs: PluralValue, rhs: PluralValue) -> Bool {
+	public static func >(lhs: PluralValue, rhs: PluralValue) -> Bool {
 		return PluralValue.compare(lhs, rhs) == .orderedDescending
 	}
 	
-	public static func ≽(lhs: PluralValue, rhs: PluralValue) -> Bool {
+	public static func >=(lhs: PluralValue, rhs: PluralValue) -> Bool {
 		let c = PluralValue.compare(lhs, rhs)
 		return (c == .orderedDescending || c == .orderedSame)
 	}

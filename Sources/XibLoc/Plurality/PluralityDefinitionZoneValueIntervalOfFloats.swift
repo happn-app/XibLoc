@@ -50,18 +50,18 @@ struct PluralityDefinitionZoneValueIntervalOfFloats : PluralityDefinitionZoneVal
 		end = endValue.flatMap{ (value: $0, included: bracket2 == "]") }
 		
 		guard start != nil || end != nil else {return nil}
-		if let start = start, let end = end, start.value ≻ end.value {return nil}
+		if let start = start, let end = end, start.value > end.value {return nil}
 	}
 	
 	func matches(pluralValue f: PluralValue) -> Bool {
 		assert(start != nil || end != nil)
 		if let start = start {
-			guard (start.included && f ≽ start.value) || (!start.included && f ≻ start.value) else {
+			guard (start.included && f >= start.value) || (!start.included && f > start.value) else {
 				return false
 			}
 		}
 		if let end = end {
-			guard (end.included && f ≼ end.value) || (!end.included && f ≺ end.value) else {
+			guard (end.included && f <= end.value) || (!end.included && f < end.value) else {
 				return false
 			}
 		}
