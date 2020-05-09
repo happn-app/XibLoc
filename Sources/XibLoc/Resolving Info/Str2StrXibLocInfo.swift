@@ -50,7 +50,6 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 		orderedReplacements = orderedReplacementsBuilding
 		
 		simpleReturnTypeReplacements = simpleReturnTypeReplacementsBuilding
-		dictionaryReplacements = nil
 		identityReplacement = { $0 }
 	}
 	

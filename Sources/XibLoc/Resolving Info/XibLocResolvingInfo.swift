@@ -62,33 +62,6 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	 * to the original value being replaced. It used to be a constant. */
 	public let simpleReturnTypeReplacements: [OneWordTokens: (_ originalValue: ReturnType) -> ReturnType]
 	
-	/* Format: "@[id|key1:val1|key2:val2¦default replacement]".
-	 * Examples of use:
-	 *    - loc_string_en = "Hello @[plural|one:dude¦dudes]"
-	 *    - loc_string_ru = "Hello in russian @[plural|one:russian word for dude|few:russian word for a few dudes¦russian word for dudes]"
-	 *      When you have one guy to greet, the dictionary will contain
-	 *      ["plural": "one"].
-	 *      When you have a few guys to greet: ["plural": "few"]
-	 *      Etc.
-	 * The id can be used more than once in the same string, the replacements
-	 * will be done for each dictionary with the same id.
-	 *
-	 * If a dictionary tag is found in the input but the id does not match any of
-	 * the keys in this property, the tag won't be replaced at all.
-	 *
-	 * If dictionaryReplacements is nil, no dictionary parsing will be done at
-	 * all.
-	 *
-	 * To escape a dictionary, just place the escape token before the @ as you
-	 * would normally do with another token.
-	 * For instance, assuming the escape token is "\\" (one backslash), to escape
-	 * "@[plural|one:dude¦dudes]", use this string: "\\@[plural|one:dude¦dudes]".
-	 * Placing the escape token between the "@" and the "[" works too:
-	 * "@\\[plural|one:dude¦dudes]".
-	 * Inside a dictionary, to escape a special character, just escape it with
-	 * the escape token as expected (eg. "@[escaped|colon\\::and\\|pipe]"). */
-	public let dictionaryReplacements: [String: String?]?
-	
 	public let identityReplacement: (_ source: SourceType) -> ReturnType
 	
 	public init(
@@ -98,7 +71,6 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		pluralGroups pg: [(MultipleWordsTokens, PluralValue)] = [],
 		attributesModifications am: [OneWordTokens: (_ modified: inout ReturnType, _ strRange: Range<String.Index>, _ refStr: String) -> Void] = [:],
 		simpleReturnTypeReplacements srtr: [OneWordTokens: (_ originalValue: ReturnType) -> ReturnType] = [:],
-		dictionaryReplacements dr: [String: String?]? = nil,
 		identityReplacement ir: @escaping (_ source: SourceType) -> ReturnType
 	) {
 		defaultPluralityDefinition = dpd
@@ -108,7 +80,6 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		pluralGroups = pg
 		attributesModifications = am
 		simpleReturnTypeReplacements = srtr
-		dictionaryReplacements = dr
 		identityReplacement = ir
 	}
 	
