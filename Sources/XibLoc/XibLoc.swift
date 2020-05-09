@@ -20,13 +20,13 @@ import Foundation
 extension String {
 	
 	public func applying(xibLocInfo: XibLocResolvingInfo<String, String>) -> String {
-		return ParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: StringParserHelper.self)
+		return ParsedXibLoc.cachedOrNewParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: StringParserHelper.self)
 	}
 	
 	#if !os(Linux)
 	
 	public func applying(xibLocInfo: XibLocResolvingInfo<String, NSMutableAttributedString>) -> NSMutableAttributedString {
-		return ParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
+		return ParsedXibLoc.cachedOrNewParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
 	}
 	
 	public func applying(xibLocInfo: XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>, defaultAttributes: [NSAttributedString.Key: Any]?) -> NSMutableAttributedString {
@@ -46,7 +46,7 @@ extension NSAttributedString {
 		let mutableAttrStr: NSMutableAttributedString
 		if let mself = self as? NSMutableAttributedString {mutableAttrStr = mself}
 		else                                              {mutableAttrStr = NSMutableAttributedString(attributedString: self)}
-		let resolved = ParsedXibLoc(source: mutableAttrStr, parserHelper: NSMutableAttributedStringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
+		let resolved = ParsedXibLoc.cachedOrNewParsedXibLoc(source: mutableAttrStr, parserHelper: NSMutableAttributedStringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
 		return resolved
 	}
 	
