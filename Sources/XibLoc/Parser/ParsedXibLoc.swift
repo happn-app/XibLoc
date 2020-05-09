@@ -30,6 +30,11 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	
 	let sourceTypeHelperType: SourceTypeHelper.Type
 	
+	static func cachedOrNewParsedXibLoc<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) -> ParsedXibLoc<SourceTypeHelper> {
+		#warning("TODO")
+		return self.init(source: source, parserHelper: parserHelper, forXibLocResolvingInfo: xibLocResolvingInfo)
+	}
+	
 	init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
 		self.init(source: source, parserHelper: parserHelper, escapeToken: xibLocResolvingInfo.escapeToken, simpleSourceTypeReplacements: Array(xibLocResolvingInfo.simpleSourceTypeReplacements.keys), orderedReplacements: Array(xibLocResolvingInfo.orderedReplacements.keys), pluralGroups: Array(xibLocResolvingInfo.pluralGroups.map{ $0.0 }), attributesModifications: Array(xibLocResolvingInfo.attributesModifications.keys), simpleReturnTypeReplacements: Array(xibLocResolvingInfo.simpleReturnTypeReplacements.keys))
 	}
@@ -44,7 +49,6 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	}
 	
 	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens], pluralityDefinitionsList: [PluralityDefinition?]) {
-		#warning("TODO: Cache")
 		assert(pluralityDefinitionsList.count >= pluralGroups.count)
 		/* First, let's make sure we are not overlapping tokens for our parsing:
 		 *    - If lsep == rsep, reduce to only sep;
