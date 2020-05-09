@@ -75,8 +75,6 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 		attributesModifications = attributesModificationsBuilding
 		
 		simpleReturnTypeReplacements = returnTypeReplacements ?? [:]
-		
-		dictionaryReplacements = nil
 		identityReplacement = { NSMutableAttributedString(string: $0, attributes: defaultAttributes) }
 	}
 	

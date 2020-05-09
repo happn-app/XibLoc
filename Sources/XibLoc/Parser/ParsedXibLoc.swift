@@ -31,30 +31,28 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	let sourceTypeHelperType: SourceTypeHelper.Type
 	
 	init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
-		self.init(source: source, parserHelper: parserHelper, escapeToken: xibLocResolvingInfo.escapeToken, simpleSourceTypeReplacements: Array(xibLocResolvingInfo.simpleSourceTypeReplacements.keys), orderedReplacements: Array(xibLocResolvingInfo.orderedReplacements.keys), pluralGroups: Array(xibLocResolvingInfo.pluralGroups.map{ $0.0 }), attributesModifications: Array(xibLocResolvingInfo.attributesModifications.keys), simpleReturnTypeReplacements: Array(xibLocResolvingInfo.simpleReturnTypeReplacements.keys), hasDictionaryReplacements: xibLocResolvingInfo.dictionaryReplacements != nil)
+		self.init(source: source, parserHelper: parserHelper, escapeToken: xibLocResolvingInfo.escapeToken, simpleSourceTypeReplacements: Array(xibLocResolvingInfo.simpleSourceTypeReplacements.keys), orderedReplacements: Array(xibLocResolvingInfo.orderedReplacements.keys), pluralGroups: Array(xibLocResolvingInfo.pluralGroups.map{ $0.0 }), attributesModifications: Array(xibLocResolvingInfo.attributesModifications.keys), simpleReturnTypeReplacements: Array(xibLocResolvingInfo.simpleReturnTypeReplacements.keys))
 	}
 	
-	init(source: SourceType, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens], hasDictionaryReplacements: Bool) {
+	init(source: SourceType, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens]) {
 		var source = SourceTypeHelper.copy(source: source)
 		var stringSource = parserHelper.stringRepresentation(of: source)
 		var pluralityDefinitionsList = ParsedXibLoc.preprocessForPluralityDefinitionOverrides(source: &source, stringSource: &stringSource, parserHelper: parserHelper)
 		while pluralityDefinitionsList.count < pluralGroups.count {pluralityDefinitionsList.append(nil)}
 		
-		self.init(source: source, stringSource: stringSource, parserHelper: parserHelper, escapeToken: escapeToken, simpleSourceTypeReplacements: simpleSourceTypeReplacements, orderedReplacements: orderedReplacements, pluralGroups: pluralGroups, attributesModifications: attributesModifications, simpleReturnTypeReplacements: simpleReturnTypeReplacements, hasDictionaryReplacements: hasDictionaryReplacements, pluralityDefinitionsList: pluralityDefinitionsList)
+		self.init(source: source, stringSource: stringSource, parserHelper: parserHelper, escapeToken: escapeToken, simpleSourceTypeReplacements: simpleSourceTypeReplacements, orderedReplacements: orderedReplacements, pluralGroups: pluralGroups, attributesModifications: attributesModifications, simpleReturnTypeReplacements: simpleReturnTypeReplacements, pluralityDefinitionsList: pluralityDefinitionsList)
 	}
 	
-	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens], hasDictionaryReplacements: Bool, pluralityDefinitionsList: [PluralityDefinition?]) {
+	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens], pluralityDefinitionsList: [PluralityDefinition?]) {
 		#warning("TODO: Cache")
 		assert(pluralityDefinitionsList.count >= pluralGroups.count)
-		assert(!hasDictionaryReplacements, "Not implemented: Creating a ParsedXibLoc with dictionary replacements")
 		/* First, let's make sure we are not overlapping tokens for our parsing:
 		 *    - If lsep == rsep, reduce to only sep;
 		 *    - No char used in any separator (left, right, internal, escape token) must be use in another separator;
-		 *    - But the same char can be used multiple time in one separator;
-		 *    - If dictionary replacements are active, the following tokens are reserved (and count in the above rules): "@[", "|", ":", "¦", "]"
+		 *    - But the same char can be used multiple time in one separator.
 		 * We'll also make sure none of the tokens are empty. */
 		#if !NS_BLOCK_ASSERTIONS // TODO: Find correct pre-processing instruction
-			var chars = !hasDictionaryReplacements ? Set<Character>() : Set<Character>(arrayLiteral: "@", "[", "|", ":", "¦", "]")
+			var chars = Set<Character>()
 			
 			let processToken = { (token: String) in
 				assert(!token.isEmpty)
@@ -79,7 +77,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		/* Let's build the replacements. Overlaps are allowed with the following rules:
 		 *    - The attributes modifications can overlap between themselves at will;
-		 *    - Replacements can be embedded in other replacements (internal ranges for multiple words tokens, default or other values ranges for dictionaries);
+		 *    - Replacements can be embedded in other replacements (internal ranges for multiple words tokens);
 		 *    - Replacements cannot overlap attributes modifications or replacements if one is not fully embedded in the other.
 		 * Note: Anything can be embedded in a simple replacement, but everything embedded in it will be dropped... (the content is replaced, by definition!) */
 		
@@ -134,7 +132,6 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		getMultipleWordsRanges(tokens: pluralGroups, replacementTypeBuilder: { .pluralGroup($0, zoneIndex: $1, numberOfZones: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		getOneWordRanges(tokens: simpleSourceTypeReplacements, replacementTypeBuilder: { .simpleSourceTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		getOneWordRanges(tokens: simpleReturnTypeReplacements, replacementTypeBuilder: { .simpleReturnTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		/* TODO: Parse the dictionary replacements. */
 		getOneWordRanges(tokens: attributesModifications, replacementTypeBuilder: { .attributesModification($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		
 		/* Let's remove the tokens we want gone from the source string. The escape
@@ -274,40 +271,6 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
 				replacementsIterator.delete(replacementGroup: replacement.groupId)
 				replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringContent)
-				
-			case .dictionaryReplacement(id: let id, key: let key, allKeys: let allKeys):
-				/* Note: The dictionary replacement has never been tested (parsing not implemented yet). */
-				guard let dictionaryReplacements = xibLocResolvingInfo.dictionaryReplacements else {
-					#if canImport(os)
-						if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got dictionary with id %{public}@ in replacement tree, but no dictionary replacements in xibLocResolvingInfo", log: $0, type: .info, id) }}
-						else                                                          {NSLog("Got dictionary with id %@ in replacement tree, but no dictionary replacements in xibLocResolvingInfo", id)}
-					#else
-						NSLogString("Got dictionary with id \(id) in replacement tree, but no dictionary replacements in xibLocResolvingInfo", log: di.log)
-					#endif
-					continue
-				}
-				guard let wantedKey = dictionaryReplacements[id] else {
-					/* Not an error to have a dictionary whose id is not in the dictionary replacements says the spec. Simply ignore this replacement group. */
-					replacementsIterator.delete(replacementGroup: replacement.groupId)
-					continue
-				}
-				let parsedDictionaryHasWantedKey = wantedKey.map{ allKeys.keys.contains($0) } ?? allKeys.hasDefaultValue
-				guard parsedDictionaryHasWantedKey || allKeys.hasDefaultValue else {
-					/* The key we want is not contained in the parsed dictionary, and
-					 * the dictionary does not have a default value. We can simply
-					 * remove the whole dictionary. */
-					returnTypeHelperType.remove(strRange: (replacement.containerRange, replacementsIterator.refString), from: &result)
-					replacementsIterator.delete(replacementGroup: replacement.groupId)
-					replacementsIterator.delete(rangeInText: replacement.containerRange)
-					continue
-				}
-				
-				guard wantedKey == key || (!parsedDictionaryHasWantedKey && key == nil) else {continue}
-				
-				let content = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
-				let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
-				replacementsIterator.delete(replacementGroup: replacement.groupId)
-				replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringContent)
 			}
 		}
 		
@@ -326,20 +289,12 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			init(v: Int) {value = v}
 		}
 		
-		class MutableKeysList {
-			var keys: Set<String>
-			var hasDefaultValue: Bool
-			init() {keys = []; hasDefaultValue = false}
-		}
-		
 		case simpleSourceTypeReplacement(OneWordTokens)
 		case orderedReplacement(MultipleWordsTokens, valueIndex: Int, numberOfValues: MutableCount)
 		case pluralGroup(MultipleWordsTokens, zoneIndex: Int, numberOfZones: MutableCount)
 		
 		case attributesModification(OneWordTokens)
 		case simpleReturnTypeReplacement(OneWordTokens)
-		
-		case dictionaryReplacement(id: String, key: String?, allKeys: MutableKeysList)
 		
 		var isAttributesModifiation: Bool {
 			switch self {
