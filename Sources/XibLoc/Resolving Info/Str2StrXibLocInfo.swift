@@ -21,18 +21,22 @@ public typealias Str2StrXibLocInfo = XibLocResolvingInfo<String, String>
 
 extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 	
+	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
 	public init(simpleReplacementWithToken token: String, value: String, escapeToken e: String? = di.defaultEscapeToken) {
 		self.init(replacements: [token: value], escapeToken: e)!
 	}
 	
+	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
 	public init(pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
 		self.init(replacements: [:], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)!
 	}
 	
+	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
 	public init(replacement: String, pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
 		self.init(replacements: ["|": replacement], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)!
 	}
 	
+	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
 	public init?(replacements: [String: String], pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
 		defaultPluralityDefinition = di.defaultPluralityDefinition
 		escapeToken = e

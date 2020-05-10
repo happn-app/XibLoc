@@ -30,6 +30,7 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 		
 	}
 	
+	@available(*, deprecated, message: "Use the new Str2AttrStrXibLocInfo init methods")
 	public init?(strResolvingInfo: Str2StrXibLocInfo, boldType: BoldOrItalicType? = nil, italicType: BoldOrItalicType? = nil, links: [OneWordTokens: URL]? = nil, baseFont: XibLocFont?, baseColor: XibLocColor?, returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedString.Key: Any]? = di.defaultStr2AttrStrAttributes) {
 		var defaultAttributesBuilding = defaultAttributes ?? [:]
 		if let f = baseFont  {defaultAttributesBuilding[.font] = f}
@@ -58,6 +59,7 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 	/** Inits the Str2AttrStrXibLocInfo, copying the string resolving info from
 	`strResolvingInfo`. `simpleSourceTypeReplacements` is ignored from the string
 	resolving info. */
+	@available(*, deprecated, message: "Use the new Str2AttrStrXibLocInfo init methods")
 	public init?(strResolvingInfo: Str2StrXibLocInfo, attributesReplacements: [OneWordTokens: StringAttributesChangesDescription], returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedString.Key: Any]? = di.defaultStr2AttrStrAttributes) {
 		defaultPluralityDefinition = strResolvingInfo.defaultPluralityDefinition
 		escapeToken = strResolvingInfo.escapeToken
