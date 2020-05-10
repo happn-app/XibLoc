@@ -36,8 +36,7 @@ final class ObjCXibLoc : NSObject {
 	@objc
 	static func objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPlural(base: String, baseFont: XibLocFont, baseColor: XibLocColor, replacement: String, pluralValue: Int, genderMeIsMale: Bool, genderOtherIsMale: Bool) throws -> NSMutableAttributedString {
 		return NSMutableAttributedString(
-			/* Bold, italic, font and text color already setup in the tests setup. */
-			attributedString: base.applyingCommonAttrTokens(simpleReplacement1: replacement, number: XibLocNumber(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale)
+			attributedString: base.applyingCommonAttrTokens(simpleReplacement1: replacement, number: XibLocNumber(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale, baseFont: baseFont, baseColor: baseColor)
 		)
 	}
 	
@@ -49,7 +48,7 @@ final class ObjCXibLoc : NSObject {
 			orderedReplacements: [:],
 			pluralGroups: [],
 			attributesModifications: [OneWordTokens(token: boldToken): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).apply(to: attrStr, range: NSRange(strRange, in: refStr)) }],
-			simpleReturnTypeReplacements: [:], identityReplacement: { NSMutableAttributedString(string: $0, attributes: di.defaultStr2AttrStrAttributes!) }
+			simpleReturnTypeReplacements: [:], identityReplacement: { NSMutableAttributedString(string: $0, attributes: [.font: baseFont, .foregroundColor: baseColor]) }
 		).get())
 	}
 	
