@@ -42,8 +42,8 @@ public struct DependencyInjection {
 	
 	#if !os(Linux)
 	public var defaultStr2AttrStrAttributes: [NSAttributedString.Key: Any]? = nil
-	public var defaultBoldAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setBold])
-	public var defaultItalicAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setItalic])
+	public var defaultBoldAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setBold])
+	public var defaultItalicAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setItalic])
 	#endif
 	
 }

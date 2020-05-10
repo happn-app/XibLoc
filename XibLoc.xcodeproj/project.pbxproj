@@ -18,6 +18,8 @@
 		7B66FAB824684494005EAB92 /* CommonTokensGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FAB624684494005EAB92 /* CommonTokensGroup.swift */; };
 		7B66FABB24686497005EAB92 /* CommonTokensGroup_Linux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FABA24686497005EAB92 /* CommonTokensGroup_Linux.swift */; };
 		7B66FABC24686497005EAB92 /* CommonTokensGroup_Linux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FABA24686497005EAB92 /* CommonTokensGroup_Linux.swift */; };
+		7B66FABE24687F19005EAB92 /* TokensGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FABD24687F19005EAB92 /* TokensGroup.swift */; };
+		7B66FABF24687F19005EAB92 /* TokensGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FABD24687F19005EAB92 /* TokensGroup.swift */; };
 		7B6B353324671651008DC972 /* ParsedXibLoc+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */; };
 		7B6B353424671651008DC972 /* ParsedXibLoc+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */; };
 		7B8A96ED2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
@@ -94,6 +96,7 @@
 		7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocParsingInfo.swift; sourceTree = "<group>"; };
 		7B66FAB624684494005EAB92 /* CommonTokensGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTokensGroup.swift; sourceTree = "<group>"; };
 		7B66FABA24686497005EAB92 /* CommonTokensGroup_Linux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTokensGroup_Linux.swift; sourceTree = "<group>"; };
+		7B66FABD24687F19005EAB92 /* TokensGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokensGroup.swift; sourceTree = "<group>"; };
 		7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParsedXibLoc+Cache.swift"; sourceTree = "<group>"; };
 		7B8A96EC2017528C00481B45 /* OneWordTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneWordTokens.swift; sourceTree = "<group>"; };
 		7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleWordsTokens.swift; sourceTree = "<group>"; };
@@ -208,6 +211,7 @@
 		7B66FAB924685CE8005EAB92 /* Tokens Group */ = {
 			isa = PBXGroup;
 			children = (
+				7B66FABD24687F19005EAB92 /* TokensGroup.swift */,
 				7B66FAB624684494005EAB92 /* CommonTokensGroup.swift */,
 				7B66FABA24686497005EAB92 /* CommonTokensGroup_Linux.swift */,
 			);
@@ -482,6 +486,7 @@
 				7BC4591120B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */,
 				7B8B339C246564DB00690AD7 /* PluralValue.swift in Sources */,
 				7BC4590C20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
+				7B66FABE24687F19005EAB92 /* TokensGroup.swift in Sources */,
 				7BCBB128201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB148201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
@@ -529,6 +534,7 @@
 				7BB9A94E2240226D00932FD5 /* NSMutableAttributedString+Utils.swift in Sources */,
 				7B8B339D246564DB00690AD7 /* PluralValue.swift in Sources */,
 				7BB9A94F2240226D00932FD5 /* StringAttributesChangesDescription.swift in Sources */,
+				7B66FABF24687F19005EAB92 /* TokensGroup.swift in Sources */,
 				7BB9A9502240226D00932FD5 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7BB9A9512240226D00932FD5 /* MultipleWordsTokens.swift in Sources */,
 				7BB9A9522240226D00932FD5 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
