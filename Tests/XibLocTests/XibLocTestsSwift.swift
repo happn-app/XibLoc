@@ -718,7 +718,7 @@ class XibLocTests: XCTestCase {
 			let baseColor = XibLocColor.black
 			let baseFont = XibLocFont.systemFont(ofSize: 14)
 			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(emptyWithIdentityReplacement: { $0 }),
+				strResolvingInfo: Str2StrXibLocInfo(identityReplacement: { $0 }),
 				attributesReplacements: [OneWordTokens(token: "🧒🏻"): StringAttributesChangesDescription(changes: [.setBold])], returnTypeReplacements: nil,
 				defaultAttributes: [.font: baseFont, .foregroundColor: baseColor]
 			).get()
@@ -739,7 +739,7 @@ class XibLocTests: XCTestCase {
 			let baseColor = XibLocColor.black
 			let baseFont = XibLocFont.systemFont(ofSize: 14)
 			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(emptyWithIdentityReplacement: { $0 }),
+				strResolvingInfo: Str2StrXibLocInfo(identityReplacement: { $0 }),
 				attributesReplacements: [OneWordTokens(token: "🧒🏻"): StringAttributesChangesDescription(changes: [.setBold])], returnTypeReplacements: nil,
 				defaultAttributes: [.font: baseFont, .foregroundColor: baseColor]
 			).get()
