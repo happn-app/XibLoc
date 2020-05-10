@@ -28,7 +28,7 @@ class XibLocTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		
-		di.defaultEscapeToken = "\\"
+		di.defaultEscapeToken = #"\"#
 	}
 	
 	override func tearDown() {
@@ -41,6 +41,26 @@ class XibLocTests: XCTestCase {
 			XCTAssertEqual(
 				#"the \|replaced\|"#.applying(xibLocInfo: info),
 				#"the |replaced|"#
+			)
+		}
+	}
+	
+	func testOneTokenEscapedSimpleReplacement() throws {
+		for _ in 0..<nRepeats {
+			let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement")
+			XCTAssertEqual(
+				#"the |replaced\|"#.applying(xibLocInfo: info),
+				#"the |replaced|"#
+			)
+		}
+	}
+	
+	func testEscapeEscapingNothing() throws {
+		for _ in 0..<nRepeats {
+			let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement")
+			XCTAssertEqual(
+				#"the\ |replaced|"#.applying(xibLocInfo: info),
+				#"the replacement"#
 			)
 		}
 	}
