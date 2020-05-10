@@ -21,16 +21,7 @@ import Foundation
 
 /** A default Tokens Group.
 
-This tokens group should be enough to process most, if not all of your
-translations.
-If you need more tokens, you can create your own groups, the same way this one
-has been done (or any other way you want, the idea is simply to get a
-`XibLocResolvingInfo` at the end; you can even extend `XibLocResolvingInfo` to
-create a custom init if you prefer, though you must remember to call
-`initParsingInfo` at the end of your init).
-
-The way this group has been build, **all** of the tokens are parsed, even if you
-don’t use some of them.
+See doc of the non Linux variant for more info.
 
 List of tokens:
 - Escape: `~`
@@ -40,38 +31,40 @@ List of tokens:
 - Plural value: `#`
 - Gender me: `{` `₋` `}`
 - Gender other: \` `¦` `´` */
-public struct CommonTokensGroup {
+public struct CommonTokensGroup : TokensGroup {
+	
+	public static let tokensExceptEscape = Set(arrayLiteral: "|", "^", "#", "<", ":", ">", "{", "₋", "}", "`", "¦", "´")
 	
 	/** Token is `|` */
-	public var simpleReplacement1: String
+	public var simpleReplacement1: String?
 	/** Token is `^` */
-	public var simpleReplacement2: String
+	public var simpleReplacement2: String?
 	/** See discussion for the tokens.
 	
 	Tokens:
 	- For the number replacement: `#`
 	- For the plural value: `<` `:` `>` */
-	public var number: XibLocNumber
+	public var number: XibLocNumber?
 	
 	/** Tokens: `{` `₋` `}`
 	- Important: The dash is not a standard dash… */
-	public var genderMeIsMale: Bool
+	public var genderMeIsMale: Bool?
 	/** Tokens: \` `¦` `´`
 	
 	(Xcode Formatting note: I did not find a way to specify the first token is
 	code (because it’s the same token as the token used to specify we have code
 	in Xcode comments). Doesn’t matter, it’s not really visible though.)*/
-	public var genderOtherIsMale: Bool = true
+	public var genderOtherIsMale: Bool?
 	
 	/** Defaults to `~` */
 	public var escapeToken: String?
 	
 	public init(
-		simpleReplacement1 r1: String = "",
-		simpleReplacement2 r2: String = "",
-		number n: XibLocNumber = XibLocNumber(0),
-		genderMeIsMale gm: Bool = true,
-		genderOtherIsMale go: Bool = true,
+		simpleReplacement1 r1: String? = nil,
+		simpleReplacement2 r2: String? = nil,
+		number n: XibLocNumber? = nil,
+		genderMeIsMale gm: Bool? = nil,
+		genderOtherIsMale go: Bool? = nil,
 		escapeToken e: String? = di.defaultEscapeToken
 	) {
 		simpleReplacement1 = r1
@@ -86,18 +79,18 @@ public struct CommonTokensGroup {
 		return Str2StrXibLocInfo(
 			defaultPluralityDefinition: di.defaultPluralityDefinition,
 			escapeToken: escapeToken,
-			simpleSourceTypeReplacements: [
-				OneWordTokens(token: "|"): { _ in self.simpleReplacement1 },
-				OneWordTokens(token: "^"): { _ in self.simpleReplacement2 },
-				OneWordTokens(token: "#"): { _ in self.number.localizedString }
-			],
+			simpleSourceTypeReplacements: [:],
 			orderedReplacements: [
-				MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}"): genderMeIsMale ? 0 : 1,
-				MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´"): genderOtherIsMale ? 0 : 1
-			],
-			pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), number.pluralValue)],
+				MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}"): genderMeIsMale.flatMap{ $0 ? 0 : 1 },
+				MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´"): genderOtherIsMale.flatMap{ $0 ? 0 : 1 }
+			].compactMapValues{ $0 },
+			pluralGroups: [number.flatMap{ (MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), $0.pluralValue) }].compactMap{ $0 },
 			attributesModifications: [:],
-			simpleReturnTypeReplacements: [:],
+			simpleReturnTypeReplacements: [
+				OneWordTokens(token: "|"): simpleReplacement1.flatMap{ r in { _ in r } },
+				OneWordTokens(token: "^"): simpleReplacement2.flatMap{ r in { _ in r } },
+				OneWordTokens(token: "#"): number.flatMap{ n in { _ in n.localizedString } }
+			].compactMapValues{ $0 },
 			identityReplacement: { $0 }
 		)! /* We force unwrap because we _know_ these tokens are valid. */
 	}
@@ -115,11 +108,11 @@ extension String {
 	- parameter genderMeIsMale: Tokens are `{` `₋` `}`
 	- parameter genderOtherIsMale: Tokens are \` `¦` `´` */
 	public func applyingCommonTokens(
-		simpleReplacement1: String = "",
-		simpleReplacement2: String = "",
-		number: XibLocNumber = XibLocNumber(0),
-		genderMeIsMale: Bool = true,
-		genderOtherIsMale: Bool = true,
+		simpleReplacement1: String? = nil,
+		simpleReplacement2: String? = nil,
+		number: XibLocNumber? = nil,
+		genderMeIsMale: Bool? = nil,
+		genderOtherIsMale: Bool? = nil,
 		escapeToken: String? = di.defaultEscapeToken
 	) -> String {
 		return applying(xibLocInfo: CommonTokensGroup(
