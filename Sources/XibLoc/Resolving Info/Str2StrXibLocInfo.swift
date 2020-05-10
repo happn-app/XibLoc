@@ -22,14 +22,18 @@ public typealias Str2StrXibLocInfo = XibLocResolvingInfo<String, String>
 extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 	
 	public init(simpleReplacementWithToken token: String, value: String, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: [token: value], escapeToken: e)
+		self.init(replacements: [token: value], escapeToken: e)!
+	}
+	
+	public init(pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
+		self.init(replacements: [:], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)!
 	}
 	
 	public init(replacement: String, pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: ["|": replacement], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
+		self.init(replacements: ["|": replacement], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)!
 	}
 	
-	public init(replacements: [String: String] = [:], pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
+	public init?(replacements: [String: String], pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
 		defaultPluralityDefinition = di.defaultPluralityDefinition
 		escapeToken = e
 		attributesModifications = [:]
@@ -45,12 +49,17 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 		}
 		
 		var orderedReplacementsBuilding = [MultipleWordsTokens: Int]()
-		if let isOtherMale = isOtherMale {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´")] = isOtherMale ? 0 : 1}
 		if let isMeMale = isMeMale       {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}")] = isMeMale ? 0 : 1}
+		if let isOtherMale = isOtherMale {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´")] = isOtherMale ? 0 : 1}
 		orderedReplacements = orderedReplacementsBuilding
 		
 		simpleReturnTypeReplacements = simpleReturnTypeReplacementsBuilding
 		identityReplacement = { $0 }
+		
+		/* See definition of parsingInfo var for explanation of this. */
+		guard initParsingInfo() else {
+			return nil
+		}
 	}
 	
 }

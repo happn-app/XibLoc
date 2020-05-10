@@ -12,6 +12,10 @@
 		7B353B832017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
 		7B5BF7B82084E0EF006AAB6A /* XibLocNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */; };
 		7B5BF7C22084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */; };
+		7B66FA922467485D005EAB92 /* XibLocParsingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */; };
+		7B66FA932467485D005EAB92 /* XibLocParsingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */; };
+		7B6B353324671651008DC972 /* ParsedXibLoc+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */; };
+		7B6B353424671651008DC972 /* ParsedXibLoc+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */; };
 		7B8A96ED2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
 		7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */; };
 		7B8B339C246564DB00690AD7 /* PluralValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8B339B246564DB00690AD7 /* PluralValue.swift */; };
@@ -83,6 +87,8 @@
 		7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Str2StrXibLocInfo.swift; sourceTree = "<group>"; };
 		7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocNumber.swift; sourceTree = "<group>"; };
 		7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Str2AttrStrXibLocInfo.swift; sourceTree = "<group>"; };
+		7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocParsingInfo.swift; sourceTree = "<group>"; };
+		7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParsedXibLoc+Cache.swift"; sourceTree = "<group>"; };
 		7B8A96EC2017528C00481B45 /* OneWordTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneWordTokens.swift; sourceTree = "<group>"; };
 		7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleWordsTokens.swift; sourceTree = "<group>"; };
 		7B8B339B246564DB00690AD7 /* PluralValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluralValue.swift; sourceTree = "<group>"; };
@@ -145,7 +151,9 @@
 		7B04C92B20166784002F9F52 /* Parser */ = {
 			isa = PBXGroup;
 			children = (
+				7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */,
 				7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */,
+				7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */,
 				7BCBB118201634E4008A3FC0 /* ParserHelper.swift */,
 				7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */,
 				7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */,
@@ -189,6 +197,13 @@
 				7BB9A95B2240226D00932FD5 /* XibLoc.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7B6B35352467188E008DC972 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cache;
 			sourceTree = "<group>";
 		};
 		7B8A96EB2017526000481B45 /* Resolving Info */ = {
@@ -236,6 +251,7 @@
 				7B8A96EB2017526000481B45 /* Resolving Info */,
 				7B04C92B20166784002F9F52 /* Parser */,
 				7BCBB119201634E4008A3FC0 /* Plurality */,
+				7B6B35352467188E008DC972 /* Cache */,
 				7B04C92C20166794002F9F52 /* Utilities */,
 				7B04C92D20166897002F9F52 /* Config.swift */,
 			);
@@ -431,10 +447,12 @@
 				7B5BF7B82084E0EF006AAB6A /* XibLocNumber.swift in Sources */,
 				7BCBB12C201634E4008A3FC0 /* ParserHelper+String.swift in Sources */,
 				7BCBB138201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
+				7B66FA922467485D005EAB92 /* XibLocParsingInfo.swift in Sources */,
 				7B04C92E20166897002F9F52 /* Config.swift in Sources */,
 				7BCBB124201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */,
 				7B5BF7C22084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */,
 				7BCBB150201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */,
+				7B6B353324671651008DC972 /* ParsedXibLoc+Cache.swift in Sources */,
 				7BCBB13C201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */,
 				7BCBB14C201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
 				7BCBB130201634E4008A3FC0 /* ParserHelper.swift in Sources */,
@@ -474,10 +492,12 @@
 				7BB9A93F2240226D00932FD5 /* XibLocNumber.swift in Sources */,
 				7BB9A9402240226D00932FD5 /* ParserHelper+String.swift in Sources */,
 				7BB9A9412240226D00932FD5 /* PluralityDefinitionZone.swift in Sources */,
+				7B66FA932467485D005EAB92 /* XibLocParsingInfo.swift in Sources */,
 				7BB9A9422240226D00932FD5 /* Config.swift in Sources */,
 				7BB9A9432240226D00932FD5 /* ParsedXibLoc.swift in Sources */,
 				7BB9A9442240226D00932FD5 /* Str2AttrStrXibLocInfo.swift in Sources */,
 				7BB9A9452240226D00932FD5 /* RandomAccessCollection+StableSort.swift in Sources */,
+				7B6B353424671651008DC972 /* ParsedXibLoc+Cache.swift in Sources */,
 				7BB9A9462240226D00932FD5 /* PluralityDefinitionZoneValue.swift in Sources */,
 				7BB9A9472240226D00932FD5 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
 				7BB9A9482240226D00932FD5 /* ParserHelper.swift in Sources */,

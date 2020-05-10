@@ -30,7 +30,7 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 		
 	}
 	
-	public init(strResolvingInfo: Str2StrXibLocInfo, boldType: BoldOrItalicType? = nil, italicType: BoldOrItalicType? = nil, links: [OneWordTokens: URL]? = nil, baseFont: XibLocFont?, baseColor: XibLocColor?, returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedString.Key: Any]? = di.defaultStr2AttrStrAttributes) {
+	public init?(strResolvingInfo: Str2StrXibLocInfo, boldType: BoldOrItalicType? = nil, italicType: BoldOrItalicType? = nil, links: [OneWordTokens: URL]? = nil, baseFont: XibLocFont?, baseColor: XibLocColor?, returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedString.Key: Any]? = di.defaultStr2AttrStrAttributes) {
 		var defaultAttributesBuilding = defaultAttributes ?? [:]
 		if let f = baseFont  {defaultAttributesBuilding[.font] = f}
 		if let c = baseColor {defaultAttributesBuilding[.foregroundColor] = c}
@@ -58,7 +58,7 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 	/** Inits the Str2AttrStrXibLocInfo, copying the string resolving info from
 	`strResolvingInfo`. `simpleSourceTypeReplacements` is ignored from the string
 	resolving info. */
-	public init(strResolvingInfo: Str2StrXibLocInfo, attributesReplacements: [OneWordTokens: StringAttributesChangesDescription], returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedString.Key: Any]? = di.defaultStr2AttrStrAttributes) {
+	public init?(strResolvingInfo: Str2StrXibLocInfo, attributesReplacements: [OneWordTokens: StringAttributesChangesDescription], returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedString.Key: Any]? = di.defaultStr2AttrStrAttributes) {
 		defaultPluralityDefinition = strResolvingInfo.defaultPluralityDefinition
 		escapeToken = strResolvingInfo.escapeToken
 		pluralGroups = strResolvingInfo.pluralGroups
@@ -76,6 +76,11 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 		
 		simpleReturnTypeReplacements = returnTypeReplacements ?? [:]
 		identityReplacement = { NSMutableAttributedString(string: $0, attributes: defaultAttributes) }
+		
+		/* See definition of parsingInfo var for explanation of this. */
+		guard initParsingInfo() else {
+			return nil
+		}
 	}
 	
 }
