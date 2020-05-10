@@ -76,21 +76,31 @@ public struct CommonTokensGroup : TokensGroup {
 	}
 	
 	public var str2StrXibLocInfo: Str2StrXibLocInfo {
+		/* Building this accessor the same way it is build for macOS crashes the
+		 * compiler on Linux. So we do it that way. */
+		var orderedReplacements = [MultipleWordsTokens: Int]()
+		var pluralGroups = [(MultipleWordsTokens, PluralValue)]()
+		var simpleReturnTypeReplacements = Dictionary<OneWordTokens, (String) -> String>()
+		
+		if let isMeMale = genderMeIsMale       {orderedReplacements[MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}")] = isMeMale ? 0 : 1}
+		if let isOtherMale = genderOtherIsMale {orderedReplacements[MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´")] = isOtherMale ? 0 : 1}
+		
+		if let number = number {
+			pluralGroups.append((MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), number.pluralValue))
+			simpleReturnTypeReplacements[OneWordTokens(token: "#")] = { _ in number.localizedString }
+		}
+		
+		if let s1 = simpleReplacement1 {simpleReturnTypeReplacements[OneWordTokens(token: "|")] = { _ in s1 }}
+		if let s2 = simpleReplacement2 {simpleReturnTypeReplacements[OneWordTokens(token: "^")] = { _ in s2 }}
+		
 		return Str2StrXibLocInfo(
 			defaultPluralityDefinition: di.defaultPluralityDefinition,
 			escapeToken: escapeToken,
 			simpleSourceTypeReplacements: [:],
-			orderedReplacements: [
-				MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}"): genderMeIsMale.flatMap{ $0 ? 0 : 1 },
-				MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´"): genderOtherIsMale.flatMap{ $0 ? 0 : 1 }
-			].compactMapValues{ $0 },
-			pluralGroups: [number.flatMap{ (MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), $0.pluralValue) }].compactMap{ $0 },
+			orderedReplacements: orderedReplacements,
+			pluralGroups: pluralGroups,
 			attributesModifications: [:],
-			simpleReturnTypeReplacements: [
-				OneWordTokens(token: "|"): simpleReplacement1.flatMap{ r in { _ in r } },
-				OneWordTokens(token: "^"): simpleReplacement2.flatMap{ r in { _ in r } },
-				OneWordTokens(token: "#"): number.flatMap{ n in { _ in n.localizedString } }
-			].compactMapValues{ $0 },
+			simpleReturnTypeReplacements: simpleReturnTypeReplacements,
 			identityReplacement: { $0 }
 		)! /* We force unwrap because we _know_ these tokens are valid. */
 	}
