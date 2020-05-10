@@ -44,7 +44,7 @@ final class ObjCXibLoc : NSObject {
 	@objc
 	static func objc_applyingXibLocTransformForCustomBold(base: String, baseFont: XibLocFont, baseColor: XibLocColor, boldToken: String) throws -> NSMutableAttributedString {
 		return try base.applying(xibLocInfo: Str2AttrStrXibLocInfo(
-			strResolvingInfo: Str2StrXibLocInfo(emptyWithIdentityReplacement: { $0 }),
+			strResolvingInfo: Str2StrXibLocInfo(identityReplacement: { $0 }),
 			attributesReplacements: [OneWordTokens(token: boldToken): StringAttributesChangesDescription(changes: [.setBold])], returnTypeReplacements: nil,
 			defaultAttributes: [.font: baseFont, .foregroundColor: baseColor]
 			).get())

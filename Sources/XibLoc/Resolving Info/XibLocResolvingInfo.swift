@@ -113,7 +113,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		}
 	}
 	
-	public init(emptyWithIdentityReplacement ir: @escaping (_ source: SourceType) -> ReturnType) {
+	public init(identityReplacement ir: @escaping (_ source: SourceType) -> ReturnType) {
 		self.init(identityReplacement: ir)!
 	}
 	
