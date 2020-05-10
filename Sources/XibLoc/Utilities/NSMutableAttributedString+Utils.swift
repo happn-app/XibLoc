@@ -93,21 +93,21 @@ extension NSMutableAttributedString {
 		
 		if let bold = newIsBold {
 			#if !os(OSX)
-				if bold {fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitBold))}
-				else    {fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitBold))}
+				if bold {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitBold))}
+				else    {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitBold))}
 			#else
-				if bold {fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.bold))}
-				else    {fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.bold))}
+				if bold {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.bold))}
+				else    {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.bold))}
 			#endif
 		}
 		
 		if let italic = newIsItalic {
 			#if !os(OSX)
-				if italic {fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitItalic))}
-				else      {fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitItalic))}
+				if italic {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitItalic))}
+				else      {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitItalic))}
 			#else
-				if italic {fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.italic))}
-				else      {fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.italic))}
+				if italic {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.italic))}
+				else      {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.italic))}
 			#endif
 		}
 		
