@@ -33,8 +33,4 @@ public struct MultipleWordsTokens : Hashable {
 		rightToken = rt
 	}
 	
-	public static func ==(lhs: MultipleWordsTokens, rhs: MultipleWordsTokens) -> Bool {
-		return lhs.leftToken == rhs.leftToken && lhs.interiorToken == rhs.interiorToken && lhs.rightToken == rhs.rightToken
-	}
-	
 }
