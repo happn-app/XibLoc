@@ -54,13 +54,12 @@ class XibLocTests: XCTestCase {
 	}
 	
 	func testOneTokenEscapedSimpleReplacement() throws {
-		for _ in 0..<nRepeats {
-			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
-			XCTAssertEqual(
-				#"the |replaced\|"#.applying(xibLocInfo: info),
-				#"the |replaced|"#
-			)
-		}
+		/* No need to repeat this one (spams the logs). */
+		let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
+		XCTAssertEqual(
+			#"the |replaced\|"#.applying(xibLocInfo: info),
+			#"the |replaced|"#
+		)
 	}
 	
 	func testEscapeEscapingNothing() throws {
@@ -177,20 +176,19 @@ class XibLocTests: XCTestCase {
 	}
 	
 	func testOnePluralReplacementMissingOneZone() throws {
-		for _ in 0..<nRepeats {
-			let n = 2
-			let info = try XibLocResolvingInfo<String, String>(
-				defaultPluralityDefinition: PluralityDefinition(string: "(1)(2→4:^*[^1][2→4]$)?(*)"), escapeToken: nil,
-				simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
-				orderedReplacements: [:],
-				pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:],
-				identityReplacement: { $0 }
-			).get()
-			XCTAssertEqual(
-				"#n# <house:houses>".applying(xibLocInfo: info),
-				"2 houses"
-			)
-		}
+		/* No need to repeat this one (spams the logs). */
+		let n = 2
+		let info = try XibLocResolvingInfo<String, String>(
+			defaultPluralityDefinition: PluralityDefinition(string: "(1)(2→4:^*[^1][2→4]$)?(*)"), escapeToken: nil,
+			simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
+			orderedReplacements: [:],
+			pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:],
+			identityReplacement: { $0 }
+		).get()
+		XCTAssertEqual(
+			"#n# <house:houses>".applying(xibLocInfo: info),
+			"2 houses"
+		)
 	}
 	
 	func testPluralWithNegativeIntervalOfInts() throws {
