@@ -30,54 +30,21 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	
 	let sourceTypeHelperType: SourceTypeHelper.Type
 	
-	static func cachedOrNewParsedXibLoc<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) -> ParsedXibLoc<SourceTypeHelper> {
-		#warning("TODO")
-		return self.init(source: source, parserHelper: parserHelper, forXibLocResolvingInfo: xibLocResolvingInfo)
-	}
-	
 	init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
-		self.init(source: source, parserHelper: parserHelper, escapeToken: xibLocResolvingInfo.escapeToken, simpleSourceTypeReplacements: Array(xibLocResolvingInfo.simpleSourceTypeReplacements.keys), orderedReplacements: Array(xibLocResolvingInfo.orderedReplacements.keys), pluralGroups: Array(xibLocResolvingInfo.pluralGroups.map{ $0.0 }), attributesModifications: Array(xibLocResolvingInfo.attributesModifications.keys), simpleReturnTypeReplacements: Array(xibLocResolvingInfo.simpleReturnTypeReplacements.keys))
+		self.init(source: source, parserHelper: parserHelper, parsingInfo: xibLocResolvingInfo.parsingInfo)
 	}
 	
-	init(source: SourceType, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens]) {
+	init(source: SourceType, parserHelper: SourceTypeHelper.Type, parsingInfo: XibLocParsingInfo) {
 		var source = SourceTypeHelper.copy(source: source)
 		var stringSource = parserHelper.stringRepresentation(of: source)
 		var pluralityDefinitionsList = ParsedXibLoc.preprocessForPluralityDefinitionOverrides(source: &source, stringSource: &stringSource, parserHelper: parserHelper)
-		while pluralityDefinitionsList.count < pluralGroups.count {pluralityDefinitionsList.append(nil)}
+		while pluralityDefinitionsList.count < parsingInfo.pluralGroups.count {pluralityDefinitionsList.append(nil)}
 		
-		self.init(source: source, stringSource: stringSource, parserHelper: parserHelper, escapeToken: escapeToken, simpleSourceTypeReplacements: simpleSourceTypeReplacements, orderedReplacements: orderedReplacements, pluralGroups: pluralGroups, attributesModifications: attributesModifications, simpleReturnTypeReplacements: simpleReturnTypeReplacements, pluralityDefinitionsList: pluralityDefinitionsList)
+		self.init(source: source, stringSource: stringSource, parserHelper: parserHelper, parsingInfo: parsingInfo, pluralityDefinitionsList: pluralityDefinitionsList)
 	}
 	
-	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens], pluralityDefinitionsList: [PluralityDefinition?]) {
-		assert(pluralityDefinitionsList.count >= pluralGroups.count)
-		/* First, let's make sure we are not overlapping tokens for our parsing:
-		 *    - If lsep == rsep, reduce to only sep;
-		 *    - No char used in any separator (left, right, internal, escape token) must be use in another separator;
-		 *    - But the same char can be used multiple time in one separator.
-		 * We'll also make sure none of the tokens are empty. */
-		#if !NS_BLOCK_ASSERTIONS // TODO: Find correct pre-processing instruction
-			var chars = Set<Character>()
-			
-			let processToken = { (token: String) in
-				assert(!token.isEmpty)
-				let tokenChars = Set(token)
-				assert(chars.intersection(tokenChars).isEmpty)
-				chars.formUnion(tokenChars)
-			}
-			
-			if let e = escapeToken {processToken(e)}
-			
-			for w in (simpleSourceTypeReplacements + attributesModifications + simpleReturnTypeReplacements) {
-				processToken(w.leftToken)
-				if w.leftToken != w.rightToken {processToken(w.rightToken)}
-			}
-			
-			for w in (orderedReplacements + pluralGroups) {
-				processToken(w.leftToken)
-				processToken(w.interiorToken)
-				if w.leftToken != w.rightToken {processToken(w.rightToken)}
-			}
-		#endif
+	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, parsingInfo: XibLocParsingInfo, pluralityDefinitionsList: [PluralityDefinition?]) {
+		assert(pluralityDefinitionsList.count >= parsingInfo.pluralGroups.count)
 		
 		/* Let's build the replacements. Overlaps are allowed with the following rules:
 		 *    - The attributes modifications can overlap between themselves at will;
@@ -88,7 +55,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		func getOneWordRanges(tokens: [OneWordTokens], replacementTypeBuilder: (_ token: OneWordTokens) -> ReplacementValue, currentGroupId: inout Int, in output: inout [Replacement]) {
 			for sep in tokens {
 				var pos = stringSource.startIndex
-				while let r = ParsedXibLoc.rangeFrom(leftSeparator: sep.leftToken, rightSeparator: sep.rightToken, escapeToken: escapeToken, baseString: stringSource, currentPositionInString: &pos) {
+				while let r = ParsedXibLoc.rangeFrom(leftSeparator: sep.leftToken, rightSeparator: sep.rightToken, escapeToken: parsingInfo.escapeToken, baseString: stringSource, currentPositionInString: &pos) {
 					let replacementType = replacementTypeBuilder(sep)
 					let doUntokenization = replacementType.isAttributesModifiation /* See discussion below about token removal */
 					let contentRange = ParsedXibLoc.contentRange(from: r, in: stringSource, leftSep: sep.leftToken, rightSep: sep.rightToken)
@@ -102,7 +69,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		func getMultipleWordsRanges(tokens: [MultipleWordsTokens], replacementTypeBuilder: (_ token: MultipleWordsTokens, _ idx: Int, _ count: ReplacementValue.MutableCount) -> ReplacementValue, currentGroupId: inout Int, in output: inout [Replacement]) {
 			for sep in tokens {
 				var pos = stringSource.startIndex
-				while let r = ParsedXibLoc.rangeFrom(leftSeparator: sep.leftToken, rightSeparator: sep.rightToken, escapeToken: escapeToken, baseString: stringSource, currentPositionInString: &pos) {
+				while let r = ParsedXibLoc.rangeFrom(leftSeparator: sep.leftToken, rightSeparator: sep.rightToken, escapeToken: parsingInfo.escapeToken, baseString: stringSource, currentPositionInString: &pos) {
 					/* Let's get the internal ranges. */
 					let contentRange = ParsedXibLoc.contentRange(from: r, in: stringSource, leftSep: sep.leftToken, rightSep: sep.rightToken)
 					var startIndex = contentRange.lowerBound
@@ -110,7 +77,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 					let count = ReplacementValue.MutableCount(v: 1)
 					
 					var idx = 0
-					while let sepRange = ParsedXibLoc.range(of: sep.interiorToken, escapeToken: escapeToken, baseString: stringSource, in: startIndex..<endIndex) {
+					while let sepRange = ParsedXibLoc.range(of: sep.interiorToken, escapeToken: parsingInfo.escapeToken, baseString: stringSource, in: startIndex..<endIndex) {
 						let internalRange = startIndex..<sepRange.lowerBound
 						/* We set both removed left and right token distances to 0 (see discussion below about token removal) */
 						let replacement = Replacement(groupId: currentGroupId, range: internalRange, value: replacementTypeBuilder(sep, idx, count), removedLeftTokenDistance: 0/*idx == 0 ? sep.leftToken.count : 0*/, removedRightTokenDistance: 0/*sep.interiorToken.count*/, containerRange: r, children: [])
@@ -132,11 +99,11 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		var currentGroupId = 0
 		var replacementsBuilding = [Replacement]()
 		
-		getMultipleWordsRanges(tokens: orderedReplacements, replacementTypeBuilder: { .orderedReplacement($0, valueIndex: $1, numberOfValues: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		getMultipleWordsRanges(tokens: pluralGroups, replacementTypeBuilder: { .pluralGroup($0, zoneIndex: $1, numberOfZones: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		getOneWordRanges(tokens: simpleSourceTypeReplacements, replacementTypeBuilder: { .simpleSourceTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		getOneWordRanges(tokens: simpleReturnTypeReplacements, replacementTypeBuilder: { .simpleReturnTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		getOneWordRanges(tokens: attributesModifications, replacementTypeBuilder: { .attributesModification($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getMultipleWordsRanges(tokens: parsingInfo.orderedReplacements, replacementTypeBuilder: { .orderedReplacement($0, valueIndex: $1, numberOfValues: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getMultipleWordsRanges(tokens: parsingInfo.pluralGroups, replacementTypeBuilder: { .pluralGroup($0, zoneIndex: $1, numberOfZones: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getOneWordRanges(tokens: parsingInfo.simpleSourceTypeReplacements, replacementTypeBuilder: { .simpleSourceTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getOneWordRanges(tokens: parsingInfo.simpleReturnTypeReplacements, replacementTypeBuilder: { .simpleReturnTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getOneWordRanges(tokens: parsingInfo.attributesModifications, replacementTypeBuilder: { .attributesModification($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		
 		/* Let's remove the tokens we want gone from the source string. The escape
 		 * token is always removed. We only remove the left and right separator
@@ -150,7 +117,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		var untokenizedSourceBuilding = source
 		var untokenizedStringSourceBuilding = stringSource
-		ParsedXibLoc.remove(escapeToken: escapeToken, in: &replacementsBuilding, source: &untokenizedSourceBuilding, stringSource: &untokenizedStringSourceBuilding, parserHelper: parserHelper)
+		ParsedXibLoc.remove(escapeToken: parsingInfo.escapeToken, in: &replacementsBuilding, source: &untokenizedSourceBuilding, stringSource: &untokenizedStringSourceBuilding, parserHelper: parserHelper)
 		ParsedXibLoc.removeTokens(from: &replacementsBuilding, source: &untokenizedSourceBuilding, stringSource: &untokenizedStringSourceBuilding, parserHelper: parserHelper)
 //		print("***** RESULTS TIME *****")
 //		print("untokenized: \(untokenizedStringSourceBuilding)")
@@ -166,7 +133,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		/* Plurality definitions overrides */
 		var pluralityDefinitionsBuilding = [MultipleWordsTokens: PluralityDefinition]()
-		for (pluralityDefinition, pluralGroup) in zip(pluralityDefinitionsList, pluralGroups) {
+		for (pluralityDefinition, pluralGroup) in zip(pluralityDefinitionsList, parsingInfo.pluralGroups) {
 			guard let pluralityDefinition = pluralityDefinition else {continue}
 			pluralityDefinitionsBuilding[pluralGroup] = pluralityDefinition
 		}
