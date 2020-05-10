@@ -29,6 +29,14 @@ class XibLocTests: XCTestCase {
 		super.setUp()
 		
 		di.defaultEscapeToken = #"\"#
+		
+		di.defaultStr2AttrStrAttributes = [
+			.font: XibLocFont.systemFont(ofSize: 14),
+			.foregroundColor: XibLocColor.black
+		]
+		
+		di.defaultBoldAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setBold])
+		di.defaultItalicAttrsChangesDescription = nil
 	}
 	
 	override func tearDown() {
@@ -37,7 +45,7 @@ class XibLocTests: XCTestCase {
 	
 	func testEscapedSimpleReplacement() throws {
 		for _ in 0..<nRepeats {
-			let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement")
+			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
 			XCTAssertEqual(
 				#"the \|replaced\|"#.applying(xibLocInfo: info),
 				#"the |replaced|"#
@@ -47,7 +55,7 @@ class XibLocTests: XCTestCase {
 	
 	func testOneTokenEscapedSimpleReplacement() throws {
 		for _ in 0..<nRepeats {
-			let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement")
+			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
 			XCTAssertEqual(
 				#"the |replaced\|"#.applying(xibLocInfo: info),
 				#"the |replaced|"#
@@ -57,7 +65,7 @@ class XibLocTests: XCTestCase {
 	
 	func testEscapeEscapingNothing() throws {
 		for _ in 0..<nRepeats {
-			let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement")
+			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
 			XCTAssertEqual(
 				#"the\ |replaced|"#.applying(xibLocInfo: info),
 				#"the replacement"#
@@ -67,7 +75,7 @@ class XibLocTests: XCTestCase {
 	
 	func testNonEscapedButPrecededByEscapeTokenSimpleReplacement() throws {
 		for _ in 0..<nRepeats {
-			let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement", escapeToken: "~")
+			let info = CommonTokensGroup(simpleReplacement1: "replacement", escapeToken: "~").str2StrXibLocInfo
 			XCTAssertEqual(
 				#"the ~~|replaced|"#.applying(xibLocInfo: info),
 				#"the ~replacement"#
@@ -77,7 +85,7 @@ class XibLocTests: XCTestCase {
 	
 	func testOneSimpleReplacement() throws {
 		for _ in 0..<nRepeats {
-			let info = XibLocResolvingInfo(simpleReplacementWithToken: "|", value: "replacement")
+			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
 			XCTAssertEqual(
 				"the |replaced|".applying(xibLocInfo: info),
 				"the replacement"
@@ -295,7 +303,7 @@ class XibLocTests: XCTestCase {
 	func testThaiGender() throws {
 		for _ in 0..<nRepeats {
 			let str = "`a¦b´ต้`a¦b´"
-			let info = Str2StrXibLocInfo(genderOtherIsMale: true)
+			let info = CommonTokensGroup(genderOtherIsMale: true).str2StrXibLocInfo
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
 				"aต้a"
@@ -307,7 +315,7 @@ class XibLocTests: XCTestCase {
 	func testEmojiGender() throws {
 		for _ in 0..<nRepeats {
 			let str = "`a¦b´🤷‍♂️`a¦b´"
-			let info = Str2StrXibLocInfo(genderOtherIsMale: true)
+			let info = CommonTokensGroup(genderOtherIsMale: true).str2StrXibLocInfo
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
 				"a🤷‍♂️a"
@@ -318,7 +326,7 @@ class XibLocTests: XCTestCase {
 	func testEmojiGenderBis() throws {
 		for _ in 0..<nRepeats {
 			let str = "`a¦b´🧒🏻`a¦b´"
-			let info = Str2StrXibLocInfo(genderOtherIsMale: true)
+			let info = CommonTokensGroup(genderOtherIsMale: true).str2StrXibLocInfo
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
 				"a🧒🏻a"
@@ -341,7 +349,7 @@ class XibLocTests: XCTestCase {
 	
 	func testTwoVariablesChangesInOrderedReplacementGroup() throws {
 		for _ in 0..<nRepeats {
-			let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: XibLocNumber(42))
+			let info = CommonTokensGroup(simpleReplacement1: "sᴉoɔuɐɹℲ", number: XibLocNumber(42)).str2StrXibLocInfo
 			let result = "42 months for sᴉoɔuɐɹℲ/month"
 			XCTAssertEqual(
 				"<#n# month for |string var|/month:#n# months for |string var|/month>".applying(xibLocInfo: info),
@@ -352,7 +360,7 @@ class XibLocTests: XCTestCase {
 	
 	func testTwoVariablesChangesAndGenderInOrderedReplacementGroup() throws {
 		for _ in 0..<nRepeats {
-			let info = Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", pluralValue: XibLocNumber(42), genderOtherIsMale: false)
+			let info = CommonTokensGroup(simpleReplacement1: "sᴉoɔuɐɹℲ", number: XibLocNumber(42), genderOtherIsMale: false).str2StrXibLocInfo
 			let result = "42 months for sᴉoɔuɐɹℲ/year"
 			XCTAssertEqual(
 				"<#n# month for |string var|/month:#n# months for |string var|/`month¦year´>".applying(xibLocInfo: info),
@@ -363,7 +371,12 @@ class XibLocTests: XCTestCase {
 	
 	func testEmbeddedSimpleReplacements() throws {
 		for _ in 0..<nRepeats {
-			let info = try Str2StrXibLocInfo(replacements: ["#": "42", "|": "replacement_value"]).get()
+			let info = try XibLocResolvingInfo<String, String>(
+				defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
+				simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { w in "42" }, OneWordTokens(token: "|"): { w in "replacement_value" }],
+				orderedReplacements: [:], pluralGroups: [], attributesModifications: [:], simpleReturnTypeReplacements: [:],
+				identityReplacement: { $0 }
+			).get()
 			XCTAssertEqual(
 				"Let's replace |#some text#|".applying(xibLocInfo: info),
 				"Let's replace replacement_value"
@@ -374,7 +387,7 @@ class XibLocTests: XCTestCase {
 	/* Also exists in ObjC (only ever failed in ObjC) */
 	func testFromHappn3() throws {
 		for _ in 0..<nRepeats {
-			let info = Str2StrXibLocInfo(genderMeIsMale: true, genderOtherIsMale: false)
+			let info = CommonTokensGroup(genderMeIsMale: true, genderOtherIsMale: false).str2StrXibLocInfo
 			XCTAssertEqual(
 				"{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}".applying(xibLocInfo: info),
 				"Vous vous êtes croisés"
@@ -388,7 +401,7 @@ class XibLocTests: XCTestCase {
 	func testPerf1() throws {
 		measure{
 			for _ in 0..<nRepeats {
-				let info = Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true)
+				let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2StrXibLocInfo
 				let str = "{CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
 				XCTAssertEqual(
 					str.applying(xibLocInfo: info),
@@ -398,12 +411,48 @@ class XibLocTests: XCTestCase {
 		}
 	}
 	
+	func testCommonTokensGroupDocCaseStr() {
+		for _ in 0..<nRepeats {
+			/* Case in doc has the default ~ escape token. */
+			di.defaultEscapeToken = "~"
+			let info = CommonTokensGroup().str2StrXibLocInfo
+			XCTAssertEqual(
+				"hello_world_how_are_you".applying(xibLocInfo: info),
+				"hello_world_how_are_you"
+			)
+			XCTAssertEqual(
+				"hello~_world~_how~_are~_you".applying(xibLocInfo: info),
+				"hello_world_how_are_you"
+			)
+		}
+	}
+	
 	#if !os(Linux)
+	
+	func testCommonTokensGroupDocCaseAttrStr() {
+		let nRepeats = 1
+		for _ in 0..<nRepeats {
+			/* Set needed defaults like in the doc. */
+			di.defaultEscapeToken = "~"
+			di.defaultItalicAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setItalic])
+			let info = CommonTokensGroup().str2AttrStrXibLocInfo
+			
+			print(info)
+			let result = NSMutableAttributedString(string: "helloworldhowareyou", attributes: di.defaultStr2AttrStrAttributes!)
+			di.defaultItalicAttrsChangesDescription?.apply(to: result, range: NSRange(location: 5, length: 5))
+			di.defaultItalicAttrsChangesDescription?.apply(to: result, range: NSRange(location: 13, length: 3))
+			
+			XCTAssertEqual(
+				"hello_world_how_are_you".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
 	
 	/* Actually, the same as testFromHappn3ObjC */
 	func testFromHappn4() throws {
 		for _ in 0..<nRepeats {
-			let info = Str2StrXibLocInfo(genderMeIsMale: true, genderOtherIsMale: false)
+			let info = CommonTokensGroup(genderMeIsMale: true, genderOtherIsMale: false).str2StrXibLocInfo
 			XCTAssertEqual(
 				localized("crossed path for the first time").applying(xibLocInfo: info),
 				"Vous vous êtes croisés"
@@ -603,13 +652,9 @@ class XibLocTests: XCTestCase {
 	
 	func testVariableChangeAfterAttrChangeInOrderedReplacementGroup1() throws {
 		for _ in 0..<nRepeats {
-			let baseColor = XibLocColor.black
-			let baseFont = XibLocFont.systemFont(ofSize: 14)
-			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", genderOtherIsMale: true),
-				boldType: .default, baseFont: baseFont, baseColor: baseColor
-			).get()
-			let result = NSMutableAttributedString(string: "Yo sᴉoɔuɐɹℲ", attributes: [.font: baseFont, .foregroundColor: baseColor])
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(simpleReplacement1: "sᴉoɔuɐɹℲ", genderOtherIsMale: true).str2AttrStrXibLocInfo
+			let result = NSMutableAttributedString(string: "Yo sᴉoɔuɐɹℲ", attributes: di.defaultStr2AttrStrAttributes!)
 			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: 2))
 			XCTAssertEqual(
 				"`*Yo* |username|¦Nope. We don’t greet women.´".applying(xibLocInfo: info),
@@ -624,13 +669,9 @@ class XibLocTests: XCTestCase {
 	
 	func testVariableChangeAfterAttrChangeInOrderedReplacementGroup2() throws {
 		for _ in 0..<nRepeats {
-			let baseColor = XibLocColor.black
-			let baseFont = XibLocFont.systemFont(ofSize: 14)
-			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(replacement: "sᴉoɔuɐɹℲ", genderOtherIsMale: false),
-				boldType: .default, baseFont: baseFont, baseColor: baseColor
-			).get()
-			let result = NSMutableAttributedString(string: "Yo sᴉoɔuɐɹℲ", attributes: [.font: baseFont, .foregroundColor: baseColor])
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(simpleReplacement1: "sᴉoɔuɐɹℲ", genderOtherIsMale: false).str2AttrStrXibLocInfo
+			let result = NSMutableAttributedString(string: "Yo sᴉoɔuɐɹℲ", attributes: di.defaultStr2AttrStrAttributes!)
 			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: 2))
 			XCTAssertEqual(
 				"`Nope. We don’t greet women.¦*Yo* |username|´".applying(xibLocInfo: info),
@@ -660,13 +701,9 @@ class XibLocTests: XCTestCase {
 	func testFromHappn1() throws {
 		for _ in 0..<nRepeats {
 			let str = "{*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
-			let baseColor = XibLocColor.black
-			let baseFont = XibLocFont.systemFont(ofSize: 14)
-			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
-				boldType: .default, baseFont: baseFont, baseColor: baseColor
-			).get()
-			let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: [.font: baseFont, .foregroundColor: baseColor])
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
+			let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: di.defaultStr2AttrStrAttributes!)
 			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: 15))
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -678,13 +715,9 @@ class XibLocTests: XCTestCase {
 	func testFromHappn1Bis() throws {
 		for _ in 0..<nRepeats {
 			let str = "{CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
-			let baseColor = XibLocColor.black
-			let baseFont = XibLocFont.systemFont(ofSize: 14)
-			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
-				boldType: .default, baseFont: baseFont, baseColor: baseColor
-			).get()
-			let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: [.font: baseFont, .foregroundColor: baseColor])
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
+			let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: di.defaultStr2AttrStrAttributes!)
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
 				result
@@ -696,14 +729,10 @@ class XibLocTests: XCTestCase {
 	func testFromHappn1Ter() throws {
 		for _ in 0..<nRepeats {
 			let str = "*लें*"
-			let baseColor = XibLocColor.black
-			let baseFont = XibLocFont.systemFont(ofSize: 14)
-			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
-				boldType: .default, baseFont: baseFont, baseColor: baseColor
-			).get()
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
 			let resultStr = "लें"
-			let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+			let result = NSMutableAttributedString(string: resultStr, attributes: di.defaultStr2AttrStrAttributes!)
 			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -716,14 +745,10 @@ class XibLocTests: XCTestCase {
 	func testFromHappn1Quater() throws {
 		for _ in 0..<nRepeats {
 			let str = "*🧒🏻*"
-			let baseColor = XibLocColor.black
-			let baseFont = XibLocFont.systemFont(ofSize: 14)
-			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
-				boldType: .default, baseFont: baseFont, baseColor: baseColor
-			).get()
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
 			let resultStr = "🧒🏻"
-			let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+			let result = NSMutableAttributedString(string: resultStr, attributes: di.defaultStr2AttrStrAttributes!)
 			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -735,15 +760,12 @@ class XibLocTests: XCTestCase {
 	func testFromHappn1Quinquies() throws {
 		for _ in 0..<nRepeats {
 			let str = "🧒🏻*🧒🏻"
-			let baseColor = XibLocColor.black
-			let baseFont = XibLocFont.systemFont(ofSize: 14)
 			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(identityReplacement: { $0 }),
-				attributesReplacements: [OneWordTokens(token: "🧒🏻"): StringAttributesChangesDescription(changes: [.setBold])], returnTypeReplacements: nil,
-				defaultAttributes: [.font: baseFont, .foregroundColor: baseColor]
+				attributesModifications: [OneWordTokens(token: "🧒🏻"): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).apply(to: attrStr, range: NSRange(strRange, in: refStr)) }],
+				identityReplacement: { NSMutableAttributedString(string: $0, attributes: di.defaultStr2AttrStrAttributes!) }
 			).get()
 			let resultStr = "*"
-			let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+			let result = NSMutableAttributedString(string: resultStr, attributes: di.defaultStr2AttrStrAttributes!)
 			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -756,15 +778,12 @@ class XibLocTests: XCTestCase {
 	func testFromHappn1Sexies() throws {
 		for _ in 0..<nRepeats {
 			let str = "🧒🏻👳🏿‍♀️🧒🏻"
-			let baseColor = XibLocColor.black
-			let baseFont = XibLocFont.systemFont(ofSize: 14)
 			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(identityReplacement: { $0 }),
-				attributesReplacements: [OneWordTokens(token: "🧒🏻"): StringAttributesChangesDescription(changes: [.setBold])], returnTypeReplacements: nil,
-				defaultAttributes: [.font: baseFont, .foregroundColor: baseColor]
+				attributesModifications: [OneWordTokens(token: "🧒🏻"): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).apply(to: attrStr, range: NSRange(strRange, in: refStr)) }],
+				identityReplacement: { NSMutableAttributedString(string: $0, attributes: di.defaultStr2AttrStrAttributes!) }
 			).get()
 			let resultStr = "👳🏿‍♀️"
-			let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+			let result = NSMutableAttributedString(string: resultStr, attributes: di.defaultStr2AttrStrAttributes!)
 			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -777,15 +796,11 @@ class XibLocTests: XCTestCase {
 	func testFromHappn1Septies() throws {
 		for _ in 0..<nRepeats {
 			let str = "🧔🏻*🧒🏻*"
-			let baseColor = XibLocColor.black
-			let baseFont = XibLocFont.systemFont(ofSize: 14)
-			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
-				boldType: .default, baseFont: baseFont, baseColor: baseColor
-			).get()
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
 			let resultStr = "🧔🏻🧒🏻"
 			let objcStart = ("🧔🏻" as NSString).length
-			let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+			let result = NSMutableAttributedString(string: resultStr, attributes: di.defaultStr2AttrStrAttributes!)
 			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: objcStart, length: (resultStr as NSString).length - objcStart))
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -798,15 +813,11 @@ class XibLocTests: XCTestCase {
 	func testFromHappn1Octies() throws {
 		for _ in 0..<nRepeats {
 			let str = "🧔🏻*a*"
-			let baseColor = XibLocColor.black
-			let baseFont = XibLocFont.systemFont(ofSize: 14)
-			let info = try Str2AttrStrXibLocInfo(
-				strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
-				boldType: .default, baseFont: baseFont, baseColor: baseColor
-			).get()
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
 			let resultStr = "🧔🏻a"
 			let objcStart = ("🧔🏻" as NSString).length
-			let result = NSMutableAttributedString(string: resultStr, attributes: [.font: baseFont, .foregroundColor: baseColor])
+			let result = NSMutableAttributedString(string: resultStr, attributes: di.defaultStr2AttrStrAttributes!)
 			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: objcStart, length: (resultStr as NSString).length - objcStart))
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -985,24 +996,16 @@ class XibLocTests: XCTestCase {
 	 * for some Objective-C strings crash. See ParsedXibLoc.swift for more info. */
 	func testPerf2() throws {
 		measure{
-			do {
-				for _ in 0..<nRepeats {
-					let str = "{*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
-					let baseColor = XibLocColor.black
-					let baseFont = XibLocFont.systemFont(ofSize: 14)
-					let info = try Str2AttrStrXibLocInfo(
-						strResolvingInfo: Str2StrXibLocInfo(pluralValue: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true),
-						boldType: .default, baseFont: baseFont, baseColor: baseColor
-					).get()
-					let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: [.font: baseFont, .foregroundColor: baseColor])
-					result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: 15))
-					XCTAssertEqual(
-						str.applying(xibLocInfo: info),
-						result
-					)
-				}
-			} catch {
-				XCTFail("Got error: \(error)")
+			for _ in 0..<nRepeats {
+				let str = "{*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
+				/* Bold, italic, font and text color already setup in the tests setup. */
+				let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
+				let result = NSMutableAttributedString(string: "CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: di.defaultStr2AttrStrAttributes!)
+				result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: 15))
+				XCTAssertEqual(
+					str.applying(xibLocInfo: info),
+					result
+				)
 			}
 		}
 	}
