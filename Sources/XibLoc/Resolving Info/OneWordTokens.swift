@@ -31,8 +31,4 @@ public struct OneWordTokens : Hashable {
 		rightToken = rt
 	}
 	
-	public static func ==(lhs: OneWordTokens, rhs: OneWordTokens) -> Bool {
-		return lhs.leftToken == rhs.leftToken && lhs.rightToken == rhs.rightToken
-	}
-	
 }
