@@ -36,7 +36,7 @@ final class ObjCXibLoc : NSObject {
 	@objc
 	static func objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPlural(base: String, baseFont: XibLocFont, baseColor: XibLocColor, replacement: String, pluralValue: Int, genderMeIsMale: Bool, genderOtherIsMale: Bool) throws -> NSMutableAttributedString {
 		return NSMutableAttributedString(
-			attributedString: base.applyingAttrCommonTokens(simpleReplacement1: replacement, number: XibLocNumber(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale, baseFont: baseFont, baseColor: baseColor)
+			attributedString: base.applyingCommonTokensAttributed(simpleReplacement1: replacement, number: XibLocNumber(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale, baseFont: baseFont, baseColor: baseColor)
 		)
 	}
 	

@@ -221,7 +221,7 @@ extension String {
 	- parameter genderOtherIsMale: Tokens are \` `¦` `´`
 	- parameter boldAttrsChangesDescription: Token is `*`
 	- parameter italicAttrsChangesDescription: Token is `_` */
-	public func applyingAttrCommonTokens(
+	public func applyingCommonTokensAttributed(
 		simpleReplacement1: String? = nil,
 		simpleReplacement2: String? = nil,
 		number: XibLocNumber? = nil,

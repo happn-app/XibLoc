@@ -41,13 +41,13 @@ extension TokensGroup {
 
 extension String {
 	
-	public func applyingTokensGroup(_ group: TokensGroup) -> String {
+	public func applying(tokensGroup group: TokensGroup) -> String {
 		return applying(xibLocInfo: group.str2StrXibLocInfo)
 	}
 	
 	#if !os(Linux)
 	
-	public func applyingAttrTokensGroup(_ group: TokensGroup) -> NSAttributedString {
+	public func applying(tokensGroupAttributed group: TokensGroup) -> NSMutableAttributedString {
 		return applying(xibLocInfo: group.str2AttrStrXibLocInfo)
 	}
 	
