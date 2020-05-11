@@ -49,23 +49,23 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 			guard string.hasPrefix("^") && string.hasSuffix("$") else {return nil}
 			
 			var transformedString = string
-			transformedString = transformedString.replacingOccurrences(of: ".", with: "\\.")
-			transformedString = transformedString.replacingOccurrences(of: "?", with: "[0-9]")
-			transformedString = transformedString.replacingOccurrences(of: "*", with: "[0-9]*")
-			transformedString = transformedString.replacingOccurrences(of: "→", with: "-")
-			transformedString = transformedString.replacingOccurrences(of: "{", with: "(")
-			transformedString = transformedString.replacingOccurrences(of: "}", with: ")?")
+				.replacingOccurrences(of: ".", with: "\\.")
+				.replacingOccurrences(of: "?", with: "[0-9]")
+				.replacingOccurrences(of: "*", with: "[0-9]*")
+				.replacingOccurrences(of: "→", with: "-")
+				.replacingOccurrences(of: "{", with: "(")
+				.replacingOccurrences(of: "}", with: ")?")
 			
 			if       transformedString.hasPrefix("^+") {transformedString.remove(at: transformedString.index(after: transformedString.startIndex))} /* We remove the "+" */
 			else if !transformedString.hasPrefix("^-") {transformedString.insert(contentsOf: "-?+", at: transformedString.index(after: transformedString.startIndex))}
-//			#if canImport(os)
-//				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }}
-//				else                                                          {NSLog("Glob language to regex conversion: “%@” --> “%@”", string, transformedString)}
-//			#else
-//				NSLogString("Glob language to regex conversion: “\(string)” --> “\(transformedString)”", log: di.log)
-//			#endif
+			#if canImport(os)
+				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }}
+				else                                                          {NSLog("Glob language to regex conversion: “%@” --> “%@”", string, transformedString)}
+			#else
+				NSLogString("Glob language to regex conversion: “\(string)” --> “\(transformedString)”", log: di.log)
+			#endif
 			
-			do {value = .regex(try NSRegularExpression(pattern: string, options: []))}
+			do {value = .regex(try NSRegularExpression(pattern: transformedString, options: []))}
 			catch {
 				#if canImport(os)
 					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Cannot create regular expression from string “%@” (original was “%@”); got error %@", log: $0, type: .info, transformedString, string, String(describing: error)) }}
@@ -78,22 +78,16 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 		}
 	}
 	
-	func matches(int: Int) -> Bool {
+	func matches(pluralValue: PluralValue) -> Bool {
 		switch value {
 		case .anyNumber: return true
-		case .anyFloat:  return false
-		case .regex:     return matches(string: String(int))
-		}
-	}
-	
-	func matches(float: Float, precision: Float) -> Bool {
-		switch value {
-		case .anyNumber, .anyFloat: return true
+		case .anyFloat:  return pluralValue.isFloat
 			
-		case .regex:
-			var stringValue = String(format: "%.15f", float)
-			while stringValue.hasSuffix("0") {stringValue = String(stringValue.dropLast())}
-			return matches(string: stringValue)
+		case .regex(let regexp):
+			let stringValue = pluralValue.fullStringValue
+			guard let r = regexp.firstMatch(in: stringValue, options: [], range: NSRange(location: 0, length: (stringValue as NSString).length)) else {return false}
+			guard r.range.location != NSNotFound else {return false} /* Not sure if needed, but better safe than sorry... */
+			return true
 		}
 	}
 	
@@ -108,16 +102,5 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 	}
 	
 	private let value: ValueType
-	
-	private func matches(string: String) -> Bool {
-		switch value {
-		case .anyNumber, .anyFloat: return false
-			
-		case .regex(let regexp):
-			guard let r = regexp.firstMatch(in: string, options: [], range: NSRange(location: 0, length: (string as NSString).length)) else {return false}
-			guard r.range.location != NSNotFound else {return false} /* Not sure if needed, but better safe than sorry... */
-			return true
-		}
-	}
 	
 }

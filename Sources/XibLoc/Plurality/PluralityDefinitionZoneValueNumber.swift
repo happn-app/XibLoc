@@ -20,60 +20,33 @@ import Foundation
 struct PluralityDefinitionZoneValueNumber : PluralityDefinitionZoneValue {
 	
 	init?(string: String) {
-		let scanner = Scanner(string: string)
-		scanner.charactersToBeSkipped = CharacterSet()
-		scanner.locale = nil /* Doc says it's the default. Let's make sure we have a nil locale. */
-		
-		var n: Int = 0
-		let intSuccess = scanner.scanInt(&n)
-		if intSuccess && scanner.isAtEnd {
-			value = .int(n)
-			return
+		guard let pluralValue = PluralValue(string: string) else {
+			return nil
 		}
-		
-		/* If we can't parse an int, we won't be able to parse a double either. */
-		guard intSuccess else {return nil}
-		
-		var f: Float = 0
-		scanner.scanLocation = 0
-		if scanner.scanFloat(&f) && scanner.isAtEnd {
-			value = .float(f)
-			return
-		}
-		
-		return nil
+		refValue = pluralValue
 	}
 	
-	func matches(int: Int) -> Bool {
-		switch value {
-		case .int(let i): return i == int
-		case .float:      return false
+	func matches(pluralValue: PluralValue) -> Bool {
+		/* If the ref value doesn’t have a decimal separator (is int), we need the
+		 * given value to also be an int. However, if the ref value is a float, it
+		 * can match an int.
+		 * This matches the behavior of the interval of ints zone matching only
+		 * ints while the interval of floats can match ints too.
+		 *
+		 * Note: Before the `PluralValue` rewrite, this zone did not behave like
+		 *       that: if the ref value was a float it required the matched value
+		 *       to be a float too. But it was not a correct behavior (and was
+		 *       very probably a bug actually). */
+		guard refValue.isFloat || pluralValue.isInt else {
+			return false
 		}
-	}
-	
-	func matches(float: Float, precision: Float) -> Bool {
-		assert(precision >= 0)
-		
-		let cmp: Float
-		switch value {
-		case .int(let i): cmp = Float(i)
-		case .float(let f): cmp = f
-		}
-		return abs(cmp - float) <= precision
+		return pluralValue == refValue
 	}
 	
 	var debugDescription: String {
-		switch value {
-		case .int(let i):   return "HCPluralityDefinitionZoneValueNumber: isInt = true, value = \(i)"
-		case .float(let f): return "HCPluralityDefinitionZoneValueNumber: isInt = false, value = \(f)"
-		}
+		return "HCPluralityDefinitionZoneValueNumber: value = \(refValue)"
 	}
 	
-	private enum IntOrFloat {
-		case int(Int)
-		case float(Float)
-	}
-	
-	private let value: IntOrFloat
+	private let refValue: PluralValue
 	
 }

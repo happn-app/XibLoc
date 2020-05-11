@@ -24,22 +24,153 @@ import Foundation
 
 
 
-public enum PluralValue {
-	
-	case int(Int)
-	case float(Float)
-	case floatCustomPrecision(value: Float, precision: Float)
-	
-	public func asNumber() -> NSNumber {
-		switch self {
-		case .int(let i):                     return NSNumber(value: i)
-		case .float(let f):                   return NSNumber(value: f)
-		case .floatCustomPrecision(let f, _): return NSNumber(value: f)
-		}
-	}
-	
-}
+/** The Plurality definition defines which version of the "`<v1:v2:v3>`" plural
+strings to use depending on the PluralValue it is given.
 
+Here are the rules that are used:
+- Each possible version should be represented by a “zone;”
+- A zone is as follow: “`(zone_content)↓??`” where “zone_content” is defined
+  later and the number of “`?`” and “`↓`” ∈ ℕ (`↓`s must be before `?`s);
+- A plurality definition is a list of zones (concatenated zones);
+- In a zone, there is a list of values, separated by a colon. Values can be:
+   - A single number (int or float, no leading + or 0 allowed). If the number is
+     an int, only ints will match, otherwise ints and floats can match;
+   - An interval of ints, with this syntax: `n→m`, where `n` and `m` are ints.
+     Only ints can match;
+   - An continuous interval (can match ints and floats), with this syntax:
+     `[n→m]`, where:
+      - `n` and `m` are floats (the decimal separator can be omitted);
+      - the opening and closing separator regions can be either opening
+        or closing square brackets (to include or exclude the value)
+   - A custom “globbing” expression:
+      - Must start with “`^`”, and end with “`$`”;
+      - Match is done on given plural value’s `fullStringValue`;
+      - By default, the glob will match positive and negative numbers (the sign
+        is ignored). To force positive or negative matching, you must add a
+        “`+`” or “`-`” resp. after the “`^`”;
+      - Wildcards (both versions match only digits; not the decimal separator):
+         - “`*`” to match any number of digits (including none);
+         - “`?`” to match exactly one digit
+      - Range (same semantics as standard regex’s `[]` where `-` is replaced by
+        `→`. “`→`” is specifically reserved for a “digit to digit” use. The
+        decimal separator is NOT allowed in brackets.):
+         - “`[135]`” or “`[1→57]`” to match resp. 1, 3 or 5 and 1 to 5 or 7;
+         - “`[^135]`” or “`[^1→57]`” to match any digit except the above
+      - Optional: “`{1}`” to match what’s inside the curly brackets—or not;
+      - No other characters than the one with meaning in regard to the above
+        rules are allowed in a globbing expression. To summarize:
+         - The following is mandatory resp. at beginning and end:
+              “`^`” and “`$`”
+         - Right after the “`^`”, is allowed: “`-`” and “`+`”
+         - The following is allowed inside:
+            - any digits, “`.`”, “`*`”, “`?`”, “`[`”, “`]`”, “`{`”, “`}`”
+            - and “`^`” and “`→`” inside a “`[]`” block
+      - Example: “`^*3$`” matches all ints ending with 3
+      - Example: “`^*3.*$`” matches all floats whose int value ends with 3
+      - Example: “`^*3{.*}$`” matches all floats or int whose int value ends
+                              with 3
+      - Example: “`^{*.}*3$`” matches any number (int or float) ending with 3
+                              (13, 1.53, etc.)
+      - Example: “`^*[3→5]$`” matches all ints ending with 3, 4 or 5
+      - Example: “`^-*3$`” matches all negative ints ending with 3
+      - Example: “`^+*3$`” matches all positive ints ending with 3
+      - Example: “`^*.*$`” matches all floats, but not ints
+      - Example: “`^*.$`” matches all integral floats, but not ints
+      - Example: “`^*$`” matches all ints, but not floats
+      - Example: “`^*{.*}$`” matches any number
+   - The string “`*.`”: it is an alias to “`^*.*$`”
+   - The string “`*`”: it is an alias to “`^*{.*}$`”
+
+If the number of zones does not match the number of versions, the following
+algorithm will be used in order to match a version:
+   - If the number of version is greater than the number of zones a warning will
+     be printed in the logs. The first matching zone will be used.
+   - If the number of versions is smaller than the number of zones, some zones
+     will be removed until the number of zones equal the number of versions
+     using the following algorithm:
+      - The zones with the more question marks are removed first;
+      - If two zones have the same number of question marks, the **LAST** one is
+        removed first.
+      - A warning is printed in the logs if a non-question-marked zone have to
+        be removed.
+
+If more than one zone match, the first that matches and has the lowest number
+of `↓` is used.
+If no zone matches, the **LAST** version will be used and an info message will
+be logged.
+
+---
+**Examples**:
+   - Standard plural (0 is plural):
+     ```text
+     “(1)(*)” or “(1)” (generic case is implicit)
+        -> Versions are defined with <singular:plural>
+     ```
+
+   - Standard plural (0 is singular):
+     ```text
+     “(0:1)(*)” or “(0→1)(*)” or “(0:1)” etc.
+        -> Versions are defined with <singular:plural>
+     ```
+
+   - Standard plural with optional dual (0 is plural):
+     ```text
+     “(1)(2)?(*)”
+        -> Versions are defined with <singular:plural> or <singular:dual:plural>
+     ```
+
+   - Standard plural with optional dual and trial (0 is plural):
+     ```text
+     “(1)(2)?(3)??(*)” or “(1)(2)?(3)?(*)” (both are equivalent)
+        -> Versions are defined with <singular:plural>, <singular:dual:plural> or <singular:dual:trial:plural>
+     ```
+
+   - Singular (0 and 1), optional few (2 to 5), plural (the rest):
+     ```text
+     “(0→1)(2→5)?(*)”
+        -> Versions are defined with <singular:few:plural> or <singular:plural>
+     ```
+
+   - Number ending with 1, number ending with 2, 3 or 4, the rest:
+     ```text
+     “(^*1$)(^*[2→4]$)(*)”
+        -> Versions are defined with <ones:two_to_four:rest>
+     ```
+
+   - Custom plural for 1, then 2, 5, 6.3 and anything (including floats) between
+     6.4 (excluded) and 8 (included), then ints from 6 to 9:
+     ```text
+     “(1)(2:5:6.3:]6.4→8])(6→9)”
+     ```
+     - Note: As there is no `(*)` zone, the latest one (6 to 9) will match for
+       non-matching numbers.
+
+       With `<zone1:zone2:zone3>`:
+        - For 1, the value will be zone1
+        - For 2, the value will be zone2
+        - For 6.3, the value will be zone2
+        - For 6.4, the value will be zone3 (6.4 does not match any zone, so it
+          matches the latest)
+        - For 6.31, the value will be zone3 (6.31 does not match any zone, so it
+          matches the latest)
+        - For 6.41, the value will be zone2
+        - For 8, the value will be zone2 (both zone2 and zone3 matches, but the
+          first one is used)
+
+   - Custom plural for 1, 2, 3 then 2 to 5 (floats too) then any int below 7
+     then the rest:
+     ```text
+     “(1→3)([2→5[)(→6)(*)”
+     ```
+
+   - Custom plural for 1, 2, 3 then 2.5 to 5 (floats too) then any int above 5
+     with star zones at the beginning:
+     ```text
+     “(*)↓↓(*.)↓(1→3)([2.5→5])(6→)”
+     ```
+     With `<zone1:zone2:zone3:zone4:zone5>`:
+      - For 1, the value will be zone3. zone1 matches first, but has a lower
+        priority than zone3. */
 public struct PluralityDefinition : CustomDebugStringConvertible {
 	
 	let zones: [PluralityDefinitionZone]
@@ -108,33 +239,10 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		}
 	}
 	
-	func indexOfVersionToUse(forValue value: PluralValue, defaultFloatPrecision: Float = 0.00001, numberOfVersions: Int) -> Int {
-		switch value {
-		case .int(let int):                                                     return indexOfVersionToUse(matchingZonePredicate: { $0.matches(int: int) }, numberOfVersions: numberOfVersions)
-		case .float(let float):                                                 return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, precision: defaultFloatPrecision) }, numberOfVersions: numberOfVersions)
-		case .floatCustomPrecision(value: let float, precision: let precision): return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, precision: precision) }, numberOfVersions: numberOfVersions)
-		}
-	}
-	
-	func indexOfVersionToUse(forValue int: Int, numberOfVersions: Int) -> Int {
-		return indexOfVersionToUse(matchingZonePredicate: { $0.matches(int: int) }, numberOfVersions: numberOfVersions)
-	}
-	
-	func indexOfVersionToUse(forValue float: Float, precision: Float, numberOfVersions: Int) -> Int {
-		return indexOfVersionToUse(matchingZonePredicate: { $0.matches(float: float, precision: precision) }, numberOfVersions: numberOfVersions)
-	}
-	
-	public var debugDescription: String {
-		var ret = "PluralityDefinition: (\n"
-		zones.forEach{ ret.append("   \($0)\n") }
-		ret.append(")")
-		return ret
-	}
-	
-	private func indexOfVersionToUse(matchingZonePredicate: (PluralityDefinitionZone) -> Bool, numberOfVersions: Int) -> Int {
+	func indexOfVersionToUse(forValue value: PluralValue, numberOfVersions: Int) -> Int {
 		assert(numberOfVersions > 0)
 		
-		let matchingZones = zonesToTest(for: numberOfVersions).filter(matchingZonePredicate)
+		let matchingZones = zonesToTest(for: numberOfVersions).filter{ $0.matches(pluralValue: value) }
 		
 		if matchingZones.isEmpty {
 //			#if canImport(os)
@@ -147,6 +255,13 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		}
 		
 		return adjust(zoneIndex: bestMatchingZone(from: matchingZones).index, fromRemovalsDueToNumberOfVersions: numberOfVersions)
+	}
+	
+	public var debugDescription: String {
+		var ret = "PluralityDefinition: (\n"
+		zones.forEach{ ret.append("   \($0)\n") }
+		ret.append(")")
+		return ret
 	}
 	
 	private func zonesToTest(for numberOfVersions: Int) -> [PluralityDefinitionZone] {

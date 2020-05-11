@@ -36,7 +36,7 @@ final class ObjCXibLoc : NSObject {
 	@objc
 	static func objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPlural(base: String, baseFont: XibLocFont, baseColor: XibLocColor, replacement: String, pluralValue: Int, genderMeIsMale: Bool, genderOtherIsMale: Bool) -> NSMutableAttributedString {
 		return base.applying(xibLocInfo: Str2AttrStrXibLocInfo(
-			strResolvingInfo: Str2StrXibLocInfo(replacement: replacement, pluralValue: NumberAndFormat(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale),
+			strResolvingInfo: Str2StrXibLocInfo(replacement: replacement, pluralValue: XibLocNumber(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale),
 			boldType: .default, baseFont: baseFont, baseColor: baseColor
 		))
 	}
