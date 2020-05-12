@@ -3,5 +3,13 @@
 
 A new format for your locs.
 
+## Important Information for `XibLoc`’s Devs
+If you’re working on XibLoc on macOS, you have to use the xcodeproj in the project and not
+open Package.swift in Xcode.  
+The project does not compile because the tests need macOS 10.11 to run when launching the
+Package.swift directly. And even when setting the correct minimum version for macOS, some
+tests are still not run (ObjC tests) and some tests only work when launched with the xcodeproj
+(use resources in a bundle).
+
 ## Credits
 This project was originally created by [François Lamboley](https://github.com/Frizlab) while working at [happn](https://happn.com).

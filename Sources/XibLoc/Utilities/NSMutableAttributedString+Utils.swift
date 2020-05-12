@@ -17,13 +17,6 @@ limitations under the License. */
 
 import CoreGraphics /* CGFloat */
 import Foundation
-#if canImport(os)
-	import os.log
-#endif
-
-#if !canImport(os) && canImport(DummyLinuxOSLog)
-	import DummyLinuxOSLog
-#endif
 
 
 
