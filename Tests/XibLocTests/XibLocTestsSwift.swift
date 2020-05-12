@@ -30,6 +30,7 @@ class XibLocTests: XCTestCase {
 		
 		di.defaultEscapeToken = #"\"#
 		
+		#if !os(Linux)
 		di.defaultStr2AttrStrAttributes = [
 			.font: XibLocFont.systemFont(ofSize: 14),
 			.foregroundColor: XibLocColor.black
@@ -37,6 +38,7 @@ class XibLocTests: XCTestCase {
 		
 		di.defaultBoldAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setBold])
 		di.defaultItalicAttrsChangesDescription = nil
+		#endif
 	}
 	
 	override func tearDown() {
