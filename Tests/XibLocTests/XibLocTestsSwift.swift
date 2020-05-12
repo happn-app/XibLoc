@@ -28,6 +28,7 @@ class XibLocTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		
+		di.cache = nil
 		di.defaultEscapeToken = #"\"#
 		
 		#if !os(Linux)
