@@ -86,8 +86,8 @@ extension NSMutableAttributedString {
 		
 		if let bold = newIsBold {
 			#if !os(macOS)
-				if bold {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitBold))}
-				else    {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitBold))}
+				if bold {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitBold))       ?? fontDesc}
+				else    {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitBold)) ?? fontDesc}
 			#else
 				if bold {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.bold))}
 				else    {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.bold))}
@@ -96,8 +96,8 @@ extension NSMutableAttributedString {
 		
 		if let italic = newIsItalic {
 			#if !os(macOS)
-				if italic {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitItalic))}
-				else      {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitItalic))}
+				if italic {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitItalic))       ?? fontDesc}
+				else      {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitItalic)) ?? fontDesc}
 			#else
 				if italic {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.italic))}
 				else      {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.italic))}
@@ -105,9 +105,9 @@ extension NSMutableAttributedString {
 		}
 		
 		#if !os(macOS)
-			setFont(XibLocFont(descriptor: fontDesc, size: newSize ?? fontDesc.pointSize),  range: range)
+			setFont(XibLocFont(descriptor: fontDesc, size: newSize ?? fontDesc.pointSize),         range: range)
 		#else
-			setFont(XibLocFont(descriptor: fontDesc, size: newSize ?? fontDesc.pointSize)!, range: range)
+			setFont(XibLocFont(descriptor: fontDesc, size: newSize ?? fontDesc.pointSize) ?? font, range: range)
 		#endif
 	}
 	
