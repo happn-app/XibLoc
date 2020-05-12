@@ -160,9 +160,7 @@
 		7B04C92B20166784002F9F52 /* Parser */ = {
 			isa = PBXGroup;
 			children = (
-				7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */,
 				7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */,
-				7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */,
 				7BCBB118201634E4008A3FC0 /* ParserHelper.swift */,
 				7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */,
 				7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */,
@@ -221,6 +219,8 @@
 		7B6B35352467188E008DC972 /* Cache */ = {
 			isa = PBXGroup;
 			children = (
+				7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */,
+				7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";

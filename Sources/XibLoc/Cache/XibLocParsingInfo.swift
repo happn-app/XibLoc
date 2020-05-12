@@ -70,8 +70,6 @@ struct XibLocParsingInfo : Hashable {
 	
 	let escapeToken: String?
 	
-//	let pluralityDefinitionsList: [PluralityDefinition?]
-	
 	let simpleSourceTypeReplacements: [OneWordTokens]
 	let orderedReplacements: [MultipleWordsTokens]
 	let pluralGroups: [MultipleWordsTokens]
