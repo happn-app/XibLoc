@@ -10,6 +10,8 @@
 		7B04C92E20166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
 		7B266297214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
 		7B353B832017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
+		7B3C11D6246AF72700F86C18 /* CacheLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3C11D5246AF72700F86C18 /* CacheLock.swift */; };
+		7B3C11D7246AF72700F86C18 /* CacheLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3C11D5246AF72700F86C18 /* CacheLock.swift */; };
 		7B5BF7B82084E0EF006AAB6A /* XibLocNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */; };
 		7B5BF7C22084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */; };
 		7B66FA922467485D005EAB92 /* XibLocParsingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */; };
@@ -20,8 +22,8 @@
 		7B66FABC24686497005EAB92 /* CommonTokensGroup_Linux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FABA24686497005EAB92 /* CommonTokensGroup_Linux.swift */; };
 		7B66FABE24687F19005EAB92 /* TokensGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FABD24687F19005EAB92 /* TokensGroup.swift */; };
 		7B66FABF24687F19005EAB92 /* TokensGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FABD24687F19005EAB92 /* TokensGroup.swift */; };
-		7B6B353324671651008DC972 /* ParsedXibLoc+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */; };
-		7B6B353424671651008DC972 /* ParsedXibLoc+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */; };
+		7B6B353324671651008DC972 /* ParsedXibLoc+InitCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6B353224671651008DC972 /* ParsedXibLoc+InitCache.swift */; };
+		7B6B353424671651008DC972 /* ParsedXibLoc+InitCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6B353224671651008DC972 /* ParsedXibLoc+InitCache.swift */; };
 		7B8A96ED2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
 		7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */; };
 		7B8B339C246564DB00690AD7 /* PluralValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8B339B246564DB00690AD7 /* PluralValue.swift */; };
@@ -91,13 +93,14 @@
 		7B21BAD12003BF0600DFF758 /* License.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
 		7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Scanner+LinuxCompat.swift"; sourceTree = "<group>"; };
 		7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Str2StrXibLocInfo.swift; sourceTree = "<group>"; };
+		7B3C11D5246AF72700F86C18 /* CacheLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheLock.swift; sourceTree = "<group>"; };
 		7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocNumber.swift; sourceTree = "<group>"; };
 		7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Str2AttrStrXibLocInfo.swift; sourceTree = "<group>"; };
 		7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocParsingInfo.swift; sourceTree = "<group>"; };
 		7B66FAB624684494005EAB92 /* CommonTokensGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTokensGroup.swift; sourceTree = "<group>"; };
 		7B66FABA24686497005EAB92 /* CommonTokensGroup_Linux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTokensGroup_Linux.swift; sourceTree = "<group>"; };
 		7B66FABD24687F19005EAB92 /* TokensGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokensGroup.swift; sourceTree = "<group>"; };
-		7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParsedXibLoc+Cache.swift"; sourceTree = "<group>"; };
+		7B6B353224671651008DC972 /* ParsedXibLoc+InitCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParsedXibLoc+InitCache.swift"; sourceTree = "<group>"; };
 		7B8A96EC2017528C00481B45 /* OneWordTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneWordTokens.swift; sourceTree = "<group>"; };
 		7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleWordsTokens.swift; sourceTree = "<group>"; };
 		7B8B339B246564DB00690AD7 /* PluralValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluralValue.swift; sourceTree = "<group>"; };
@@ -219,8 +222,9 @@
 		7B6B35352467188E008DC972 /* Cache */ = {
 			isa = PBXGroup;
 			children = (
+				7B3C11D5246AF72700F86C18 /* CacheLock.swift */,
 				7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */,
-				7B6B353224671651008DC972 /* ParsedXibLoc+Cache.swift */,
+				7B6B353224671651008DC972 /* ParsedXibLoc+InitCache.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -473,7 +477,7 @@
 				7BCBB124201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */,
 				7B5BF7C22084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */,
 				7BCBB150201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */,
-				7B6B353324671651008DC972 /* ParsedXibLoc+Cache.swift in Sources */,
+				7B6B353324671651008DC972 /* ParsedXibLoc+InitCache.swift in Sources */,
 				7BCBB13C201634E4008A3FC0 /* PluralityDefinitionZoneValue.swift in Sources */,
 				7BCBB14C201634E4008A3FC0 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
 				7BCBB130201634E4008A3FC0 /* ParserHelper.swift in Sources */,
@@ -487,6 +491,7 @@
 				7B8B339C246564DB00690AD7 /* PluralValue.swift in Sources */,
 				7BC4590C20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
 				7B66FABE24687F19005EAB92 /* TokensGroup.swift in Sources */,
+				7B3C11D6246AF72700F86C18 /* CacheLock.swift in Sources */,
 				7BCBB128201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7BCBB148201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
@@ -521,7 +526,7 @@
 				7BB9A9432240226D00932FD5 /* ParsedXibLoc.swift in Sources */,
 				7BB9A9442240226D00932FD5 /* Str2AttrStrXibLocInfo.swift in Sources */,
 				7BB9A9452240226D00932FD5 /* RandomAccessCollection+StableSort.swift in Sources */,
-				7B6B353424671651008DC972 /* ParsedXibLoc+Cache.swift in Sources */,
+				7B6B353424671651008DC972 /* ParsedXibLoc+InitCache.swift in Sources */,
 				7BB9A9462240226D00932FD5 /* PluralityDefinitionZoneValue.swift in Sources */,
 				7BB9A9472240226D00932FD5 /* PluralityDefinitionZoneValueNumber.swift in Sources */,
 				7BB9A9482240226D00932FD5 /* ParserHelper.swift in Sources */,
@@ -535,6 +540,7 @@
 				7B8B339D246564DB00690AD7 /* PluralValue.swift in Sources */,
 				7BB9A94F2240226D00932FD5 /* StringAttributesChangesDescription.swift in Sources */,
 				7B66FABF24687F19005EAB92 /* TokensGroup.swift in Sources */,
+				7B3C11D7246AF72700F86C18 /* CacheLock.swift in Sources */,
 				7BB9A9502240226D00932FD5 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7BB9A9512240226D00932FD5 /* MultipleWordsTokens.swift in Sources */,
 				7BB9A9522240226D00932FD5 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,

@@ -46,6 +46,19 @@ public struct DependencyInjection {
 	public var defaultItalicAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setItalic])
 	#endif
 	
+	/** We give public access to the cache so you can customize it however you
+	like. However, you should not access objects in it or modify them.
+	
+	To disable the cache, set this property to `nil`.
+	
+	- Important: Do **not** modify the objects in this cache. The property should
+	only be modified if needed when your app starts, to customize the cache. */
+	public var cache: NSCache<ErasedParsedXibLocInitInfoWrapper, ParsedXibLocWrapper>? = {
+		let c = NSCache<ErasedParsedXibLocInitInfoWrapper, ParsedXibLocWrapper>()
+		c.countLimit = 1500
+		return c
+	}()
+	
 }
 
 public var di = DependencyInjection()
