@@ -30,6 +30,7 @@ class XibLocTests: XCTestCase {
 		
 		XibLocConfig.cache = nil
 		XibLocConfig.defaultEscapeToken = #"\"#
+		XibLocConfig.defaultPluralityDefinition = PluralityDefinition()
 		
 		#if !os(Linux)
 		XibLocConfig.defaultStr2AttrStrAttributes = [
@@ -39,6 +40,15 @@ class XibLocTests: XCTestCase {
 		
 		XibLocConfig.defaultBoldAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setBold])
 		XibLocConfig.defaultItalicAttrsChangesDescription = nil
+		#endif
+		
+		#if canImport(os)
+			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+				XibLocConfig.oslog = nil
+			}
+		#endif
+		#if canImport(Logging)
+			XibLocConfig.logger = nil
 		#endif
 	}
 	
@@ -57,12 +67,13 @@ class XibLocTests: XCTestCase {
 	}
 	
 	func testOneTokenEscapedSimpleReplacement() throws {
-		/* No need to repeat this one (spams the logs). */
-		let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
-		XCTAssertEqual(
-			#"the |replaced\|"#.applying(xibLocInfo: info),
-			#"the |replaced|"#
-		)
+		for _ in 0..<nRepeats {
+			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
+			XCTAssertEqual(
+				#"the |replaced\|"#.applying(xibLocInfo: info),
+				#"the |replaced|"#
+			)
+		}
 	}
 	
 	func testEscapeEscapingNothing() throws {
@@ -179,19 +190,20 @@ class XibLocTests: XCTestCase {
 	}
 	
 	func testOnePluralReplacementMissingOneZone() throws {
-		/* No need to repeat this one (spams the logs). */
-		let n = 2
-		let info = try XibLocResolvingInfo<String, String>(
-			defaultPluralityDefinition: PluralityDefinition(string: "(1)(2→4:^*[^1][2→4]$)?(*)"), escapeToken: nil,
-			simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
-			orderedReplacements: [:],
-			pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:],
-			identityReplacement: { $0 }
-		).get()
-		XCTAssertEqual(
-			"#n# <house:houses>".applying(xibLocInfo: info),
-			"2 houses"
-		)
+		for _ in 0..<nRepeats {
+			let n = 2
+			let info = try XibLocResolvingInfo<String, String>(
+				defaultPluralityDefinition: PluralityDefinition(string: "(1)(2→4:^*[^1][2→4]$)?(*)"), escapeToken: nil,
+				simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
+				orderedReplacements: [:],
+				pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:],
+				identityReplacement: { $0 }
+			).get()
+			XCTAssertEqual(
+				"#n# <house:houses>".applying(xibLocInfo: info),
+				"2 houses"
+			)
+		}
 	}
 	
 	func testPluralWithNegativeIntervalOfInts() throws {
@@ -229,19 +241,20 @@ class XibLocTests: XCTestCase {
 	}
 	
 	func testPluralWithInvalidIntervalOfInts() throws {
-		/* No need to repeat this test (and spam the logs) */
-		let n = 2
-		let info = try XibLocResolvingInfo<String, String>(
-			defaultPluralityDefinition: PluralityDefinition(string: "(1)(2-6→4)(*)"), escapeToken: nil,
-			simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
-			orderedReplacements: [:],
-			pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:],
-			identityReplacement: { $0 }
-		).get()
-		XCTAssertEqual(
-			"#n# <house:houses:housess>".applying(xibLocInfo: info),
-			"2 housess"
-		)
+		for _ in 0..<nRepeats {
+			let n = 2
+			let info = try XibLocResolvingInfo<String, String>(
+				defaultPluralityDefinition: PluralityDefinition(string: "(1)(2-6→4)(*)"), escapeToken: nil,
+				simpleSourceTypeReplacements: [OneWordTokens(token: "#"): { _ in "\(n)" }],
+				orderedReplacements: [:],
+				pluralGroups: [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), PluralValue(int: n))], attributesModifications: [:], simpleReturnTypeReplacements: [:],
+				identityReplacement: { $0 }
+			).get()
+			XCTAssertEqual(
+				"#n# <house:houses:housess>".applying(xibLocInfo: info),
+				"2 housess"
+			)
+		}
 	}
 	
 	func testPluralWithIntervalOfIntsNoStart() throws {
