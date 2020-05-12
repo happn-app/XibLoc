@@ -19,9 +19,13 @@ import Foundation
 
 extension ParsedXibLoc where SourceTypeHelper.ParsedType : Hashable {
 	
-	static func cachedOrNewParsedXibLoc<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) -> ParsedXibLoc<SourceTypeHelper> {
+	public static func cachedOrNewParsedXibLoc<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) -> ParsedXibLoc<SourceTypeHelper> {
+		return cachedOrNewParsedXibLoc(source: source, parserHelper: parserHelper, parsingInfo: xibLocResolvingInfo.parsingInfo)
+	}
+	
+	static func cachedOrNewParsedXibLoc(source: SourceType, parserHelper: SourceTypeHelper.Type, parsingInfo: XibLocParsingInfo) -> ParsedXibLoc<SourceTypeHelper> {
 		#warning("TODO")
-		return self.init(source: source, parserHelper: parserHelper, forXibLocResolvingInfo: xibLocResolvingInfo)
+		return self.init(source: source, parserHelper: parserHelper, parsingInfo: parsingInfo)
 	}
 	
 }

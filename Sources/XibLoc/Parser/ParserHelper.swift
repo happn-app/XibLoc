@@ -17,7 +17,7 @@ import Foundation
 
 
 
-protocol ParserHelper {
+public protocol ParserHelper {
 	
 	/** Can be anything. Usually it will be a String or an NS(Mutable)AttributedString. */
 	associatedtype ParsedType

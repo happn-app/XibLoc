@@ -24,13 +24,18 @@ import Foundation
 
 
 
-struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
+public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	
-	typealias SourceType = SourceTypeHelper.ParsedType
+	public typealias SourceType = SourceTypeHelper.ParsedType
 	
-	let sourceTypeHelperType: SourceTypeHelper.Type
+	public let sourceTypeHelperType: SourceTypeHelper.Type
 	
-	init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
+	/** Init a new ParsedXibLoc. Usually you shouldn’t use this, unless you add
+	the support for a type other than `String` or `NSMutableAttributedString`, in
+	which case you should extend your type to apply directly the given resolving
+	info, and the implementation of your extension should call this init (see the
+	implementation of the extension of `String` etc. in file `XibLoc.swift`). */
+	public init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
 		self.init(source: source, parserHelper: parserHelper, parsingInfo: xibLocResolvingInfo.parsingInfo)
 	}
 	
@@ -140,7 +145,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		pluralityDefinitions = pluralityDefinitionsBuilding
 	}
 	
-	func resolve<ReturnTypeHelper : ParserHelper>(xibLocResolvingInfo: XibLocResolvingInfo<SourceType, ReturnTypeHelper.ParsedType>, returnTypeHelperType: ReturnTypeHelper.Type) -> ReturnTypeHelper.ParsedType {
+	public func resolve<ReturnTypeHelper : ParserHelper>(xibLocResolvingInfo: XibLocResolvingInfo<SourceType, ReturnTypeHelper.ParsedType>, returnTypeHelperType: ReturnTypeHelper.Type) -> ReturnTypeHelper.ParsedType {
 		let replacementsIterator = ReplacementsIterator(refString: untokenizedStringSource, adjustedReplacements: replacements)
 		
 		var pluralGroupsDictionary = [MultipleWordsTokens: PluralValue]()
