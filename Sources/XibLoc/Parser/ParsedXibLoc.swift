@@ -18,9 +18,7 @@ import Foundation
 	import os.log
 #endif
 
-#if canImport(Logging)
-	import Logging
-#endif
+import Logging
 
 
 
@@ -157,13 +155,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			guard case .simpleSourceTypeReplacement(let token) = replacement.value else {continue}
 			guard let newValueCreator = xibLocResolvingInfo.simpleSourceTypeReplacements[token] else {
 				#if canImport(os)
-					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-						XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }
-					}
+				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+					XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 				#endif
-				#if canImport(Logging)
-					XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo")
-				#endif
+				XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo")
 				continue
 			}
 			
@@ -185,13 +180,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			case .attributesModification(let token):
 				guard let modifier = xibLocResolvingInfo.attributesModifications[token] else {
 					#if canImport(os)
-						if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-							XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for attributes modification, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }
-						}
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+						XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for attributes modification, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 					#endif
-					#if canImport(Logging)
-						XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for attributes modification, but no value given in xibLocResolvingInfo")
-					#endif
+					XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for attributes modification, but no value given in xibLocResolvingInfo")
 					continue
 				}
 				modifier(&result, replacement.range, replacementsIterator.refString)
@@ -201,13 +193,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			case .simpleReturnTypeReplacement(let token):
 				guard let newValueCreator = xibLocResolvingInfo.simpleReturnTypeReplacements[token] else {
 					#if canImport(os)
-						if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-							XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }
-						}
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+						XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 					#endif
-					#if canImport(Logging)
-						XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo")
-					#endif
+					XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo")
 					continue
 				}
 				
@@ -219,13 +208,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			case .orderedReplacement(let token, valueIndex: let valueIndex, numberOfValues: let numberOfValues):
 				guard let wantedValue = xibLocResolvingInfo.orderedReplacements[token] else {
 					#if canImport(os)
-						if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-							XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }
-						}
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+						XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 					#endif
-					#if canImport(Logging)
-						XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo")
-					#endif
+					XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo")
 					continue
 				}
 				guard valueIndex == wantedValue || (wantedValue >= numberOfValues.value && valueIndex == numberOfValues.value-1) else {continue}
@@ -238,13 +224,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			case .pluralGroup(let token, zoneIndex: let zoneIndex, numberOfZones: let numberOfZones):
 				guard let wantedValue = pluralGroupsDictionary[token] else {
 					#if canImport(os)
-						if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-							XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for plural replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }
-						}
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+						XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for plural replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 					#endif
-					#if canImport(Logging)
-						XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for plural replacement, but no value given in xibLocResolvingInfo")
-					#endif
+					XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for plural replacement, but no value given in xibLocResolvingInfo")
 					continue
 				}
 				let pluralityDefinition = pluralityDefinitions[token] ?? xibLocResolvingInfo.defaultPluralityDefinition
@@ -666,13 +649,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		guard let pluralityEndIdx = stringSource.range(of: "||", options: [.literal], range: pluralityStringStartIdx..<stringSource.endIndex)?.lowerBound else {
 			/* Nope. It is not. */
 			#if canImport(os)
-				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-					XibLocConfig.oslog.flatMap{ os_log("Got invalid plurality override in string source \"%@\"", log: $0, type: .info, stringSource) }
-				}
+			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+				XibLocConfig.oslog.flatMap{ os_log("Got invalid plurality override in string source \"%@\"", log: $0, type: .info, stringSource) }}
 			#endif
-			#if canImport(Logging)
-				XibLocConfig.logger?.warning("Got invalid plurality override in string source \"\(stringSource)\"")
-			#endif
+			XibLocConfig.logger?.warning("Got invalid plurality override in string source \"\(stringSource)\"")
 			return []
 		}
 		
@@ -703,13 +683,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		guard let rightSeparatorRange = range(of: rightSeparator, escapeToken: escapeToken, baseString: baseString, in: currentPositionInString..<baseString.endIndex) else {
 			/* Invalid string: The left token was found, but the right was not. */
 			#if canImport(os)
-				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-					XibLocConfig.oslog.flatMap{ os_log("Invalid baseString “%@”: left token “%@” was found, but right one “%@” was not. Ignoring.", log: $0, type: .info, baseString, leftSeparator, rightSeparator) }
-				}
+			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+				XibLocConfig.oslog.flatMap{ os_log("Invalid baseString “%@”: left token “%@” was found, but right one “%@” was not. Ignoring.", log: $0, type: .info, baseString, leftSeparator, rightSeparator) }}
 			#endif
-			#if canImport(Logging)
-				XibLocConfig.logger?.warning("Invalid baseString “\(baseString)”: left token “\(leftSeparator)” was found, but right one “\(rightSeparator)” was not. Ignoring.")
-			#endif
+			XibLocConfig.logger?.warning("Invalid baseString “\(baseString)”: left token “\(leftSeparator)” was found, but right one “\(rightSeparator)” was not. Ignoring.")
 			currentPositionInString = baseString.endIndex
 			return nil
 		}

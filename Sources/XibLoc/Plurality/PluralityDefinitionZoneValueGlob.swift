@@ -18,9 +18,7 @@ import Foundation
 	import os.log
 #endif
 
-#if canImport(Logging)
-	import Logging
-#endif
+import Logging
 
 
 
@@ -59,24 +57,18 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 			if       transformedString.hasPrefix("^+") {transformedString.remove(at: transformedString.index(after: transformedString.startIndex))} /* We remove the "+" */
 			else if !transformedString.hasPrefix("^-") {transformedString.insert(contentsOf: "-?+", at: transformedString.index(after: transformedString.startIndex))}
 			#if canImport(os)
-				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-					XibLocConfig.oslog.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }
-				}
+			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+				XibLocConfig.oslog.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }}
 			#endif
-			#if canImport(Logging)
-				XibLocConfig.logger?.debug("Glob language to regex conversion: “\(string)” --> “\(transformedString)”")
-			#endif
+			XibLocConfig.logger?.debug("Glob language to regex conversion: “\(string)” --> “\(transformedString)”")
 			
 			do {value = .regex(try NSRegularExpression(pattern: transformedString, options: []))}
 			catch {
 				#if canImport(os)
-					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-						XibLocConfig.oslog.flatMap{ os_log("Cannot create regular expression from string “%@” (original was “%@”); are you sure the original string follow all the rules? Got error %@", log: $0, type: .info, transformedString, string, String(describing: error)) }
-					}
+				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+					XibLocConfig.oslog.flatMap{ os_log("Cannot create regular expression from string “%@” (original was “%@”); are you sure the original string follow all the rules? Got error %@", log: $0, type: .info, transformedString, string, String(describing: error)) }}
 				#endif
-				#if canImport(Logging)
-					XibLocConfig.logger?.error("Cannot create regular expression from string “\(transformedString)” (original was “\(string)”); are you sure the original string follow all the rules? Got error \(String(describing: error))")
-				#endif
+				XibLocConfig.logger?.error("Cannot create regular expression from string “\(transformedString)” (original was “\(string)”); are you sure the original string follow all the rules? Got error \(String(describing: error))")
 				return nil
 			}
 		}

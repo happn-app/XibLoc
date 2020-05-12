@@ -47,9 +47,7 @@ class XibLocTests: XCTestCase {
 				XibLocConfig.oslog = nil
 			}
 		#endif
-		#if canImport(Logging)
-			XibLocConfig.logger = nil
-		#endif
+		XibLocConfig.logger = nil
 	}
 	
 	override func tearDown() {

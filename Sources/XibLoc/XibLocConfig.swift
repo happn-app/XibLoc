@@ -18,12 +18,7 @@ import Foundation
 	import os.log
 #endif
 
-/* We check if it is possible to import Logging because XibLoc’s xcodeproj
-(needed to launch some ObjC tests and some other weirdnesses) do not have the
-Logging dependency setup. */
-#if canImport(Logging)
-	import Logging
-#endif
+import Logging
 
 
 
@@ -55,16 +50,14 @@ public struct XibLocConfig {
 		@available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *)
 		public static var oslog: OSLog? = .default
 	#endif
-	#if canImport(Logging)
-		public static var logger: Logger? = {
-			#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-				return nil
-			}
-			#endif
-			return Logger(label: "com.happn.XibLoc")
-		}()
-	#endif
+	public static var logger: Logger? = {
+		#if canImport(os)
+		if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+			return nil
+		}
+		#endif
+		return Logger(label: "com.happn.XibLoc")
+	}()
 	
 	public static var defaultEscapeToken: String? = "~"
 	public static var defaultPluralityDefinition = PluralityDefinition()
