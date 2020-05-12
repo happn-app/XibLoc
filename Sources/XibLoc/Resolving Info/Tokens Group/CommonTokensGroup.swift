@@ -114,12 +114,12 @@ public struct CommonTokensGroup : TokensGroup {
 		number n: XibLocNumber? = nil,
 		genderMeIsMale gm: Bool? = nil,
 		genderOtherIsMale go: Bool? = nil,
-		escapeToken e: String? = di.defaultEscapeToken,
+		escapeToken e: String? = XibLocConfig.defaultEscapeToken,
 		baseFont f: XibLocFont? = nil,
 		baseColor c: XibLocColor? = nil,
-		baseAttributes attrs: [NSAttributedString.Key: Any]? = di.defaultStr2AttrStrAttributes,
-		boldAttrsChangesDescription boldAttrsChanges: StringAttributesChangesDescription? = di.defaultBoldAttrsChangesDescription,
-		italicAttrsChangesDescription italicAttrsChanges: StringAttributesChangesDescription? = di.defaultItalicAttrsChangesDescription
+		baseAttributes attrs: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes,
+		boldAttrsChangesDescription boldAttrsChanges: StringAttributesChangesDescription? = XibLocConfig.defaultBoldAttrsChangesDescription,
+		italicAttrsChangesDescription italicAttrsChanges: StringAttributesChangesDescription? = XibLocConfig.defaultItalicAttrsChangesDescription
 	) {
 		simpleReplacement1 = r1
 		simpleReplacement2 = r2
@@ -138,7 +138,7 @@ public struct CommonTokensGroup : TokensGroup {
 	
 	public var str2StrXibLocInfo: Str2StrXibLocInfo {
 		return Str2StrXibLocInfo(
-			defaultPluralityDefinition: di.defaultPluralityDefinition,
+			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
 			escapeToken: escapeToken,
 			simpleSourceTypeReplacements: [:],
 			orderedReplacements: [
@@ -162,7 +162,7 @@ public struct CommonTokensGroup : TokensGroup {
 		if let c = baseColor {defaultAttributes[.foregroundColor] = c}
 		
 		return Str2AttrStrXibLocInfo(
-			defaultPluralityDefinition: di.defaultPluralityDefinition,
+			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
 			escapeToken: escapeToken,
 			simpleSourceTypeReplacements: [
 				OneWordTokens(token: "|"): simpleReplacement1.flatMap{ r in { _ in r } },
@@ -200,7 +200,7 @@ extension String {
 		number: XibLocNumber? = nil,
 		genderMeIsMale: Bool? = nil,
 		genderOtherIsMale: Bool? = nil,
-		escapeToken: String? = di.defaultEscapeToken
+		escapeToken: String? = XibLocConfig.defaultEscapeToken
 	) -> String {
 		return applying(xibLocInfo: CommonTokensGroup(
 			simpleReplacement1: simpleReplacement1,
@@ -227,12 +227,12 @@ extension String {
 		number: XibLocNumber? = nil,
 		genderMeIsMale: Bool? = nil,
 		genderOtherIsMale: Bool? = nil,
-		escapeToken: String? = di.defaultEscapeToken,
+		escapeToken: String? = XibLocConfig.defaultEscapeToken,
 		baseFont: XibLocFont? = nil,
 		baseColor: XibLocColor? = nil,
-		baseAttributes: [NSAttributedString.Key: Any]? = di.defaultStr2AttrStrAttributes,
-		boldAttrsChangesDescription: StringAttributesChangesDescription? = di.defaultBoldAttrsChangesDescription,
-		italicAttrsChangesDescription: StringAttributesChangesDescription? = di.defaultItalicAttrsChangesDescription
+		baseAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes,
+		boldAttrsChangesDescription: StringAttributesChangesDescription? = XibLocConfig.defaultBoldAttrsChangesDescription,
+		italicAttrsChangesDescription: StringAttributesChangesDescription? = XibLocConfig.defaultItalicAttrsChangesDescription
 	) -> NSAttributedString {
 		return applying(xibLocInfo: CommonTokensGroup(
 			simpleReplacement1: simpleReplacement1,

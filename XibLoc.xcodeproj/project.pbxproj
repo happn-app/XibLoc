@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7B04C92E20166897002F9F52 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
+		7B04C92E20166897002F9F52 /* XibLocConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* XibLocConfig.swift */; };
 		7B266297214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
 		7B353B832017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
 		7B3C11D6246AF72700F86C18 /* CacheLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3C11D5246AF72700F86C18 /* CacheLock.swift */; };
@@ -35,7 +35,7 @@
 		7BB9A93F2240226D00932FD5 /* XibLocNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */; };
 		7BB9A9402240226D00932FD5 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
 		7BB9A9412240226D00932FD5 /* PluralityDefinitionZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB11B201634E4008A3FC0 /* PluralityDefinitionZone.swift */; };
-		7BB9A9422240226D00932FD5 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* Config.swift */; };
+		7BB9A9422240226D00932FD5 /* XibLocConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B04C92D20166897002F9F52 /* XibLocConfig.swift */; };
 		7BB9A9432240226D00932FD5 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
 		7BB9A9442240226D00932FD5 /* Str2AttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */; };
 		7BB9A9452240226D00932FD5 /* RandomAccessCollection+StableSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */; };
@@ -87,7 +87,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7B04C92D20166897002F9F52 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		7B04C92D20166897002F9F52 /* XibLocConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocConfig.swift; sourceTree = "<group>"; };
 		7B21BACE2003B2C600DFF758 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; wrapsLines = 1; };
 		7B21BAD02003BBC700DFF758 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		7B21BAD12003BF0600DFF758 /* License.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
@@ -272,12 +272,12 @@
 			isa = PBXGroup;
 			children = (
 				7BCBB122201634E4008A3FC0 /* XibLoc.swift */,
+				7B04C92D20166897002F9F52 /* XibLocConfig.swift */,
 				7B8A96EB2017526000481B45 /* Resolving Info */,
 				7B04C92B20166784002F9F52 /* Parser */,
 				7BCBB119201634E4008A3FC0 /* Plurality */,
 				7B6B35352467188E008DC972 /* Cache */,
 				7B04C92C20166794002F9F52 /* Utilities */,
-				7B04C92D20166897002F9F52 /* Config.swift */,
 			);
 			path = XibLoc;
 			sourceTree = "<group>";
@@ -473,7 +473,7 @@
 				7BCBB138201634E4008A3FC0 /* PluralityDefinitionZone.swift in Sources */,
 				7B66FA922467485D005EAB92 /* XibLocParsingInfo.swift in Sources */,
 				7B66FAB724684494005EAB92 /* CommonTokensGroup.swift in Sources */,
-				7B04C92E20166897002F9F52 /* Config.swift in Sources */,
+				7B04C92E20166897002F9F52 /* XibLocConfig.swift in Sources */,
 				7BCBB124201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */,
 				7B5BF7C22084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */,
 				7BCBB150201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */,
@@ -522,7 +522,7 @@
 				7BB9A9412240226D00932FD5 /* PluralityDefinitionZone.swift in Sources */,
 				7B66FA932467485D005EAB92 /* XibLocParsingInfo.swift in Sources */,
 				7B66FAB824684494005EAB92 /* CommonTokensGroup.swift in Sources */,
-				7BB9A9422240226D00932FD5 /* Config.swift in Sources */,
+				7BB9A9422240226D00932FD5 /* XibLocConfig.swift in Sources */,
 				7BB9A9432240226D00932FD5 /* ParsedXibLoc.swift in Sources */,
 				7BB9A9442240226D00932FD5 /* Str2AttrStrXibLocInfo.swift in Sources */,
 				7BB9A9452240226D00932FD5 /* RandomAccessCollection+StableSort.swift in Sources */,

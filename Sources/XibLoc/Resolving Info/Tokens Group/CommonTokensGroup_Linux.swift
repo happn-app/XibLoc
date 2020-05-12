@@ -65,7 +65,7 @@ public struct CommonTokensGroup : TokensGroup {
 		number n: XibLocNumber? = nil,
 		genderMeIsMale gm: Bool? = nil,
 		genderOtherIsMale go: Bool? = nil,
-		escapeToken e: String? = di.defaultEscapeToken
+		escapeToken e: String? = XibLocConfig.defaultEscapeToken
 	) {
 		simpleReplacement1 = r1
 		simpleReplacement2 = r2
@@ -94,7 +94,7 @@ public struct CommonTokensGroup : TokensGroup {
 		if let s2 = simpleReplacement2 {simpleReturnTypeReplacements[OneWordTokens(token: "^")] = { _ in s2 }}
 		
 		return Str2StrXibLocInfo(
-			defaultPluralityDefinition: di.defaultPluralityDefinition,
+			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
 			escapeToken: escapeToken,
 			simpleSourceTypeReplacements: [:],
 			orderedReplacements: orderedReplacements,
@@ -123,7 +123,7 @@ extension String {
 		number: XibLocNumber? = nil,
 		genderMeIsMale: Bool? = nil,
 		genderOtherIsMale: Bool? = nil,
-		escapeToken: String? = di.defaultEscapeToken
+		escapeToken: String? = XibLocConfig.defaultEscapeToken
 	) -> String {
 		return applying(xibLocInfo: CommonTokensGroup(
 			simpleReplacement1: simpleReplacement1,

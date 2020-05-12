@@ -24,26 +24,24 @@ import Foundation
 
 
 
-public struct DependencyInjection {
+public struct XibLocConfig {
 	
-	init() {
+	public static var log: OSLog? = {
 		#if canImport(os)
-			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {log = .default}
-			else                                                          {log = nil}
+			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {return .default}
+			else                                                          {return nil}
 		#else
-			log = nil
+			return nil
 		#endif
-	}
+	}()
 	
-	public var log: OSLog?
-	
-	public var defaultEscapeToken: String? = nil
-	public var defaultPluralityDefinition = PluralityDefinition()
+	public static var defaultEscapeToken: String? = "~"
+	public static var defaultPluralityDefinition = PluralityDefinition()
 	
 	#if !os(Linux)
-	public var defaultStr2AttrStrAttributes: [NSAttributedString.Key: Any]? = nil
-	public var defaultBoldAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setBold])
-	public var defaultItalicAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setItalic])
+	public static var defaultStr2AttrStrAttributes: [NSAttributedString.Key: Any]? = nil
+	public static var defaultBoldAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setBold])
+	public static var defaultItalicAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setItalic])
 	#endif
 	
 	/** We give public access to the cache so you can customize it however you
@@ -53,12 +51,13 @@ public struct DependencyInjection {
 	
 	- Important: Do **not** modify the objects in this cache. The property should
 	only be modified if needed when your app starts, to customize the cache. */
-	public var cache: NSCache<ErasedParsedXibLocInitInfoWrapper, ParsedXibLocWrapper>? = {
+	public static var cache: NSCache<ErasedParsedXibLocInitInfoWrapper, ParsedXibLocWrapper>? = {
 		let c = NSCache<ErasedParsedXibLocInitInfoWrapper, ParsedXibLocWrapper>()
 		c.countLimit = 1500
 		return c
 	}()
 	
+	/** This struct is simply a container for static configuration properties. */
+	private init() {}
+	
 }
-
-public var di = DependencyInjection()

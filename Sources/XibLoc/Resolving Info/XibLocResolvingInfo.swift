@@ -91,7 +91,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	}
 	
 	public init?(
-		defaultPluralityDefinition dpd: PluralityDefinition = di.defaultPluralityDefinition, escapeToken et: String? = di.defaultEscapeToken,
+		defaultPluralityDefinition dpd: PluralityDefinition = XibLocConfig.defaultPluralityDefinition, escapeToken et: String? = XibLocConfig.defaultEscapeToken,
 		simpleSourceTypeReplacements sstr: [OneWordTokens: (_ originalValue: SourceType) -> SourceType] = [:],
 		orderedReplacements or: [MultipleWordsTokens: Int] = [:],
 		pluralGroups pg: [(MultipleWordsTokens, PluralValue)] = [],
