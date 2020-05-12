@@ -32,7 +32,7 @@ class XibLocTests: XCTestCase {
 		XibLocConfig.defaultEscapeToken = #"\"#
 		XibLocConfig.defaultPluralityDefinition = PluralityDefinition()
 		
-		#if !os(Linux)
+		#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 		XibLocConfig.defaultStr2AttrStrAttributes = [
 			.font: XibLocFont.systemFont(ofSize: 14),
 			.foregroundColor: XibLocColor.black
@@ -43,7 +43,7 @@ class XibLocTests: XCTestCase {
 		#endif
 		
 		#if canImport(os)
-			if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 				XibLocConfig.oslog = nil
 			}
 		#endif
@@ -441,7 +441,7 @@ class XibLocTests: XCTestCase {
 		}
 	}
 	
-	#if !os(Linux)
+	#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 	
 	func testCommonTokensGroupDocCaseAttrStr() {
 		let nRepeats = 1

@@ -23,7 +23,7 @@ extension String {
 		return ParsedXibLoc.cachedOrNewParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: StringParserHelper.self)
 	}
 	
-	#if !os(Linux)
+	#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 	
 	public func applying(xibLocInfo: XibLocResolvingInfo<String, NSMutableAttributedString>) -> NSMutableAttributedString {
 		return ParsedXibLoc.cachedOrNewParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
@@ -38,7 +38,7 @@ extension String {
 }
 
 
-#if !os(Linux)
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 
 extension NSAttributedString {
 	

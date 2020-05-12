@@ -52,17 +52,24 @@ OSLog through Logging without any performance or privacy hit). */
 public struct XibLocConfig {
 	
 	#if canImport(os)
-		@available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *)
+		@available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *)
 		public static var oslog: OSLog? = .default
 	#endif
 	#if canImport(Logging)
-		public static var logger: Logger? = Logger(label: "com.happn.XibLoc")
+		public static var logger: Logger? = {
+			#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+				return nil
+			}
+			#endif
+			return Logger(label: "com.happn.XibLoc")
+		}()
 	#endif
 	
 	public static var defaultEscapeToken: String? = "~"
 	public static var defaultPluralityDefinition = PluralityDefinition()
 	
-	#if !os(Linux)
+	#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 		public static var defaultStr2AttrStrAttributes: [NSAttributedString.Key: Any]? = nil
 		public static var defaultBoldAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setBold])
 		public static var defaultItalicAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setItalic])

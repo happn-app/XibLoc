@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#if !os(Linux)
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 
 import CoreGraphics /* CGFloat */
 import Foundation
@@ -23,7 +23,7 @@ import Foundation
 extension XibLocFont {
 	
 	var isBold: Bool {
-		#if !os(OSX)
+		#if !os(macOS)
 			return fontDescriptor.symbolicTraits.contains(.traitBold)
 		#else
 			return fontDescriptor.symbolicTraits.contains(.bold)
@@ -31,7 +31,7 @@ extension XibLocFont {
 	}
 	
 	var isItalic: Bool {
-		#if !os(OSX)
+		#if !os(macOS)
 			return fontDescriptor.symbolicTraits.contains(.traitItalic)
 		#else
 			return fontDescriptor.symbolicTraits.contains(.italic)
@@ -85,7 +85,7 @@ extension NSMutableAttributedString {
 		var fontDesc = font.fontDescriptor
 		
 		if let bold = newIsBold {
-			#if !os(OSX)
+			#if !os(macOS)
 				if bold {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitBold))}
 				else    {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitBold))}
 			#else
@@ -95,7 +95,7 @@ extension NSMutableAttributedString {
 		}
 		
 		if let italic = newIsItalic {
-			#if !os(OSX)
+			#if !os(macOS)
 				if italic {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitItalic))}
 				else      {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitItalic))}
 			#else
@@ -104,7 +104,7 @@ extension NSMutableAttributedString {
 			#endif
 		}
 		
-		#if !os(OSX)
+		#if !os(macOS)
 			setFont(XibLocFont(descriptor: fontDesc, size: newSize ?? fontDesc.pointSize),  range: range)
 		#else
 			setFont(XibLocFont(descriptor: fontDesc, size: newSize ?? fontDesc.pointSize)!, range: range)
@@ -123,7 +123,7 @@ extension NSMutableAttributedString {
 		var outRange = NSRange(location: 0, length: 0)
 		
 		repeat {
-			#if !os(OSX)
+			#if !os(macOS)
 				let f = getFont(at: curPos, effectiveRange: &outRange) ?? XibLocFont.preferredFont(forTextStyle: .body)
 			#else
 				let f = getFont(at: curPos, effectiveRange: &outRange) ?? XibLocFont.systemFont(ofSize: XibLocFont.systemFontSize)

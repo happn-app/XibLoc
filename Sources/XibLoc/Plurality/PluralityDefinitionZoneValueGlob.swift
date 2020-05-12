@@ -59,7 +59,7 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 			if       transformedString.hasPrefix("^+") {transformedString.remove(at: transformedString.index(after: transformedString.startIndex))} /* We remove the "+" */
 			else if !transformedString.hasPrefix("^-") {transformedString.insert(contentsOf: "-?+", at: transformedString.index(after: transformedString.startIndex))}
 			#if canImport(os)
-				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 					XibLocConfig.oslog.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }
 				}
 			#endif
@@ -70,7 +70,7 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 			do {value = .regex(try NSRegularExpression(pattern: transformedString, options: []))}
 			catch {
 				#if canImport(os)
-					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 						XibLocConfig.oslog.flatMap{ os_log("Cannot create regular expression from string “%@” (original was “%@”); are you sure the original string follow all the rules? Got error %@", log: $0, type: .info, transformedString, string, String(describing: error)) }
 					}
 				#endif

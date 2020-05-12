@@ -19,7 +19,7 @@ import Foundation
 
 
 
-#if !os(Linux)
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 @objc
 final class ObjCXibLoc : NSObject {
 	

@@ -54,7 +54,7 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 
 		if !scanner.isAtEnd {
 			#if canImport(os)
-				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 					XibLocConfig.oslog.flatMap{ os_log("Got garbage after end of plurality definition zone string: %@", log: $0, type: .info, (scanner.string as NSString).substring(from: scanner.scanLocation)) }
 				}
 			#endif
@@ -77,7 +77,7 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 			if ret == nil {
 				let v = $0
 				#if canImport(os)
-					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 						XibLocConfig.oslog.flatMap{ l in os_log("Cannot parse zone value string “%@”. Skipping...", log: l, type: .info, v) }
 					}
 				#endif

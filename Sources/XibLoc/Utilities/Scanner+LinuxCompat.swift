@@ -17,7 +17,7 @@ import Foundation
 
 
 
-#if !os(Linux)
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 
 extension Scanner {
 	
