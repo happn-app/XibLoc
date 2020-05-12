@@ -4,6 +4,8 @@ import PackageDescription
 
 let package = Package(
 	name: "XibLoc",
+	/* When opening the project via the Package.swift in Xcode… */
+//	platforms: [.macOS(.v10_11)],
 	products: [
 		.library(name: "XibLoc", targets: ["XibLoc"])
 	],
