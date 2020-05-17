@@ -1,5 +1,5 @@
 /*
-Copyright 2019 happn
+Copyright 2020 happn
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,18 +17,12 @@ import Foundation
 
 
 
-public struct OneWordTokens : Hashable {
+struct CacheLock {
 	
-	public let leftToken: String
-	public let rightToken: String
-	
-	public init(token: String) {
-		self.init(leftToken: token, rightToken: token)
-	}
-	
-	public init(leftToken lt: String, rightToken rt: String) {
-		leftToken = lt
-		rightToken = rt
-	}
+	static let lock: NSLock = {
+		let l = NSLock()
+		l.name = "com.happn.XibLoc.cache-lock"
+		return l
+	}()
 	
 }

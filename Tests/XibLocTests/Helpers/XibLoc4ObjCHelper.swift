@@ -19,35 +19,37 @@ import Foundation
 
 
 
-#if !os(Linux)
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 @objc
 final class ObjCXibLoc : NSObject {
 	
 	@objc
 	static func objc_applyingXibLocSimpleReplacementLocString(base: String, replacement: String) -> String {
-		return base.applying(xibLocInfo: Str2StrXibLocInfo(replacement: replacement))
+		return base.applyingCommonTokens(simpleReplacement1: replacement)
 	}
 	
 	@objc
 	static func objc_applyingXibLocSimpleReplacementAndGenderLocString(base: String, replacement: String, genderMeIsMale: Bool, genderOtherIsMale: Bool) -> String {
-		return base.applying(xibLocInfo: Str2StrXibLocInfo(replacement: replacement, genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale))
+		return base.applyingCommonTokens(simpleReplacement1: replacement, genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale)
 	}
 	
 	@objc
-	static func objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPlural(base: String, baseFont: XibLocFont, baseColor: XibLocColor, replacement: String, pluralValue: Int, genderMeIsMale: Bool, genderOtherIsMale: Bool) -> NSMutableAttributedString {
-		return base.applying(xibLocInfo: Str2AttrStrXibLocInfo(
-			strResolvingInfo: Str2StrXibLocInfo(replacement: replacement, pluralValue: XibLocNumber(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale),
-			boldType: .default, baseFont: baseFont, baseColor: baseColor
-		))
+	static func objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPlural(base: String, baseFont: XibLocFont, baseColor: XibLocColor, replacement: String, pluralValue: Int, genderMeIsMale: Bool, genderOtherIsMale: Bool) throws -> NSMutableAttributedString {
+		return NSMutableAttributedString(
+			attributedString: base.applyingCommonTokensAttributed(simpleReplacement1: replacement, number: XibLocNumber(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale, baseFont: baseFont, baseColor: baseColor)
+		)
 	}
 	
 	@objc
-	static func objc_applyingXibLocTransformForCustomBold(base: String, baseFont: XibLocFont, baseColor: XibLocColor, boldToken: String) -> NSMutableAttributedString {
-		return base.applying(xibLocInfo: Str2AttrStrXibLocInfo(
-			strResolvingInfo: Str2StrXibLocInfo(identityReplacement: { $0 }),
-			attributesReplacements: [OneWordTokens(token: boldToken): StringAttributesChangesDescription(changes: [.setBold])], returnTypeReplacements: nil,
-			defaultAttributes: [.font: baseFont, .foregroundColor: baseColor]
-		))
+	static func objc_applyingXibLocTransformForCustomBold(base: String, baseFont: XibLocFont, baseColor: XibLocColor, boldToken: String) throws -> NSMutableAttributedString {
+		return try base.applying(xibLocInfo: XibLocResolvingInfo<String, NSMutableAttributedString>(
+			defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
+			simpleSourceTypeReplacements: [:],
+			orderedReplacements: [:],
+			pluralGroups: [],
+			attributesModifications: [OneWordTokens(token: boldToken): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).apply(to: attrStr, range: NSRange(strRange, in: refStr)) }],
+			simpleReturnTypeReplacements: [:], identityReplacement: { NSMutableAttributedString(string: $0, attributes: [.font: baseFont, .foregroundColor: baseColor]) }
+		).get())
 	}
 	
 	/**

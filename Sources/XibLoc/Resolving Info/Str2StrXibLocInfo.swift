@@ -21,24 +21,24 @@ public typealias Str2StrXibLocInfo = XibLocResolvingInfo<String, String>
 
 extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 	
-	public init(simpleReplacementWithToken token: String, value: String, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: [token: value], escapeToken: e)
+	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
+	public init(simpleReplacementWithToken token: String, value: String, escapeToken e: String? = XibLocConfig.defaultEscapeToken) {
+		self.init(replacements: [token: value], escapeToken: e)!
 	}
 	
-	public init(replacement: String, pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: ["|": replacement], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
+	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
+	public init(pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = XibLocConfig.defaultEscapeToken) {
+		self.init(replacements: [:], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)!
 	}
 	
-	public init(numberReplacement: XibLocNumber, pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: ["#": numberReplacement.localizedString], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
+	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
+	public init(replacement: String, pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = XibLocConfig.defaultEscapeToken) {
+		self.init(replacements: ["|": replacement], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)!
 	}
 	
-	public init(numberReplacements: [String: XibLocNumber], pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		self.init(replacements: numberReplacements.mapValues{ $0.localizedString }, pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)
-	}
-	
-	public init(replacements: [String: String] = [:], pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = di.defaultEscapeToken) {
-		defaultPluralityDefinition = di.defaultPluralityDefinition
+	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
+	public init?(replacements: [String: String], pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = XibLocConfig.defaultEscapeToken) {
+		defaultPluralityDefinition = XibLocConfig.defaultPluralityDefinition
 		escapeToken = e
 		attributesModifications = [:]
 		simpleSourceTypeReplacements = [:]
@@ -53,13 +53,17 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 		}
 		
 		var orderedReplacementsBuilding = [MultipleWordsTokens: Int]()
-		if let isOtherMale = isOtherMale {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´")] = isOtherMale ? 0 : 1}
 		if let isMeMale = isMeMale       {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}")] = isMeMale ? 0 : 1}
+		if let isOtherMale = isOtherMale {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´")] = isOtherMale ? 0 : 1}
 		orderedReplacements = orderedReplacementsBuilding
 		
 		simpleReturnTypeReplacements = simpleReturnTypeReplacementsBuilding
-		dictionaryReplacements = nil
 		identityReplacement = { $0 }
+		
+		/* See definition of parsingInfo var for explanation of this. */
+		guard initParsingInfo() else {
+			return nil
+		}
 	}
 	
 }

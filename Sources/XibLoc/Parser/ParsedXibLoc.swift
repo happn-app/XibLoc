@@ -18,75 +18,47 @@ import Foundation
 	import os.log
 #endif
 
-#if !canImport(os) && canImport(DummyLinuxOSLog)
-	import DummyLinuxOSLog
-#endif
+import Logging
 
 
 
-struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
+public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	
-	typealias SourceType = SourceTypeHelper.ParsedType
+	public typealias SourceType = SourceTypeHelper.ParsedType
 	
-	let sourceTypeHelperType: SourceTypeHelper.Type
+	public let sourceTypeHelperType: SourceTypeHelper.Type
 	
-	init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
-		self.init(source: source, parserHelper: parserHelper, escapeToken: xibLocResolvingInfo.escapeToken, simpleSourceTypeReplacements: Array(xibLocResolvingInfo.simpleSourceTypeReplacements.keys), orderedReplacements: Array(xibLocResolvingInfo.orderedReplacements.keys), pluralGroups: Array(xibLocResolvingInfo.pluralGroups.map{ $0.0 }), attributesModifications: Array(xibLocResolvingInfo.attributesModifications.keys), simpleReturnTypeReplacements: Array(xibLocResolvingInfo.simpleReturnTypeReplacements.keys), hasDictionaryReplacements: xibLocResolvingInfo.dictionaryReplacements != nil)
+	/** Init a new ParsedXibLoc. Usually you shouldn’t use this, unless you add
+	the support for a type other than `String` or `NSMutableAttributedString`, in
+	which case you should extend your type to apply directly the given resolving
+	info, and the implementation of your extension should call this init (see the
+	implementation of the extension of `String` etc. in file `XibLoc.swift`). */
+	public init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
+		self.init(source: source, parserHelper: parserHelper, parsingInfo: xibLocResolvingInfo.parsingInfo)
 	}
 	
-	init(source: SourceType, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens], hasDictionaryReplacements: Bool) {
+	init(source: SourceType, parserHelper: SourceTypeHelper.Type, parsingInfo: XibLocParsingInfo) {
 		var source = SourceTypeHelper.copy(source: source)
 		var stringSource = parserHelper.stringRepresentation(of: source)
 		var pluralityDefinitionsList = ParsedXibLoc.preprocessForPluralityDefinitionOverrides(source: &source, stringSource: &stringSource, parserHelper: parserHelper)
-		while pluralityDefinitionsList.count < pluralGroups.count {pluralityDefinitionsList.append(nil)}
+		while pluralityDefinitionsList.count < parsingInfo.pluralGroups.count {pluralityDefinitionsList.append(nil)}
 		
-		self.init(source: source, stringSource: stringSource, parserHelper: parserHelper, escapeToken: escapeToken, simpleSourceTypeReplacements: simpleSourceTypeReplacements, orderedReplacements: orderedReplacements, pluralGroups: pluralGroups, attributesModifications: attributesModifications, simpleReturnTypeReplacements: simpleReturnTypeReplacements, hasDictionaryReplacements: hasDictionaryReplacements, pluralityDefinitionsList: pluralityDefinitionsList)
+		self.init(source: source, stringSource: stringSource, parserHelper: parserHelper, parsingInfo: parsingInfo, pluralityDefinitionsList: pluralityDefinitionsList)
 	}
 	
-	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, escapeToken: String?, simpleSourceTypeReplacements: [OneWordTokens], orderedReplacements: [MultipleWordsTokens], pluralGroups: [MultipleWordsTokens], attributesModifications: [OneWordTokens], simpleReturnTypeReplacements: [OneWordTokens], hasDictionaryReplacements: Bool, pluralityDefinitionsList: [PluralityDefinition?]) {
-		#warning("TODO: Cache")
-		assert(pluralityDefinitionsList.count >= pluralGroups.count)
-		assert(!hasDictionaryReplacements, "Not implemented: Creating a ParsedXibLoc with dictionary replacements")
-		/* First, let's make sure we are not overlapping tokens for our parsing:
-		 *    - If lsep == rsep, reduce to only sep;
-		 *    - No char used in any separator (left, right, internal, escape token) must be use in another separator;
-		 *    - But the same char can be used multiple time in one separator;
-		 *    - If dictionary replacements are active, the following tokens are reserved (and count in the above rules): "@[", "|", ":", "¦", "]"
-		 * We'll also make sure none of the tokens are empty. */
-		#if !NS_BLOCK_ASSERTIONS // TODO: Find correct pre-processing instruction
-			var chars = !hasDictionaryReplacements ? Set<Character>() : Set<Character>(arrayLiteral: "@", "[", "|", ":", "¦", "]")
-			
-			let processToken = { (token: String) in
-				assert(!token.isEmpty)
-				let tokenChars = Set(token)
-				assert(chars.intersection(tokenChars).isEmpty)
-				chars.formUnion(tokenChars)
-			}
-			
-			if let e = escapeToken {processToken(e)}
-			
-			for w in (simpleSourceTypeReplacements + attributesModifications + simpleReturnTypeReplacements) {
-				processToken(w.leftToken)
-				if w.leftToken != w.rightToken {processToken(w.rightToken)}
-			}
-			
-			for w in (orderedReplacements + pluralGroups) {
-				processToken(w.leftToken)
-				processToken(w.interiorToken)
-				if w.leftToken != w.rightToken {processToken(w.rightToken)}
-			}
-		#endif
+	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, parsingInfo: XibLocParsingInfo, pluralityDefinitionsList: [PluralityDefinition?]) {
+		assert(pluralityDefinitionsList.count >= parsingInfo.pluralGroups.count)
 		
 		/* Let's build the replacements. Overlaps are allowed with the following rules:
 		 *    - The attributes modifications can overlap between themselves at will;
-		 *    - Replacements can be embedded in other replacements (internal ranges for multiple words tokens, default or other values ranges for dictionaries);
+		 *    - Replacements can be embedded in other replacements (internal ranges for multiple words tokens);
 		 *    - Replacements cannot overlap attributes modifications or replacements if one is not fully embedded in the other.
 		 * Note: Anything can be embedded in a simple replacement, but everything embedded in it will be dropped... (the content is replaced, by definition!) */
 		
 		func getOneWordRanges(tokens: [OneWordTokens], replacementTypeBuilder: (_ token: OneWordTokens) -> ReplacementValue, currentGroupId: inout Int, in output: inout [Replacement]) {
 			for sep in tokens {
 				var pos = stringSource.startIndex
-				while let r = ParsedXibLoc.rangeFrom(leftSeparator: sep.leftToken, rightSeparator: sep.rightToken, escapeToken: escapeToken, baseString: stringSource, currentPositionInString: &pos) {
+				while let r = ParsedXibLoc.rangeFrom(leftSeparator: sep.leftToken, rightSeparator: sep.rightToken, escapeToken: parsingInfo.escapeToken, baseString: stringSource, currentPositionInString: &pos) {
 					let replacementType = replacementTypeBuilder(sep)
 					let doUntokenization = replacementType.isAttributesModifiation /* See discussion below about token removal */
 					let contentRange = ParsedXibLoc.contentRange(from: r, in: stringSource, leftSep: sep.leftToken, rightSep: sep.rightToken)
@@ -100,7 +72,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		func getMultipleWordsRanges(tokens: [MultipleWordsTokens], replacementTypeBuilder: (_ token: MultipleWordsTokens, _ idx: Int, _ count: ReplacementValue.MutableCount) -> ReplacementValue, currentGroupId: inout Int, in output: inout [Replacement]) {
 			for sep in tokens {
 				var pos = stringSource.startIndex
-				while let r = ParsedXibLoc.rangeFrom(leftSeparator: sep.leftToken, rightSeparator: sep.rightToken, escapeToken: escapeToken, baseString: stringSource, currentPositionInString: &pos) {
+				while let r = ParsedXibLoc.rangeFrom(leftSeparator: sep.leftToken, rightSeparator: sep.rightToken, escapeToken: parsingInfo.escapeToken, baseString: stringSource, currentPositionInString: &pos) {
 					/* Let's get the internal ranges. */
 					let contentRange = ParsedXibLoc.contentRange(from: r, in: stringSource, leftSep: sep.leftToken, rightSep: sep.rightToken)
 					var startIndex = contentRange.lowerBound
@@ -108,7 +80,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 					let count = ReplacementValue.MutableCount(v: 1)
 					
 					var idx = 0
-					while let sepRange = ParsedXibLoc.range(of: sep.interiorToken, escapeToken: escapeToken, baseString: stringSource, in: startIndex..<endIndex) {
+					while let sepRange = ParsedXibLoc.range(of: sep.interiorToken, escapeToken: parsingInfo.escapeToken, baseString: stringSource, in: startIndex..<endIndex) {
 						let internalRange = startIndex..<sepRange.lowerBound
 						/* We set both removed left and right token distances to 0 (see discussion below about token removal) */
 						let replacement = Replacement(groupId: currentGroupId, range: internalRange, value: replacementTypeBuilder(sep, idx, count), removedLeftTokenDistance: 0/*idx == 0 ? sep.leftToken.count : 0*/, removedRightTokenDistance: 0/*sep.interiorToken.count*/, containerRange: r, children: [])
@@ -130,12 +102,11 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		var currentGroupId = 0
 		var replacementsBuilding = [Replacement]()
 		
-		getMultipleWordsRanges(tokens: orderedReplacements, replacementTypeBuilder: { .orderedReplacement($0, valueIndex: $1, numberOfValues: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		getMultipleWordsRanges(tokens: pluralGroups, replacementTypeBuilder: { .pluralGroup($0, zoneIndex: $1, numberOfZones: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		getOneWordRanges(tokens: simpleSourceTypeReplacements, replacementTypeBuilder: { .simpleSourceTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		getOneWordRanges(tokens: simpleReturnTypeReplacements, replacementTypeBuilder: { .simpleReturnTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
-		/* TODO: Parse the dictionary replacements. */
-		getOneWordRanges(tokens: attributesModifications, replacementTypeBuilder: { .attributesModification($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getMultipleWordsRanges(tokens: parsingInfo.orderedReplacements, replacementTypeBuilder: { .orderedReplacement($0, valueIndex: $1, numberOfValues: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getMultipleWordsRanges(tokens: parsingInfo.pluralGroups, replacementTypeBuilder: { .pluralGroup($0, zoneIndex: $1, numberOfZones: $2) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getOneWordRanges(tokens: parsingInfo.simpleSourceTypeReplacements, replacementTypeBuilder: { .simpleSourceTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getOneWordRanges(tokens: parsingInfo.simpleReturnTypeReplacements, replacementTypeBuilder: { .simpleReturnTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
+		getOneWordRanges(tokens: parsingInfo.attributesModifications, replacementTypeBuilder: { .attributesModification($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		
 		/* Let's remove the tokens we want gone from the source string. The escape
 		 * token is always removed. We only remove the left and right separator
@@ -149,7 +120,7 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		var untokenizedSourceBuilding = source
 		var untokenizedStringSourceBuilding = stringSource
-		ParsedXibLoc.remove(escapeToken: escapeToken, in: &replacementsBuilding, source: &untokenizedSourceBuilding, stringSource: &untokenizedStringSourceBuilding, parserHelper: parserHelper)
+		ParsedXibLoc.remove(escapeToken: parsingInfo.escapeToken, in: &replacementsBuilding, source: &untokenizedSourceBuilding, stringSource: &untokenizedStringSourceBuilding, parserHelper: parserHelper)
 		ParsedXibLoc.removeTokens(from: &replacementsBuilding, source: &untokenizedSourceBuilding, stringSource: &untokenizedStringSourceBuilding, parserHelper: parserHelper)
 //		print("***** RESULTS TIME *****")
 //		print("untokenized: \(untokenizedStringSourceBuilding)")
@@ -165,14 +136,14 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		/* Plurality definitions overrides */
 		var pluralityDefinitionsBuilding = [MultipleWordsTokens: PluralityDefinition]()
-		for (pluralityDefinition, pluralGroup) in zip(pluralityDefinitionsList, pluralGroups) {
+		for (pluralityDefinition, pluralGroup) in zip(pluralityDefinitionsList, parsingInfo.pluralGroups) {
 			guard let pluralityDefinition = pluralityDefinition else {continue}
 			pluralityDefinitionsBuilding[pluralGroup] = pluralityDefinition
 		}
 		pluralityDefinitions = pluralityDefinitionsBuilding
 	}
 	
-	func resolve<ReturnTypeHelper : ParserHelper>(xibLocResolvingInfo: XibLocResolvingInfo<SourceType, ReturnTypeHelper.ParsedType>, returnTypeHelperType: ReturnTypeHelper.Type) -> ReturnTypeHelper.ParsedType {
+	public func resolve<ReturnTypeHelper : ParserHelper>(xibLocResolvingInfo: XibLocResolvingInfo<SourceType, ReturnTypeHelper.ParsedType>, returnTypeHelperType: ReturnTypeHelper.Type) -> ReturnTypeHelper.ParsedType {
 		let replacementsIterator = ReplacementsIterator(refString: untokenizedStringSource, adjustedReplacements: replacements)
 		
 		var pluralGroupsDictionary = [MultipleWordsTokens: PluralValue]()
@@ -184,11 +155,10 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			guard case .simpleSourceTypeReplacement(let token) = replacement.value else {continue}
 			guard let newValueCreator = xibLocResolvingInfo.simpleSourceTypeReplacements[token] else {
 				#if canImport(os)
-					if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got token %{public}@ in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
-					else                                                          {NSLog("Got token %@ in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", String(describing: token))}
-				#else
-					NSLogString("Got token \(String(describing: token)) in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", log: di.log)
+				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+					XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 				#endif
+				XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo")
 				continue
 			}
 			
@@ -210,11 +180,10 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			case .attributesModification(let token):
 				guard let modifier = xibLocResolvingInfo.attributesModifications[token] else {
 					#if canImport(os)
-						if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got token %{public}@ in replacement tree for attributes modification, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
-						else                                                          {NSLog("Got token %@ in replacement tree for attributes modification, but no value given in xibLocResolvingInfo", String(describing: token))}
-					#else
-						NSLogString("Got token \(String(describing: token)) in replacement tree for attributes modification, but no value given in xibLocResolvingInfo", log: di.log)
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+						XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for attributes modification, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 					#endif
+					XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for attributes modification, but no value given in xibLocResolvingInfo")
 					continue
 				}
 				modifier(&result, replacement.range, replacementsIterator.refString)
@@ -224,11 +193,10 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			case .simpleReturnTypeReplacement(let token):
 				guard let newValueCreator = xibLocResolvingInfo.simpleReturnTypeReplacements[token] else {
 					#if canImport(os)
-						if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got token %{public}@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
-						else                                                          {NSLog("Got token %@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", String(describing: token))}
-					#else
-						NSLogString("Got token \(String(describing: token)) in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", log: di.log)
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+						XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 					#endif
+					XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo")
 					continue
 				}
 				
@@ -240,11 +208,10 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			case .orderedReplacement(let token, valueIndex: let valueIndex, numberOfValues: let numberOfValues):
 				guard let wantedValue = xibLocResolvingInfo.orderedReplacements[token] else {
 					#if canImport(os)
-						if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got token %{public}@ in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
-						else                                                          {NSLog("Got token %@ in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo", String(describing: token))}
-					#else
-						NSLogString("Got token \(String(describing: token)) in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo", log: di.log)
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+						XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 					#endif
+					XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo")
 					continue
 				}
 				guard valueIndex == wantedValue || (wantedValue >= numberOfValues.value && valueIndex == numberOfValues.value-1) else {continue}
@@ -257,11 +224,10 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			case .pluralGroup(let token, zoneIndex: let zoneIndex, numberOfZones: let numberOfZones):
 				guard let wantedValue = pluralGroupsDictionary[token] else {
 					#if canImport(os)
-						if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got token %{public}@ in replacement tree for plural replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
-						else                                                          {NSLog("Got token %@ in replacement tree for plural replacement, but no value given in xibLocResolvingInfo", String(describing: token))}
-					#else
-						NSLogString("Got token \(String(describing: token)) in replacement tree for plural replacement, but no value given in xibLocResolvingInfo", log: di.log)
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+						XibLocConfig.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for plural replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
 					#endif
+					XibLocConfig.logger?.warning("Got token \(String(describing: token)) in replacement tree for plural replacement, but no value given in xibLocResolvingInfo")
 					continue
 				}
 				let pluralityDefinition = pluralityDefinitions[token] ?? xibLocResolvingInfo.defaultPluralityDefinition
@@ -269,40 +235,6 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				assert(indexToUse <= numberOfZones.value)
 				
 				guard zoneIndex == indexToUse else {continue}
-				
-				let content = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
-				let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
-				replacementsIterator.delete(replacementGroup: replacement.groupId)
-				replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringContent)
-				
-			case .dictionaryReplacement(id: let id, key: let key, allKeys: let allKeys):
-				/* Note: The dictionary replacement has never been tested (parsing not implemented yet). */
-				guard let dictionaryReplacements = xibLocResolvingInfo.dictionaryReplacements else {
-					#if canImport(os)
-						if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got dictionary with id %{public}@ in replacement tree, but no dictionary replacements in xibLocResolvingInfo", log: $0, type: .info, id) }}
-						else                                                          {NSLog("Got dictionary with id %@ in replacement tree, but no dictionary replacements in xibLocResolvingInfo", id)}
-					#else
-						NSLogString("Got dictionary with id \(id) in replacement tree, but no dictionary replacements in xibLocResolvingInfo", log: di.log)
-					#endif
-					continue
-				}
-				guard let wantedKey = dictionaryReplacements[id] else {
-					/* Not an error to have a dictionary whose id is not in the dictionary replacements says the spec. Simply ignore this replacement group. */
-					replacementsIterator.delete(replacementGroup: replacement.groupId)
-					continue
-				}
-				let parsedDictionaryHasWantedKey = wantedKey.map{ allKeys.keys.contains($0) } ?? allKeys.hasDefaultValue
-				guard parsedDictionaryHasWantedKey || allKeys.hasDefaultValue else {
-					/* The key we want is not contained in the parsed dictionary, and
-					 * the dictionary does not have a default value. We can simply
-					 * remove the whole dictionary. */
-					returnTypeHelperType.remove(strRange: (replacement.containerRange, replacementsIterator.refString), from: &result)
-					replacementsIterator.delete(replacementGroup: replacement.groupId)
-					replacementsIterator.delete(rangeInText: replacement.containerRange)
-					continue
-				}
-				
-				guard wantedKey == key || (!parsedDictionaryHasWantedKey && key == nil) else {continue}
 				
 				let content = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
 				let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
@@ -326,20 +258,12 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			init(v: Int) {value = v}
 		}
 		
-		class MutableKeysList {
-			var keys: Set<String>
-			var hasDefaultValue: Bool
-			init() {keys = []; hasDefaultValue = false}
-		}
-		
 		case simpleSourceTypeReplacement(OneWordTokens)
 		case orderedReplacement(MultipleWordsTokens, valueIndex: Int, numberOfValues: MutableCount)
 		case pluralGroup(MultipleWordsTokens, zoneIndex: Int, numberOfZones: MutableCount)
 		
 		case attributesModification(OneWordTokens)
 		case simpleReturnTypeReplacement(OneWordTokens)
-		
-		case dictionaryReplacement(id: String, key: String?, allKeys: MutableKeysList)
 		
 		var isAttributesModifiation: Bool {
 			switch self {
@@ -725,11 +649,10 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		guard let pluralityEndIdx = stringSource.range(of: "||", options: [.literal], range: pluralityStringStartIdx..<stringSource.endIndex)?.lowerBound else {
 			/* Nope. It is not. */
 			#if canImport(os)
-				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Got invalid plurality override in string source \"%@\"", log: $0, type: .info, stringSource) }}
-				else                                                          {NSLog("Got invalid plurality override in string source \"%@\"", stringSource)}
-			#else
-				NSLogString("Got invalid plurality override in string source \"\(stringSource)\"", log: di.log)
+			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+				XibLocConfig.oslog.flatMap{ os_log("Got invalid plurality override in string source \"%@\"", log: $0, type: .info, stringSource) }}
 			#endif
+			XibLocConfig.logger?.warning("Got invalid plurality override in string source \"\(stringSource)\"")
 			return []
 		}
 		
@@ -760,11 +683,10 @@ struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		guard let rightSeparatorRange = range(of: rightSeparator, escapeToken: escapeToken, baseString: baseString, in: currentPositionInString..<baseString.endIndex) else {
 			/* Invalid string: The left token was found, but the right was not. */
 			#if canImport(os)
-				if #available(OSX 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {di.log.flatMap{ os_log("Invalid baseString “%@”: left token “%@” was found, but right one “%@” was not. Ignoring.", log: $0, type: .info, baseString, leftSeparator, rightSeparator) }}
-				else                                                          {NSLog("Invalid baseString “%@”: left token “%@” was found, but right one “%@” was not. Ignoring.", baseString, leftSeparator, rightSeparator)}
-			#else
-				NSLogString("Invalid baseString “\(baseString)”: left token “\(leftSeparator)” was found, but right one “\(rightSeparator)” was not. Ignoring.", log: di.log)
+			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+				XibLocConfig.oslog.flatMap{ os_log("Invalid baseString “%@”: left token “%@” was found, but right one “%@” was not. Ignoring.", log: $0, type: .info, baseString, leftSeparator, rightSeparator) }}
 			#endif
+			XibLocConfig.logger?.warning("Invalid baseString “\(baseString)”: left token “\(leftSeparator)” was found, but right one “\(rightSeparator)” was not. Ignoring.")
 			currentPositionInString = baseString.endIndex
 			return nil
 		}

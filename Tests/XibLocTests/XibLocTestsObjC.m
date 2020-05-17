@@ -60,9 +60,11 @@ static NSUInteger nRepeats = 150;
 		NSColor *baseColor = NSColor.blackColor;
 		NSFont *baseFont = [NSFont systemFontOfSize:12];
 		
+		NSError *error = nil;
 		NSMutableAttributedString *tested = [ObjCXibLoc objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPluralWithBase:@"   *Play CrushTime* and see if you can guess who Liked you!"
 																																								 baseFont:baseFont baseColor:baseColor
-																																							 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES];
+																																							 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES error:&error];
+		XCTAssertNil(error);
 		
 		NSMutableAttributedString *ref = [[NSMutableAttributedString alloc] initWithString:@"   Play CrushTime and see if you can guess who Liked you!" attributes:@{NSFontAttributeName: baseFont, NSForegroundColorAttributeName: baseColor}];
 		[ObjCXibLoc setBoldOrItalicIn:ref bold:1 italic:-1 range:NSMakeRange(3, 14)];
@@ -81,9 +83,11 @@ static NSUInteger nRepeats = 150;
 		NSColor *baseColor = NSColor.blackColor;
 		NSFont *baseFont = [NSFont systemFontOfSize:12];
 		
+		NSError *error = nil;
 		NSMutableAttributedString *tested = [ObjCXibLoc objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPluralWithBase:str
 																																								 baseFont:baseFont baseColor:baseColor
-																																							 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES];
+																																							 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES error:&error];
+		XCTAssertNil(error);
 		
 		NSString *resultStr = @"CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!";
 		NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:resultStr attributes:@{NSFontAttributeName: baseFont, NSForegroundColorAttributeName: baseColor}];
@@ -101,9 +105,11 @@ static NSUInteger nRepeats = 150;
 		NSColor *baseColor = NSColor.blackColor;
 		NSFont *baseFont = [NSFont systemFontOfSize:12];
 		
+		NSError *error = nil;
 		NSMutableAttributedString *tested = [ObjCXibLoc objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPluralWithBase:str
 																																								 baseFont:baseFont baseColor:baseColor
-																																							 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES];
+																																							 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES error:&error];
+		XCTAssertNil(error);
 		
 		NSString *resultStr = @"लें";
 		NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:resultStr attributes:@{NSFontAttributeName: baseFont, NSForegroundColorAttributeName: baseColor}];
@@ -121,7 +127,9 @@ static NSUInteger nRepeats = 150;
 		NSColor *baseColor = NSColor.blackColor;
 		NSFont *baseFont = [NSFont systemFontOfSize:12];
 		
-		NSMutableAttributedString *tested = [ObjCXibLoc objc_applyingXibLocTransformForCustomBoldWithBase:str baseFont:baseFont baseColor:baseColor boldToken:@"🧒🏻"];
+		NSError *error = nil;
+		NSMutableAttributedString *tested = [ObjCXibLoc objc_applyingXibLocTransformForCustomBoldWithBase:str baseFont:baseFont baseColor:baseColor boldToken:@"🧒🏻" error:&error];
+		XCTAssertNil(error);
 		
 		NSString *resultStr = @"👳🏿‍♀️";
 		NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:resultStr attributes:@{NSFontAttributeName: baseFont, NSForegroundColorAttributeName: baseColor}];
@@ -139,9 +147,11 @@ static NSUInteger nRepeats = 150;
 		NSColor *baseColor = NSColor.blackColor;
 		NSFont *baseFont = [NSFont systemFontOfSize:12];
 		
+		NSError *error = nil;
 		NSMutableAttributedString *tested = [ObjCXibLoc objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPluralWithBase:str
 																																								 baseFont:baseFont baseColor:baseColor
-																																							 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES];
+																																							 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES error:&error];
+		XCTAssertNil(error);
 		
 		NSString *resultStr = @"🧔🏻🧒🏻";
 		NSInteger start = @"🧔🏻".length;
@@ -160,9 +170,11 @@ static NSUInteger nRepeats = 150;
 		NSColor *baseColor = NSColor.blackColor;
 		NSFont *baseFont = [NSFont systemFontOfSize:12];
 		
+		NSError *error = nil;
 		NSMutableAttributedString *tested = [ObjCXibLoc objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPluralWithBase:str
 																																								 baseFont:baseFont baseColor:baseColor
-																																							 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES];
+																																							 replacement:@"" pluralValue:0 genderMeIsMale:YES genderOtherIsMale:YES error:&error];
+		XCTAssertNil(error);
 		
 		NSString *resultStr = @"🧔🏻a";
 		NSInteger start = @"🧔🏻".length;
