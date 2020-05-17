@@ -111,9 +111,10 @@ extension NSMutableAttributedString {
 		#endif
 	}
 	
-	/** - Warning: If no font is defined in the given range, the method will use
-	the preferred font for the “body” style (on iOS, watchOS and tvOS) or the
-	system font of “system” size. */
+	/**
+	- Warning: If no font is defined in the given range, the method will use the
+	preferred font for the “body” style (on iOS, watchOS and tvOS) or the system
+	font of “system” size. */
 	func setBoldOrItalic(bold: Bool?, italic: Bool?, range: NSRange? = nil) {
 		let range = range ?? NSRange(location: 0, length: length)
 		guard bold != nil || italic != nil else {return}

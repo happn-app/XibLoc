@@ -17,7 +17,8 @@ import Foundation
 
 
 
-/** Supported configurations & Required Constraints:
+/**
+Supported configurations & Required Constraints:
 - See `validateTokens` in `XibLocParsingInfo` private init for constraints on
 the tokens;
 - Supported overlaps:
@@ -83,8 +84,9 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		return XibLocParsingInfo(resolvingInfo: self)!
 	}
 	
-	/** Call this function at the end of any init of XibLocResolvingInfo, and
-	fail your init if the method returns false. */
+	/**
+	Call this function at the end of any init of XibLocResolvingInfo, and fail
+	your init if the method returns false. */
 	public mutating func initParsingInfo() -> Bool {
 		_parsingInfo = XibLocParsingInfo(resolvingInfo: self)
 		return _parsingInfo != nil

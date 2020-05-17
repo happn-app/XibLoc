@@ -17,8 +17,9 @@ import Foundation
 
 
 
-/** Defines a “plural value,” which is used when resolving a plurality
-definition, to choose the correct zone index to show.
+/**
+Defines a “plural value,” which is used when resolving a plurality definition,
+to choose the correct zone index to show.
 
 Resolving a plural requires to have much information about said plural.
 For instance, depending on the language, the plural can be different for the
@@ -234,7 +235,8 @@ public struct PluralValue {
 		)
 	}
 	
-	/** Init a PluralValue directly with its parts.
+	/**
+	Init a PluralValue directly with its parts.
 	
 	Init fails if either:
 	- The int or fraction part contains a non-numeric (base-10) character;

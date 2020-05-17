@@ -19,7 +19,8 @@ import Foundation
 
 extension RandomAccessCollection {
 	
-	/** Return a sorted collection with a stable sort algorithm.
+	/**
+	Return a sorted collection with a stable sort algorithm.
 	
 	Retrieved from [StackOverflow](https://stackoverflow.com/a/45585365/1152894)
 	

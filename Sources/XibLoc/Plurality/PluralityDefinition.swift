@@ -22,7 +22,8 @@ import Logging
 
 
 
-/** The Plurality definition defines which version of the "`<v1:v2:v3>`" plural
+/**
+The Plurality definition defines which version of the "`<v1:v2:v3>`" plural
 strings to use depending on the PluralValue it is given.
 
 Here are the rules that are used:
@@ -185,8 +186,9 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		zones = [PluralityDefinitionZone()]
 	}
 	
-	/* Parses the plurality string to create a plurality definition. The parsing
-	 * is forgiving: messages are printed in the logs if there are syntax errors. */
+	/** Parses the plurality string to create a plurality definition. The parsing
+	is forgiving: messages are printed in the logs if there are syntax errors,
+	but the init will not fail. */
 	public init(string: String) {
 		let scanner = Scanner(string: string)
 		scanner.charactersToBeSkipped = CharacterSet()

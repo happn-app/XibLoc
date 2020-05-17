@@ -303,8 +303,8 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 	}
 	
-	/** Contains the parsed replacements to apply when transforming the input
-	string.
+	/**
+	Contains the parsed replacements to apply when transforming the input string.
 	
 	The data structure is basically a graph whose root is hidden (the variable
 	contains all the children of the root directly). The children of a
@@ -570,7 +570,8 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		stringSource = iterator.refString
 	}
 	
-	/** Inserts the given replacement in the given array of replacements, if
+	/**
+	Inserts the given replacement in the given array of replacements, if
 	possible. If a valid insertion cannot be done, returns `false` (otherwise,
 	returns `true`).
 	

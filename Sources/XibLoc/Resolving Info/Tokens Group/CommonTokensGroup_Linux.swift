@@ -19,7 +19,8 @@ import Foundation
 
 #if !os(macOS) && !os(iOS) && !os(tvOS) && !os(watchOS)
 
-/** A default Tokens Group.
+/**
+A default Tokens Group.
 
 See doc of the non Linux variant for more info.
 
@@ -33,46 +34,46 @@ List of tokens:
 - Gender other: \` `¦` `´` */
 public struct CommonTokensGroup : TokensGroup {
 	
+	public static let escapeToken = "~"
 	public static let tokensExceptEscape = Set(arrayLiteral: "|", "^", "#", "<", ":", ">", "{", "₋", "}", "`", "¦", "´")
 	
 	/** Token is `|` */
 	public var simpleReplacement1: String?
 	/** Token is `^` */
 	public var simpleReplacement2: String?
-	/** See discussion for the tokens.
+	/**
+	Intentionally blank line (for Xcode formatting purposes).
 	
 	Tokens:
 	- For the number replacement: `#`
 	- For the plural value: `<` `:` `>` */
 	public var number: XibLocNumber?
 	
-	/** Tokens: `{` `₋` `}`
+	/**
+	Tokens: `{` `₋` `}`
+	
 	- Important: The dash is not a standard dash… */
 	public var genderMeIsMale: Bool?
-	/** Tokens: \` `¦` `´`
+	/**
+	Tokens: \` `¦` `´`
 	
 	(Xcode Formatting note: I did not find a way to specify the first token is
 	code (because it’s the same token as the token used to specify we have code
 	in Xcode comments). Doesn’t matter, it’s not really visible though.)*/
 	public var genderOtherIsMale: Bool?
 	
-	/** Defaults to `~` */
-	public var escapeToken: String?
-	
 	public init(
 		simpleReplacement1 r1: String? = nil,
 		simpleReplacement2 r2: String? = nil,
 		number n: XibLocNumber? = nil,
 		genderMeIsMale gm: Bool? = nil,
-		genderOtherIsMale go: Bool? = nil,
-		escapeToken e: String? = XibLocConfig.defaultEscapeToken
+		genderOtherIsMale go: Bool? = nil
 	) {
 		simpleReplacement1 = r1
 		simpleReplacement2 = r2
 		number = n
 		genderMeIsMale = gm
 		genderOtherIsMale = go
-		escapeToken = e
 	}
 	
 	public var str2StrXibLocInfo: Str2StrXibLocInfo {
@@ -95,7 +96,7 @@ public struct CommonTokensGroup : TokensGroup {
 		
 		return Str2StrXibLocInfo(
 			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
-			escapeToken: escapeToken,
+			escapeToken: CommonTokensGroup.escapeToken,
 			simpleSourceTypeReplacements: [:],
 			orderedReplacements: orderedReplacements,
 			pluralGroups: pluralGroups,
@@ -110,7 +111,8 @@ public struct CommonTokensGroup : TokensGroup {
 
 extension String {
 	
-	/** Apply a `CommonTokensGroup` on your string.
+	/**
+	Apply a `CommonTokensGroup` on your string.
 	
 	- parameter simpleReplacement1: Token is `|`
 	- parameter simpleReplacement2: Token is `^`
@@ -122,16 +124,14 @@ extension String {
 		simpleReplacement2: String? = nil,
 		number: XibLocNumber? = nil,
 		genderMeIsMale: Bool? = nil,
-		genderOtherIsMale: Bool? = nil,
-		escapeToken: String? = XibLocConfig.defaultEscapeToken
+		genderOtherIsMale: Bool? = nil
 	) -> String {
 		return applying(xibLocInfo: CommonTokensGroup(
 			simpleReplacement1: simpleReplacement1,
 			simpleReplacement2: simpleReplacement2,
 			number: number,
 			genderMeIsMale: genderMeIsMale,
-			genderOtherIsMale: genderOtherIsMale,
-			escapeToken: escapeToken
+			genderOtherIsMale: genderOtherIsMale
 		).str2StrXibLocInfo)
 	}
 	

@@ -17,7 +17,8 @@ import Foundation
 
 
 
-/** Contains a PluralValue to resolve a plurality, and the localized string
+/**
+Contains a PluralValue to resolve a plurality, and the localized string
 representation of said plural value.
 
 Interestingly, it is not possible to retrieve the original value of the number

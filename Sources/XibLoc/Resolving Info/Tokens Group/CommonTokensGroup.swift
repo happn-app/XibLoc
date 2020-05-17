@@ -19,7 +19,8 @@ import Foundation
 
 #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 
-/** A default Tokens Group.
+/**
+A default Tokens Group.
 
 This tokens group should be enough to process most, if not all of your
 translations.
@@ -73,31 +74,33 @@ variable for convenience, as well as a static method to escape all of the tokens
 in a string. */
 public struct CommonTokensGroup : TokensGroup {
 	
+	public static let escapeToken = "~"
 	public static let tokensExceptEscape = Set(arrayLiteral: "|", "^", "#", "<", ":", ">", "{", "₋", "}", "`", "¦", "´", "*", "_")
 	
 	/** Token is `|` */
 	public var simpleReplacement1: String?
 	/** Token is `^` */
 	public var simpleReplacement2: String?
-	/** See discussion for the tokens.
+	/**
+	Intentionally blank line (for Xcode formatting purposes).
 	
 	Tokens:
 	- For the number replacement: `#`
 	- For the plural value: `<` `:` `>` */
 	public var number: XibLocNumber?
 	
-	/** Tokens: `{` `₋` `}`
+	/**
+	Tokens: `{` `₋` `}`
+	
 	- Important: The dash is not a standard dash… */
 	public var genderMeIsMale: Bool?
-	/** Tokens: \` `¦` `´`
+	/**
+	Tokens: \` `¦` `´`
 	
 	(Xcode Formatting note: I did not find a way to specify the first token is
 	code (because it’s the same token as the token used to specify we have code
 	in Xcode comments). Doesn’t matter, it’s not really visible though.)*/
 	public var genderOtherIsMale: Bool?
-	
-	/** Defaults to `~` */
-	public var escapeToken: String?
 	
 	public var baseFont: XibLocFont?
 	public var baseColor: XibLocColor?
@@ -114,7 +117,6 @@ public struct CommonTokensGroup : TokensGroup {
 		number n: XibLocNumber? = nil,
 		genderMeIsMale gm: Bool? = nil,
 		genderOtherIsMale go: Bool? = nil,
-		escapeToken e: String? = XibLocConfig.defaultEscapeToken,
 		baseFont f: XibLocFont? = nil,
 		baseColor c: XibLocColor? = nil,
 		baseAttributes attrs: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes,
@@ -126,7 +128,6 @@ public struct CommonTokensGroup : TokensGroup {
 		number = n
 		genderMeIsMale = gm
 		genderOtherIsMale = go
-		escapeToken = e
 		
 		baseFont = f
 		baseColor = c
@@ -139,7 +140,7 @@ public struct CommonTokensGroup : TokensGroup {
 	public var str2StrXibLocInfo: Str2StrXibLocInfo {
 		return Str2StrXibLocInfo(
 			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
-			escapeToken: escapeToken,
+			escapeToken: CommonTokensGroup.escapeToken,
 			simpleSourceTypeReplacements: [:],
 			orderedReplacements: [
 				MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}"): genderMeIsMale.flatMap{ $0 ? 0 : 1 },
@@ -163,7 +164,7 @@ public struct CommonTokensGroup : TokensGroup {
 		
 		return Str2AttrStrXibLocInfo(
 			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
-			escapeToken: escapeToken,
+			escapeToken: CommonTokensGroup.escapeToken,
 			simpleSourceTypeReplacements: [
 				OneWordTokens(token: "|"): simpleReplacement1.flatMap{ r in { _ in r } },
 				OneWordTokens(token: "^"): simpleReplacement2.flatMap{ r in { _ in r } },
@@ -187,7 +188,8 @@ public struct CommonTokensGroup : TokensGroup {
 
 extension String {
 	
-	/** Apply a `CommonTokensGroup` on your string.
+	/**
+	Apply a `CommonTokensGroup` on your string.
 	
 	- parameter simpleReplacement1: Token is `|`
 	- parameter simpleReplacement2: Token is `^`
@@ -207,12 +209,12 @@ extension String {
 			simpleReplacement2: simpleReplacement2,
 			number: number,
 			genderMeIsMale: genderMeIsMale,
-			genderOtherIsMale: genderOtherIsMale,
-			escapeToken: escapeToken
+			genderOtherIsMale: genderOtherIsMale
 		).str2StrXibLocInfo)
 	}
 	
-	/** Apply a `CommonTokensGroup` on your string w/ attributed string result.
+	/**
+	Apply a `CommonTokensGroup` on your string w/ attributed string result.
 	
 	- parameter simpleReplacement1: Token is `|`
 	- parameter simpleReplacement2: Token is `^`
@@ -240,7 +242,6 @@ extension String {
 			number: number,
 			genderMeIsMale: genderMeIsMale,
 			genderOtherIsMale: genderOtherIsMale,
-			escapeToken: escapeToken,
 			baseFont: baseFont,
 			baseColor: baseColor,
 			baseAttributes: baseAttributes,

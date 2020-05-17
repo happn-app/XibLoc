@@ -54,9 +54,16 @@ class XibLocTests: XCTestCase {
 		super.tearDown()
 	}
 	
+	func testTokenGroupEscape() throws {
+		XCTAssertEqual(CommonTokensGroup.escape("a~|b`c"), "a~~~|b~`c")
+	}
+	
 	func testEscapedSimpleReplacement() throws {
 		for _ in 0..<nRepeats {
-			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
+			let info = try XibLocResolvingInfo<String, String>(
+				simpleSourceTypeReplacements: [OneWordTokens(token: "|"): { _ in "replacement" }],
+				identityReplacement: { $0 }
+			).get()
 			XCTAssertEqual(
 				#"the \|replaced\|"#.applying(xibLocInfo: info),
 				#"the |replaced|"#
@@ -66,7 +73,10 @@ class XibLocTests: XCTestCase {
 	
 	func testOneTokenEscapedSimpleReplacement() throws {
 		for _ in 0..<nRepeats {
-			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
+			let info = try XibLocResolvingInfo<String, String>(
+				simpleSourceTypeReplacements: [OneWordTokens(token: "|"): { _ in "replacement" }],
+				identityReplacement: { $0 }
+			).get()
 			XCTAssertEqual(
 				#"the |replaced\|"#.applying(xibLocInfo: info),
 				#"the |replaced|"#
@@ -76,7 +86,10 @@ class XibLocTests: XCTestCase {
 	
 	func testEscapeEscapingNothing() throws {
 		for _ in 0..<nRepeats {
-			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
+			let info = try XibLocResolvingInfo<String, String>(
+				simpleSourceTypeReplacements: [OneWordTokens(token: "|"): { _ in "replacement" }],
+				identityReplacement: { $0 }
+			).get()
 			XCTAssertEqual(
 				#"the\ |replaced|"#.applying(xibLocInfo: info),
 				#"the replacement"#
@@ -86,7 +99,7 @@ class XibLocTests: XCTestCase {
 	
 	func testNonEscapedButPrecededByEscapeTokenSimpleReplacement() throws {
 		for _ in 0..<nRepeats {
-			let info = CommonTokensGroup(simpleReplacement1: "replacement", escapeToken: "~").str2StrXibLocInfo
+			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
 			XCTAssertEqual(
 				#"the ~~|replaced|"#.applying(xibLocInfo: info),
 				#"the ~replacement"#

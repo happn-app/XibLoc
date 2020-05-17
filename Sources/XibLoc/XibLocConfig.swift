@@ -22,7 +22,8 @@ import Logging
 
 
 
-/** The global configuration for XibLoc.
+/**
+The global configuration for XibLoc.
 
 You can modify all of the variables in this struct to change the default
 behavior of XibLoc.
@@ -68,8 +69,9 @@ public struct XibLocConfig {
 		public static var defaultItalicAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setItalic])
 	#endif
 	
-	/** We give public access to the cache so you can customize it however you
-	like. However, you should not access objects in it or modify them.
+	/**
+	We give public access to the cache so you can customize it however you like.
+	However, you should not access objects in it or modify them.
 	
 	To disable the cache, set this property to `nil`.
 	

@@ -19,6 +19,7 @@ import Foundation
 
 public protocol TokensGroup {
 	
+	static var escapeToken: String {get}
 	static var tokensExceptEscape: Set<String> {get}
 	
 	var str2StrXibLocInfo: Str2StrXibLocInfo {get}
@@ -31,7 +32,7 @@ public protocol TokensGroup {
 
 extension TokensGroup {
 	
-	public static func escape(_ string: String, with escapeToken: String) -> String {
+	public static func escape(_ string: String) -> String {
 		assert(!tokensExceptEscape.contains(escapeToken))
 		return ([escapeToken] + Array(tokensExceptEscape)).reduce(string, { $0.replacingOccurrences(of: $1, with: escapeToken + $1) })
 	}
