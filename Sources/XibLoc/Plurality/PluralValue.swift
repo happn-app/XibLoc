@@ -202,7 +202,7 @@ public struct PluralValue {
 		 * The `%f` format work for floats and doubles. So as long as Swift does
 		 * not represent floats or doubles using `long double` internally, we will
 		 * be good passing them to String(format:). */
-		let stringValue = String(format: "%.*f", locale: nil, float, format.maxFractionDigits)
+		let stringValue = String(format: "%.*f", locale: nil, format.maxFractionDigits, float)
 		let components = stringValue.split(separator: ".", omittingEmptySubsequences: false)
 		assert(components.count == 2 || components.count == 1)
 		
