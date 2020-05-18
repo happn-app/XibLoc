@@ -60,6 +60,18 @@ public struct XibLocConfig {
 		return Logger(label: "com.happn.XibLoc")
 	}()
 	
+	public static var defaultNumberFormatterForInts: NumberFormatter = {
+		let f = NumberFormatter()
+		f.numberStyle = .none
+		return f
+	}()
+	
+	public static var defaultNumberFormatterForFloats: NumberFormatter = {
+		let f = NumberFormatter()
+		f.numberStyle = .decimal
+		return f
+	}()
+	
 	public static var defaultEscapeToken: String? = "~"
 	public static var defaultPluralityDefinition = PluralityDefinition()
 	

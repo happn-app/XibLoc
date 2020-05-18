@@ -26,22 +26,10 @@ from this struct (without parsing the string values available, which I would
 definitely do not recommend)! */
 public struct XibLocNumber {
 	
-	public static var defaultNumberFormatterInt: NumberFormatter = {
-		let f = NumberFormatter()
-		f.numberStyle = .none
-		return f
-	}()
-	
-	public static var defaultNumberFormatterFloat: NumberFormatter = {
-		let f = NumberFormatter()
-		f.numberStyle = .decimal
-		return f
-	}()
-	
 	public let localizedString: String
 	public let pluralValue: PluralValue
 	
-	public init(_ i: Int, formatter: NumberFormatter = XibLocNumber.defaultNumberFormatterInt) {
+	public init(_ i: Int, formatter: NumberFormatter = XibLocConfig.defaultNumberFormatterForInts) {
 		/* After looking at the code of the string(from:) function, it should
 		 * never return `nil` in our use case. To be extra thorough and not crash
 		 * in any circumstances, we do not force-unwrap but instead use the non-
@@ -50,7 +38,7 @@ public struct XibLocNumber {
 		pluralValue = PluralValue(int: i, format: PluralValue.NumberFormat(numberFormatter: formatter))
 	}
 	
-	public init(_ f: Float, formatter: NumberFormatter = XibLocNumber.defaultNumberFormatterFloat) {
+	public init(_ f: Float, formatter: NumberFormatter = XibLocConfig.defaultNumberFormatterForFloats) {
 		/* See comment in Int init for formatter comment, and in Float init of
 		 * PluralValue for %f comment. */
 		localizedString = formatter.string(from: NSNumber(value: f)) ?? String(format: "%f", locale: nil, f)
