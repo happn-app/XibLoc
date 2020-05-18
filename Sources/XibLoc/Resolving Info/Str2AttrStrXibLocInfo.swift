@@ -23,12 +23,20 @@ public typealias Str2AttrStrXibLocInfo = XibLocResolvingInfo<String, NSMutableAt
 
 extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutableAttributedString {
 	
+	/**
+	Convenience init for an Str2AttrStrXibLocInfo.
+	
+	Takes an str2str xib loc info and convert it to an str2attrstr xib loc info
+	with no additional tokens. */
 	public init(strResolvingInfo: Str2StrXibLocInfo, defaultAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes) {
 		defaultPluralityDefinition = strResolvingInfo.defaultPluralityDefinition
 		escapeToken = strResolvingInfo.escapeToken
 		pluralGroups = strResolvingInfo.pluralGroups
 		orderedReplacements = strResolvingInfo.orderedReplacements
-		simpleSourceTypeReplacements = strResolvingInfo.simpleReturnTypeReplacements
+		
+		simpleSourceTypeReplacements = strResolvingInfo.simpleSourceTypeReplacements.merging(strResolvingInfo.simpleReturnTypeReplacements, uniquingKeysWith: { _, _ in
+			fatalError("The given str2str xib loc info was not valid: it had source and return type replacements which had the same tokens!")
+		})
 		
 		attributesModifications = [:]
 		simpleReturnTypeReplacements = [:]
