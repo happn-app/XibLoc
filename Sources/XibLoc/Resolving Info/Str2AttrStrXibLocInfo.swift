@@ -29,25 +29,20 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 	Takes an str2str xib loc info and convert it to an str2attrstr xib loc info
 	with no additional tokens. */
 	public init(strResolvingInfo: Str2StrXibLocInfo, defaultAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes) {
-		defaultPluralityDefinition = strResolvingInfo.defaultPluralityDefinition
-		escapeToken = strResolvingInfo.escapeToken
-		pluralGroups = strResolvingInfo.pluralGroups
-		orderedReplacements = strResolvingInfo.orderedReplacements
-		
-		simpleSourceTypeReplacements = strResolvingInfo.simpleSourceTypeReplacements.merging(strResolvingInfo.simpleReturnTypeReplacements, uniquingKeysWith: { _, _ in
+		let simpleSourceTypeReplacements = strResolvingInfo.simpleSourceTypeReplacements.merging(strResolvingInfo.simpleReturnTypeReplacements, uniquingKeysWith: { _, _ in
 			fatalError("The given str2str xib loc info was not valid: it had source and return type replacements which had the same tokens!")
 		})
 		
-		attributesModifications = [:]
-		simpleReturnTypeReplacements = [:]
-		
-		identityReplacement = { NSMutableAttributedString(string: $0, attributes: defaultAttributes) }
-		
-		/* We must call initParsingInfo(). In theory we should check it returns
-		 * true and fail the init if it does not. However, because we’re initing
-		 * ourselves from a valid loc info and do not add new tokens, we _know_
-		 * the tokens are valid and the method call will succeed. */
-		_ = initParsingInfo()
+		/* We’re initing ourselves from a valid loc info and do not add new
+		 * tokens: we _know_ the tokens are valid and the init will succeed. */
+		self.init(
+			defaultPluralityDefinition: strResolvingInfo.defaultPluralityDefinition, escapeToken: strResolvingInfo.escapeToken,
+			simpleSourceTypeReplacements: simpleSourceTypeReplacements,
+			orderedReplacements: strResolvingInfo.orderedReplacements,
+			pluralGroups: strResolvingInfo.pluralGroups,
+			attributesModifications: [:], simpleReturnTypeReplacements: [:],
+			identityReplacement: { NSMutableAttributedString(string: $0, attributes: defaultAttributes) }
+		)!
 	}
 	
 }

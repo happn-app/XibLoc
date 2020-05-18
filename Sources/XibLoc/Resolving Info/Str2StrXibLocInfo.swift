@@ -21,6 +21,10 @@ public typealias Str2StrXibLocInfo = XibLocResolvingInfo<String, String>
 
 extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 	
+	public init() {
+		self.init(identityReplacement: { $0 })!
+	}
+	
 	/**
 	Convenience init for an Str2StrXibLocInfo.
 	
@@ -31,11 +35,6 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 	All the keys in the dictionaries must represent the short form of the one
 	word or multiple words tokens they represent. */
 	public init?(replacements: [String: String] = [:], plurals: [(valueTokens: String, pluralTokens: String, value: XibLocNumber)] = [], orderedReplacements or: [String: Int] = [:], escapeToken e: String? = XibLocConfig.defaultEscapeToken, defaultPluralityDefinition dpd: PluralityDefinition = XibLocConfig.defaultPluralityDefinition) {
-		defaultPluralityDefinition = dpd
-		escapeToken = e
-		attributesModifications = [:]
-		simpleSourceTypeReplacements = [:]
-		
 		var orderedReplacementsBuilding = [MultipleWordsTokens: Int]()
 		var pluralGroupsBuilding = [(MultipleWordsTokens, PluralValue)]()
 		var simpleReturnTypeReplacementsBuilding = [OneWordTokens: (String) -> String]()
@@ -64,16 +63,15 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 			orderedReplacementsBuilding[token] = v
 		}
 		
-		pluralGroups = pluralGroupsBuilding
-		orderedReplacements = orderedReplacementsBuilding
-		simpleReturnTypeReplacements = simpleReturnTypeReplacementsBuilding
-		
-		identityReplacement = { $0 }
-		
-		/* Mandatory. See definition of parsingInfo var for explanation of this. */
-		guard initParsingInfo() else {
-			return nil
-		}
+		self.init(
+			defaultPluralityDefinition: dpd, escapeToken: e,
+			simpleSourceTypeReplacements: [:],
+			orderedReplacements: orderedReplacementsBuilding,
+			pluralGroups: pluralGroupsBuilding,
+			attributesModifications: [:],
+			simpleReturnTypeReplacements: simpleReturnTypeReplacementsBuilding,
+			identityReplacement: { $0 }
+		)
 	}
 	
 }

@@ -12,6 +12,7 @@
 		7B266297214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */; };
 		7B353B832017DA6D004D3540 /* Str2StrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */; };
 		7B3C11D6246AF72700F86C18 /* CacheLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3C11D5246AF72700F86C18 /* CacheLock.swift */; };
+		7B4487A924726F0200B6DB7B /* XibLocResolvingInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4487A824726F0200B6DB7B /* XibLocResolvingInfoTests.swift */; };
 		7B5BF7B82084E0EF006AAB6A /* XibLocNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */; };
 		7B5BF7C22084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */; };
 		7B66FA922467485D005EAB92 /* XibLocParsingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */; };
@@ -65,6 +66,7 @@
 		7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Scanner+LinuxCompat.swift"; sourceTree = "<group>"; };
 		7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Str2StrXibLocInfo.swift; sourceTree = "<group>"; };
 		7B3C11D5246AF72700F86C18 /* CacheLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheLock.swift; sourceTree = "<group>"; };
+		7B4487A824726F0200B6DB7B /* XibLocResolvingInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocResolvingInfoTests.swift; sourceTree = "<group>"; };
 		7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocNumber.swift; sourceTree = "<group>"; };
 		7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Str2AttrStrXibLocInfo.swift; sourceTree = "<group>"; };
 		7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocParsingInfo.swift; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 			children = (
 				7BF533662240526A00A141BB /* Helpers */,
 				7B8B339E24659ED700690AD7 /* PluralityTests.swift */,
+				7B4487A824726F0200B6DB7B /* XibLocResolvingInfoTests.swift */,
 				7BF53364224050F300A141BB /* XibLocTestsObjC.m */,
 				7BCBB15D2016354F008A3FC0 /* XibLocTestsSwift.swift */,
 			);
@@ -437,6 +440,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B4487A924726F0200B6DB7B /* XibLocResolvingInfoTests.swift in Sources */,
 				7B8B339F24659ED700690AD7 /* PluralityTests.swift in Sources */,
 				7BF53368224052C800A141BB /* XibLoc4ObjCHelper.swift in Sources */,
 				7B8B33A42466BAA600690AD7 /* Optional+Utils.swift in Sources */,
