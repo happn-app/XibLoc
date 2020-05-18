@@ -96,7 +96,7 @@ public struct CommonTokensGroup : TokensGroup {
 		
 		return Str2StrXibLocInfo(
 			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
-			escapeToken: CommonTokensGroup.escapeToken,
+			escapeToken: Self.escapeToken,
 			simpleSourceTypeReplacements: [:],
 			orderedReplacements: orderedReplacements,
 			pluralGroups: pluralGroups,

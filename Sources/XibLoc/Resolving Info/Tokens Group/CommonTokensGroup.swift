@@ -140,7 +140,7 @@ public struct CommonTokensGroup : TokensGroup {
 	public var str2StrXibLocInfo: Str2StrXibLocInfo {
 		return Str2StrXibLocInfo(
 			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
-			escapeToken: CommonTokensGroup.escapeToken,
+			escapeToken: Self.escapeToken,
 			simpleSourceTypeReplacements: [:],
 			orderedReplacements: [
 				MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}"): genderMeIsMale.flatMap{ $0 ? 0 : 1 },
@@ -164,7 +164,7 @@ public struct CommonTokensGroup : TokensGroup {
 		
 		return Str2AttrStrXibLocInfo(
 			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
-			escapeToken: CommonTokensGroup.escapeToken,
+			escapeToken: Self.escapeToken,
 			simpleSourceTypeReplacements: [
 				OneWordTokens(token: "|"): simpleReplacement1.flatMap{ r in { _ in r } },
 				OneWordTokens(token: "^"): simpleReplacement2.flatMap{ r in { _ in r } },
