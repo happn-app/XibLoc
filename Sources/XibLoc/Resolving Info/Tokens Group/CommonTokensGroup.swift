@@ -201,8 +201,7 @@ extension String {
 		simpleReplacement2: String? = nil,
 		number: XibLocNumber? = nil,
 		genderMeIsMale: Bool? = nil,
-		genderOtherIsMale: Bool? = nil,
-		escapeToken: String? = XibLocConfig.defaultEscapeToken
+		genderOtherIsMale: Bool? = nil
 	) -> String {
 		return applying(xibLocInfo: CommonTokensGroup(
 			simpleReplacement1: simpleReplacement1,
@@ -229,7 +228,6 @@ extension String {
 		number: XibLocNumber? = nil,
 		genderMeIsMale: Bool? = nil,
 		genderOtherIsMale: Bool? = nil,
-		escapeToken: String? = XibLocConfig.defaultEscapeToken,
 		baseFont: XibLocFont? = nil,
 		baseColor: XibLocColor? = nil,
 		baseAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes,
