@@ -57,13 +57,13 @@ class XibLocResolvingInfoTests: XCTestCase {
 	}
 	
 	func testRemovingTokens() throws {
-		var info = CommonTokensGroup(simpleReplacement1: "yo1", simpleReplacement2: "yo2", number: XibLocNumber(42)).str2AttrStrXibLocInfo
+		var info = CommonTokensGroup(simpleReplacement1: "yo1", simpleReplacement2: "yo2", number: XibLocNumber(42)).str2StrXibLocInfo
 		
-		XCTAssertEqual(info.simpleSourceTypeReplacements.count, 3)
+		XCTAssertEqual(info.simpleReturnTypeReplacements.count, 3)
 		XCTAssertTrue(info.removeTokens(OneWordTokens(token: "#")))
-		XCTAssertEqual(info.simpleSourceTypeReplacements.count, 2)
+		XCTAssertEqual(info.simpleReturnTypeReplacements.count, 2)
 		XCTAssertFalse(info.removeTokens(OneWordTokens(token: "#")))
-		XCTAssertEqual(info.simpleSourceTypeReplacements.count, 2)
+		XCTAssertEqual(info.simpleReturnTypeReplacements.count, 2)
 
 		XCTAssertEqual(info.pluralGroups.count, 1)
 		XCTAssertTrue(info.removeTokens(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">")))
