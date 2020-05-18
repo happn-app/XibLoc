@@ -30,18 +30,12 @@ public struct XibLocNumber {
 	public let pluralValue: PluralValue
 	
 	public init(_ i: Int, formatter: NumberFormatter = XibLocConfig.defaultNumberFormatterForInts) {
-		/* After looking at the code of the string(from:) function, it should
-		 * never return `nil` in our use case. To be extra thorough and not crash
-		 * in any circumstances, we do not force-unwrap but instead use the non-
-		 * localized string version of the int in case the formatter returns nil. */
-		localizedString = formatter.string(from: NSNumber(value: i)) ?? String(i)
+		localizedString = formatter.xl_string(from: NSNumber(value: i))
 		pluralValue = PluralValue(int: i, format: PluralValue.NumberFormat(numberFormatter: formatter))
 	}
 	
 	public init(_ f: Float, formatter: NumberFormatter = XibLocConfig.defaultNumberFormatterForFloats) {
-		/* See comment in Int init for formatter comment, and in Float init of
-		 * PluralValue for %f comment. */
-		localizedString = formatter.string(from: NSNumber(value: f)) ?? String(format: "%f", locale: nil, f)
+		localizedString = formatter.xl_string(from: NSNumber(value: f))
 		pluralValue = PluralValue(float: f, format: PluralValue.NumberFormat(numberFormatter: formatter))
 	}
 	
