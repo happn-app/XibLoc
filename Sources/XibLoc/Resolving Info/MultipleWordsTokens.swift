@@ -33,4 +33,19 @@ public struct MultipleWordsTokens : Hashable {
 		rightToken = rt
 	}
 	
+	/**
+	A convenience init for multiple words tokens with a one-char left, right and
+	interior tokens.
+	
+	The short tokens form is a concatenation of the left, interior and right
+	tokens. The count of a short tokens form is thus always 3.
+	
+	Examples:
+	- Left and right token: “`|`”, Interior token: “`:`” -> Short tokens form: “`|:|`”
+	- Left token: “`<`”, Interior token: “`:`”, Right token: “`>`” -> Short tokens form: “`<:>`” */
+	public init?(shortTokensForm string: String) {
+		guard string.count == 3 else {return nil}
+		self.init(leftToken: String(string.first!), interiorToken: String(string.dropFirst().first!), rightToken: String(string.dropFirst(2).first!))
+	}
+	
 }

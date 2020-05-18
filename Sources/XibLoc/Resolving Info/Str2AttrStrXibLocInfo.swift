@@ -23,66 +23,23 @@ public typealias Str2AttrStrXibLocInfo = XibLocResolvingInfo<String, NSMutableAt
 
 extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutableAttributedString {
 	
-	public enum BoldOrItalicType {
-		
-		case `default`
-		case custom(XibLocFont)
-		
-	}
-	
-	@available(*, deprecated, message: "Use the new Str2AttrStrXibLocInfo init methods")
-	public init?(strResolvingInfo: Str2StrXibLocInfo, boldType: BoldOrItalicType? = nil, italicType: BoldOrItalicType? = nil, links: [OneWordTokens: URL]? = nil, baseFont: XibLocFont?, baseColor: XibLocColor?, returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes) {
-		var defaultAttributesBuilding = defaultAttributes ?? [:]
-		if let f = baseFont  {defaultAttributesBuilding[.font] = f}
-		if let c = baseColor {defaultAttributesBuilding[.foregroundColor] = c}
-		
-		var attributesReplacementsBuilding = [OneWordTokens: StringAttributesChangesDescription]()
-		switch boldType {
-		case .default?:          attributesReplacementsBuilding[OneWordTokens(token: "*")] = StringAttributesChangesDescription(changes: [.setBold])
-		case .custom(let font)?: attributesReplacementsBuilding[OneWordTokens(token: "*")] = StringAttributesChangesDescription(changes: [.changeFont(newFont: font, preserveSizes: true, preserveBold: false, preserveItalic: true)])
-		default: (/*nop*/)
-		}
-		switch italicType {
-		case .default?:          attributesReplacementsBuilding[OneWordTokens(token: "_")] = StringAttributesChangesDescription(changes: [.setItalic])
-		case .custom(let font)?: attributesReplacementsBuilding[OneWordTokens(token: "_")] = StringAttributesChangesDescription(changes: [.changeFont(newFont: font, preserveSizes: true, preserveBold: true, preserveItalic: false)])
-		default: (/*nop*/)
-		}
-		if let links = links {
-			for (token, url) in links {
-				attributesReplacementsBuilding[token] = StringAttributesChangesDescription(changes: [.addLink(url)])
-			}
-		}
-		
-		self.init(strResolvingInfo: strResolvingInfo, attributesReplacements: attributesReplacementsBuilding, returnTypeReplacements: returnTypeReplacements, defaultAttributes: defaultAttributesBuilding)
-	}
-	
-	/** Inits the Str2AttrStrXibLocInfo, copying the string resolving info from
-	`strResolvingInfo`. `simpleSourceTypeReplacements` is ignored from the string
-	resolving info. */
-	@available(*, deprecated, message: "Use the new Str2AttrStrXibLocInfo init methods")
-	public init?(strResolvingInfo: Str2StrXibLocInfo, attributesReplacements: [OneWordTokens: StringAttributesChangesDescription], returnTypeReplacements: [OneWordTokens: (_ originalValue: NSMutableAttributedString) -> NSMutableAttributedString]? = nil, defaultAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes) {
+	public init(strResolvingInfo: Str2StrXibLocInfo, defaultAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes) {
 		defaultPluralityDefinition = strResolvingInfo.defaultPluralityDefinition
 		escapeToken = strResolvingInfo.escapeToken
 		pluralGroups = strResolvingInfo.pluralGroups
 		orderedReplacements = strResolvingInfo.orderedReplacements
 		simpleSourceTypeReplacements = strResolvingInfo.simpleReturnTypeReplacements
 		
-		var attributesModificationsBuilding = Dictionary<OneWordTokens, (_ modified: inout NSMutableAttributedString, _ strRange: Range<String.Index>, _ refStr: String) -> Void>()
-		for (t, c) in attributesReplacements {
-			attributesModificationsBuilding[t] = { attrStr, strRange, refStr in
-				assert(refStr == attrStr.string)
-				c.apply(to: attrStr, range: NSRange(strRange, in: refStr))
-			}
-		}
-		attributesModifications = attributesModificationsBuilding
+		attributesModifications = [:]
+		simpleReturnTypeReplacements = [:]
 		
-		simpleReturnTypeReplacements = returnTypeReplacements ?? [:]
 		identityReplacement = { NSMutableAttributedString(string: $0, attributes: defaultAttributes) }
 		
-		/* See definition of parsingInfo var for explanation of this. */
-		guard initParsingInfo() else {
-			return nil
-		}
+		/* We must call initParsingInfo(). In theory we should check it returns
+		 * true and fail the init if it does not. However, because we’re initing
+		 * ourselves from a valid loc info and do not add new tokens, we _know_
+		 * the tokens are valid and the method call will succeed. */
+		_ = initParsingInfo()
 	}
 	
 }

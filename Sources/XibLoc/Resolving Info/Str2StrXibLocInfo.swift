@@ -21,46 +21,56 @@ public typealias Str2StrXibLocInfo = XibLocResolvingInfo<String, String>
 
 extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 	
-	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
-	public init(simpleReplacementWithToken token: String, value: String, escapeToken e: String? = XibLocConfig.defaultEscapeToken) {
-		self.init(replacements: [token: value], escapeToken: e)!
-	}
+	/**
+	Convenience init for an Str2StrXibLocInfo.
 	
-	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
-	public init(pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = XibLocConfig.defaultEscapeToken) {
-		self.init(replacements: [:], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)!
-	}
+	Usually you should get a XibLocInfo from a tokens group. In case you have a
+	translation that does not fit within a tokens group, you can use this
+	convenience to create the info you need easily.
 	
-	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
-	public init(replacement: String, pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = XibLocConfig.defaultEscapeToken) {
-		self.init(replacements: ["|": replacement], pluralValue: pluralValue, genderMeIsMale: isMeMale, genderOtherIsMale: isOtherMale, escapeToken: e)!
-	}
-	
-	@available(*, deprecated, message: "Use the new Str2StrXibLocInfo init methods")
-	public init?(replacements: [String: String], pluralValue: XibLocNumber? = nil, genderMeIsMale isMeMale: Bool? = nil, genderOtherIsMale isOtherMale: Bool? = nil, escapeToken e: String? = XibLocConfig.defaultEscapeToken) {
-		defaultPluralityDefinition = XibLocConfig.defaultPluralityDefinition
+	All the keys in the dictionaries must represent the short form of the one
+	word or multiple words tokens they represent. */
+	public init?(replacements: [String: String] = [:], plurals: [(valueTokens: String, pluralTokens: String, value: XibLocNumber)] = [], orderedReplacements or: [String: Int] = [:], escapeToken e: String? = XibLocConfig.defaultEscapeToken, defaultPluralityDefinition dpd: PluralityDefinition = XibLocConfig.defaultPluralityDefinition) {
+		defaultPluralityDefinition = dpd
 		escapeToken = e
 		attributesModifications = [:]
 		simpleSourceTypeReplacements = [:]
 		
+		var orderedReplacementsBuilding = [MultipleWordsTokens: Int]()
+		var pluralGroupsBuilding = [(MultipleWordsTokens, PluralValue)]()
 		var simpleReturnTypeReplacementsBuilding = [OneWordTokens: (String) -> String]()
-		for (t, v) in replacements {simpleReturnTypeReplacementsBuilding[OneWordTokens(token: t)] = { _ in v }}
-		if let xibLocNumber = pluralValue {
-			simpleReturnTypeReplacementsBuilding[OneWordTokens(token: "#")] = { _ in xibLocNumber.localizedString }
-			pluralGroups = [(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), xibLocNumber.pluralValue)]
-		} else {
-			pluralGroups = []
+		
+		for (tokenStr, v) in replacements {
+			guard let token = OneWordTokens(shortTokensForm: tokenStr), simpleReturnTypeReplacementsBuilding[token] == nil else {
+				return nil
+			}
+			simpleReturnTypeReplacementsBuilding[token] = { _ in v }
+		}
+		for (valueTokensStr, pluralTokensStr, value) in plurals {
+			guard let valueTokens = OneWordTokens(shortTokensForm: valueTokensStr), simpleReturnTypeReplacementsBuilding[valueTokens] == nil else {
+				return nil
+			}
+			simpleReturnTypeReplacementsBuilding[valueTokens] = { _ in value.localizedString }
+			
+			guard let pluralTokens = MultipleWordsTokens(shortTokensForm: pluralTokensStr) else {
+				return nil
+			}
+			pluralGroupsBuilding.append((pluralTokens, value.pluralValue))
+		}
+		for (tokenStr, v) in or {
+			guard let token = MultipleWordsTokens(shortTokensForm: tokenStr), orderedReplacementsBuilding[token] == nil else {
+				return nil
+			}
+			orderedReplacementsBuilding[token] = v
 		}
 		
-		var orderedReplacementsBuilding = [MultipleWordsTokens: Int]()
-		if let isMeMale = isMeMale       {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}")] = isMeMale ? 0 : 1}
-		if let isOtherMale = isOtherMale {orderedReplacementsBuilding[MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´")] = isOtherMale ? 0 : 1}
+		pluralGroups = pluralGroupsBuilding
 		orderedReplacements = orderedReplacementsBuilding
-		
 		simpleReturnTypeReplacements = simpleReturnTypeReplacementsBuilding
+		
 		identityReplacement = { $0 }
 		
-		/* See definition of parsingInfo var for explanation of this. */
+		/* Mandatory. See definition of parsingInfo var for explanation of this. */
 		guard initParsingInfo() else {
 			return nil
 		}
