@@ -193,16 +193,20 @@ public struct PluralValue {
 	}
 	
 	public init(float: Float, format: NumberFormat) {
+		self.init(double: Double(float), format: format)
+	}
+	
+	public init(double: Double, format: NumberFormat) {
 		/* Doc of `NSString` for init with format and locale says if we specify a
 		 * `nil` locale, we get the system locale. The system locale, says the
 		 * doc, is the locale to use when we don’t want any localizations, which
 		 * is exactly what we want!
-		 * The format `%.*f` will take the float it is given and output exactly
+		 * The format `%.*f` will take the double it is given and output exactly
 		 * the given number fraction digits.
 		 * The `%f` format work for floats and doubles. So as long as Swift does
 		 * not represent floats or doubles using `long double` internally, we will
 		 * be good passing them to String(format:). */
-		let stringValue = String(format: "%.*f", locale: nil, format.maxFractionDigits, float)
+		let stringValue = String(format: "%.*f", locale: nil, format.maxFractionDigits, double)
 		let components = stringValue.split(separator: ".", omittingEmptySubsequences: false)
 		assert(components.count == 2 || components.count == 1)
 		

@@ -39,6 +39,11 @@ public struct XibLocNumber {
 		pluralValue = PluralValue(float: f, format: PluralValue.NumberFormat(numberFormatter: formatter))
 	}
 	
+	public init(_ d: Double, formatter: NumberFormatter = XibLocConfig.defaultNumberFormatterForFloats) {
+		localizedString = formatter.xl_string(from: NSNumber(value: d))
+		pluralValue = PluralValue(double: d, format: PluralValue.NumberFormat(numberFormatter: formatter))
+	}
+	
 	public init(localizedString str: String, pluralValue v: PluralValue) {
 		localizedString = str
 		pluralValue = v
