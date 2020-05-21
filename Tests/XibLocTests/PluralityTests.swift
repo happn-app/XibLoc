@@ -32,6 +32,7 @@ class PluralityTests: XCTestCase {
 		XCTAssertNil(PluralValue(intPart: "", fractionPart: ""))
 		XCTAssertNil(PluralValue(intPart: "1.", fractionPart: ""))
 		XCTAssertNil(PluralValue(intPart: "01", fractionPart: ""))
+		XCTAssertEqual(PluralValue(string: "0")?.fullStringValue, "0")
 	}
 	
 	func testPluralValueDecimalSeparator() {
@@ -39,6 +40,14 @@ class PluralityTests: XCTestCase {
 		XCTAssertEqual(PluralValue(intPart: "0", fractionPart: "")?.fullStringValue, "0.")
 		XCTAssertEqual(PluralValue(intPart: "0", fractionPart: "0")?.fullStringValue, "0.0")
 		XCTAssertEqual(PluralValue(intPart: "0", fractionPart: "0")?.fractionPartNoTrailingZeros, "")
+		XCTAssertEqual(PluralValue(string: "0.0")?.fullStringValue, "0.0")
+		XCTAssertEqual(PluralValue(string: "0.")?.fullStringValue, "0.")
+		XCTAssertEqual(PluralValue(double: 0, format: PluralValue.NumberFormat(minFractionDigits: 0, maxFractionDigits: 0, forceDecimalSeparator: true, zeroIsNegative: false)).fullStringValue, "0.")
+		XCTAssertEqual(PluralValue(double: 0, format: PluralValue.NumberFormat(minFractionDigits: 0, maxFractionDigits: 42, forceDecimalSeparator: true, zeroIsNegative: false)).fullStringValue, "0.")
+		XCTAssertEqual(PluralValue(double: 0, format: PluralValue.NumberFormat(minFractionDigits: 0, maxFractionDigits: 42, forceDecimalSeparator: false, zeroIsNegative: false)).fullStringValue, "0")
+		XCTAssertEqual(PluralValue(double: 0.1, format: PluralValue.NumberFormat(minFractionDigits: 0, maxFractionDigits: 0, forceDecimalSeparator: true, zeroIsNegative: false)).fullStringValue, "0.")
+		XCTAssertEqual(PluralValue(double: 0.7, format: PluralValue.NumberFormat(minFractionDigits: 0, maxFractionDigits: 0, forceDecimalSeparator: true, zeroIsNegative: false)).fullStringValue, "1.")
+		XCTAssertEqual(PluralValue(double: 0.7, format: PluralValue.NumberFormat(minFractionDigits: 0, maxFractionDigits: 1, forceDecimalSeparator: true, zeroIsNegative: false)).fullStringValue, "0.7")
 		XCTAssertNil(PluralValue(intPart: "0", fractionPart: nil)?.fractionPartNoTrailingZeros)
 		XCTAssertEqual(
 			PluralValue(float: 0, format: PluralValue.NumberFormat(minFractionDigits: 1, maxFractionDigits: 2)).fullStringValue,
