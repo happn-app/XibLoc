@@ -29,6 +29,7 @@
 		7B8BD02320026E8C009BE667 /* XibLoc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B8BD01A20026E8C009BE667 /* XibLoc.framework */; };
 		7BC4590C20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
 		7BC4591120B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
+		7BC649752476A47300C848FD /* Collection+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC649742476A47300C848FD /* Collection+Utils.swift */; };
 		7BCBB124201634E4008A3FC0 /* ParsedXibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */; };
 		7BCBB128201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */; };
 		7BCBB12C201634E4008A3FC0 /* ParserHelper+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */; };
@@ -87,6 +88,7 @@
 		7B8BD02920026E8C009BE667 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringAttributesChangesDescription.swift; sourceTree = "<group>"; };
 		7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Utils.swift"; sourceTree = "<group>"; };
+		7BC649742476A47300C848FD /* Collection+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Utils.swift"; sourceTree = "<group>"; };
 		7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParsedXibLoc.swift; sourceTree = "<group>"; };
 		7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParserHelper+NSMutableAttributedString.swift"; sourceTree = "<group>"; };
 		7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParserHelper+String.swift"; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */,
 				7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */,
 				7B4487AB2472F39F00B6DB7B /* NumberFormatter+Utils.swift */,
+				7BC649742476A47300C848FD /* Collection+Utils.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -431,6 +434,7 @@
 				7BC4590C20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
 				7B66FABE24687F19005EAB92 /* TokensGroup.swift in Sources */,
 				7B3C11D6246AF72700F86C18 /* CacheLock.swift in Sources */,
+				7BC649752476A47300C848FD /* Collection+Utils.swift in Sources */,
 				7BCBB128201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
 				7B4487AC2472F39F00B6DB7B /* NumberFormatter+Utils.swift in Sources */,

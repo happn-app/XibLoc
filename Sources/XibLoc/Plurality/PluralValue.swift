@@ -210,8 +210,8 @@ public struct PluralValue {
 		let components = stringValue.split(separator: ".", omittingEmptySubsequences: false)
 		assert(components.count == 2 || components.count == 1)
 		
-		let intPart = String(components[0])
-		var fractionPart = String(components.count >= 2 ? components[1] : "")
+		let intPart = String(components[components.startIndex])
+		var fractionPart = components.elementIndex(forOffset: 1).flatMap{ String(components[$0]) } ?? ""
 		assert(fractionPart.count == format.maxFractionDigits)
 		while fractionPart.hasSuffix("0") && fractionPart.count > format.minFractionDigits {
 			fractionPart.removeLast()
@@ -224,8 +224,8 @@ public struct PluralValue {
 		let components = string.split(separator: ".", omittingEmptySubsequences: false)
 		guard components.count == 1 || components.count == 2 else {return nil}
 		self.init(
-			intPart: String(components[0]),
-			fractionPart: components.count >= 2 ? String(components[1]) : nil
+			intPart: String(components[components.startIndex]),
+			fractionPart: components.elementIndex(forOffset: 1).flatMap{ String(components[$0]) } ?? nil
 		)
 	}
 	
