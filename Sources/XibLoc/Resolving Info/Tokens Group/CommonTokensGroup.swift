@@ -233,7 +233,7 @@ extension String {
 		baseAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes,
 		boldAttrsChangesDescription: StringAttributesChangesDescription? = XibLocConfig.defaultBoldAttrsChangesDescription,
 		italicAttrsChangesDescription: StringAttributesChangesDescription? = XibLocConfig.defaultItalicAttrsChangesDescription
-	) -> NSAttributedString {
+	) -> NSMutableAttributedString {
 		return applying(xibLocInfo: CommonTokensGroup(
 			simpleReplacement1: simpleReplacement1,
 			simpleReplacement2: simpleReplacement2,

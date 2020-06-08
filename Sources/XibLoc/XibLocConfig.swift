@@ -77,8 +77,8 @@ public struct XibLocConfig {
 	
 	#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 		public static var defaultStr2AttrStrAttributes: [NSAttributedString.Key: Any]? = nil
-		public static var defaultBoldAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setBold])
-		public static var defaultItalicAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(changes: [.setItalic])
+		public static var defaultBoldAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(change: .setBold)
+		public static var defaultItalicAttrsChangesDescription: StringAttributesChangesDescription? = StringAttributesChangesDescription(change: .setItalic)
 	#endif
 	
 	/**

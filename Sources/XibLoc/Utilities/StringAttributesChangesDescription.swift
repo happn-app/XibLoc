@@ -78,6 +78,14 @@ public struct StringAttributesChangesDescription {
 	
 	public var changes: [ChangeApplicationHandler]
 	
+	public var attributesModifications: (_ modified: inout NSMutableAttributedString, _ strRange: Range<String.Index>, _ refStr: String) -> Void {
+		return { attrStr, range, str in self.apply(to: attrStr, range: NSRange(range, in: str)) }
+	}
+	
+	public init(change c: StringAttributesChangeDescription) {
+		self.init(changes: [c])
+	}
+	
 	public init(changes c: [StringAttributesChangeDescription]) {
 		changes = c.map{ $0.handlerToApplyChange }
 	}

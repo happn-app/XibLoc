@@ -28,7 +28,7 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 	
 	Takes an str2str xib loc info and convert it to an str2attrstr xib loc info
 	with no additional tokens. */
-	public init(strResolvingInfo: Str2StrXibLocInfo, defaultAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes) {
+	public init(strResolvingInfo: Str2StrXibLocInfo = Str2StrXibLocInfo(), defaultAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes) {
 		let simpleSourceTypeReplacements = strResolvingInfo.simpleSourceTypeReplacements.merging(strResolvingInfo.simpleReturnTypeReplacements, uniquingKeysWith: { _, _ in
 			fatalError("The given str2str xib loc info was not valid: it had source and return type replacements which had the same tokens!")
 		})
@@ -43,6 +43,22 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 			attributesModifications: [:], simpleReturnTypeReplacements: [:],
 			identityReplacement: { NSMutableAttributedString(string: $0, attributes: defaultAttributes) }
 		)!
+	}
+	
+	public mutating func addStringAttributesChanges(tokens: OneWordTokens, changes: StringAttributesChangesDescription, allowReplace: Bool = false) -> Bool {
+		return addAttributesModification(tokens: tokens, attributesModification: changes.attributesModifications, allowReplace: allowReplace)
+	}
+	
+	public func addingStringAttributesChanges(tokens: OneWordTokens, changes: StringAttributesChangesDescription, allowReplace: Bool = false) -> Self? {
+		return addingAttributesModification(tokens: tokens, attributesModification: changes.attributesModifications, allowReplace: allowReplace)
+	}
+	
+	public mutating func addStringAttributesChange(tokens: OneWordTokens, change: StringAttributesChangesDescription.StringAttributesChangeDescription, allowReplace: Bool = false) -> Bool {
+		return addAttributesModification(tokens: tokens, attributesModification: StringAttributesChangesDescription(change: change).attributesModifications, allowReplace: allowReplace)
+	}
+	
+	public func addingStringAttributesChange(tokens: OneWordTokens, change: StringAttributesChangesDescription.StringAttributesChangeDescription, allowReplace: Bool = false) -> Self? {
+		return addingAttributesModification(tokens: tokens, attributesModification: StringAttributesChangesDescription(change: change).attributesModifications, allowReplace: allowReplace)
 	}
 	
 }
