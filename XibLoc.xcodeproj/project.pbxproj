@@ -62,7 +62,6 @@
 
 /* Begin PBXFileReference section */
 		7B04C92D20166897002F9F52 /* XibLocConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocConfig.swift; sourceTree = "<group>"; };
-		7B21BACE2003B2C600DFF758 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; wrapsLines = 1; };
 		7B21BAD02003BBC700DFF758 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		7B21BAD12003BF0600DFF758 /* License.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
 		7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Scanner+LinuxCompat.swift"; sourceTree = "<group>"; };
@@ -70,6 +69,7 @@
 		7B3C11D5246AF72700F86C18 /* CacheLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheLock.swift; sourceTree = "<group>"; };
 		7B4487A824726F0200B6DB7B /* XibLocResolvingInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocResolvingInfoTests.swift; sourceTree = "<group>"; };
 		7B4487AB2472F39F00B6DB7B /* NumberFormatter+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Utils.swift"; sourceTree = "<group>"; };
+		7B5242482498F77700485AB8 /* Readme.adoc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Readme.adoc; sourceTree = "<group>"; };
 		7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocNumber.swift; sourceTree = "<group>"; };
 		7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Str2AttrStrXibLocInfo.swift; sourceTree = "<group>"; };
 		7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocParsingInfo.swift; sourceTree = "<group>"; };
@@ -159,7 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				7B21BAD12003BF0600DFF758 /* License.txt */,
-				7B21BACE2003B2C600DFF758 /* Readme.md */,
+				7B5242482498F77700485AB8 /* Readme.adoc */,
 				7B21BAD02003BBC700DFF758 /* Package.swift */,
 				7B8BD01120026AF1009BE667 /* Sources */,
 				7B8BD031200274B9009BE667 /* Tests */,
