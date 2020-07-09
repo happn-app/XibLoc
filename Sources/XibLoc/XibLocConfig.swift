@@ -51,7 +51,7 @@ public struct XibLocConfig {
 		@available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *)
 		public static var oslog: OSLog? = .default
 	#endif
-	public static var logger: Logger? = {
+	public static var logger: Logging.Logger? = {
 		#if canImport(os)
 		if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 			return nil
