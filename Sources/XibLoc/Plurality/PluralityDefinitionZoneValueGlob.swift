@@ -81,7 +81,7 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 			
 		case .regex(let regexp):
 			let stringValue = pluralValue.fullStringValue
-			guard let r = regexp.firstMatch(in: stringValue, options: [], range: NSRange(location: 0, length: (stringValue as NSString).length)) else {return false}
+			guard let r = regexp.firstMatch(in: stringValue, options: [], range: NSRange(stringValue.startIndex..<stringValue.endIndex, in: stringValue)) else {return false}
 			guard r.range.location != NSNotFound else {return false} /* Not sure if needed, but better safe than sorry... */
 			return true
 		}
