@@ -124,6 +124,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		self.init(identityReplacement: ir)!
 	}
 	
+	@discardableResult
 	public mutating func changeEscapeToken(to newEscapeToken: String?) -> Bool {
 		let savedEscapeToken = escapeToken
 		escapeToken = newEscapeToken
@@ -214,6 +215,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		)! /* Force unwrapped because removing a token will not make the tokens be invalid in the resolving info. */
 	}
 	
+	@discardableResult
 	public mutating func addSimpleSourceTypeReplacement(tokens: OneWordTokens, replacement: @escaping (_ originalValue: SourceType) -> SourceType, allowReplace: Bool = false) -> Bool {
 		guard allowReplace || simpleSourceTypeReplacements[tokens] == nil else {return false}
 		
@@ -244,6 +246,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		)
 	}
 	
+	@discardableResult
 	public mutating func addOrderedReplacement(tokens: MultipleWordsTokens, value: Int, allowReplace: Bool = false) -> Bool {
 		guard allowReplace || orderedReplacements[tokens] == nil else {return false}
 		
@@ -274,6 +277,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		)
 	}
 	
+	@discardableResult
 	public mutating func addPluralGroup(atIndex insertIdx: Int? = nil, tokens: MultipleWordsTokens, value: PluralValue, allowReplace: Bool = false) -> Bool {
 		let currentIndex = pluralGroups.firstIndex(where: { $0.0 == tokens })
 		guard allowReplace || currentIndex == nil else {return false}
@@ -332,6 +336,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		)
 	}
 	
+	@discardableResult
 	public mutating func addAttributesModification(tokens: OneWordTokens, attributesModification: @escaping (_ modified: inout ReturnType, _ strRange: Range<String.Index>, _ refStr: String) -> Void, allowReplace: Bool = false) -> Bool {
 		guard allowReplace || attributesModifications[tokens] == nil else {return false}
 		
@@ -362,6 +367,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		)
 	}
 	
+	@discardableResult
 	public mutating func addSimpleReturnTypeReplacement(tokens: OneWordTokens, replacement: @escaping (_ originalValue: ReturnType) -> ReturnType, allowReplace: Bool = false) -> Bool {
 		guard allowReplace || simpleReturnTypeReplacements[tokens] == nil else {return false}
 		
