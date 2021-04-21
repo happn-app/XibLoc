@@ -224,4 +224,15 @@ class PluralityTests: XCTestCase {
 		XCTAssertFalse(try PluralityDefinitionZoneValueGlob(string: "^+42{.*}$").get().matches(pluralValue: PluralValue(string: "-42").get()))
 	}
 	
+	func testMoreVersionsThanZones() {
+		let plurality = PluralityDefinition(string: "(1:^*[^1]1$)(2→4:^*[^1][2→4]$)?(*)")
+		let resolvingInfos = (0..<9).map{ v in
+			Str2StrXibLocInfo(defaultPluralityDefinition: plurality, pluralGroups: [(MultipleWordsTokens(shortTokensForm: "<:>")!, PluralValue(int: v))], identityReplacement: { $0 })
+		}
+		let str = "<one:few:many:other>"
+		XCTAssertEqual(str.applying(xibLocInfo: resolvingInfos[4]!), "few")
+		XCTAssertEqual(str.applying(xibLocInfo: resolvingInfos[5]!), "many")
+		XCTAssertEqual(str.applying(xibLocInfo: resolvingInfos[6]!), "many")
+	}
+	
 }
