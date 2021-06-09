@@ -152,6 +152,7 @@ public struct CommonTokensGroup : TokensGroup {
 		)! /* We force unwrap because we _know_ these tokens are valid. */
 	}
 	
+	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 	public var str2AttrStrXibLocInfo: Str2AttrStrXibLocInfo {
 		var defaultAttributes = baseAttributes ?? [:]
 		if let f = baseFont  {defaultAttributes[.font] = f}
@@ -171,8 +172,35 @@ public struct CommonTokensGroup : TokensGroup {
 			].compactMapValues{ $0 },
 			pluralGroups: [number.flatMap{ (MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), $0.pluralValue) }].compactMap{ $0 },
 			attributesModifications: [
-				OneWordTokens(token: "*"):   boldAttrsChangesDescription.flatMap{ c in { attrStr, strRange, refStr in assert(refStr == attrStr.string); c.apply(to: attrStr, range: NSRange(strRange, in: refStr)) } },
-				OneWordTokens(token: "_"): italicAttrsChangesDescription.flatMap{ c in { attrStr, strRange, refStr in assert(refStr == attrStr.string); c.apply(to: attrStr, range: NSRange(strRange, in: refStr)) } },
+				OneWordTokens(token: "*"):   boldAttrsChangesDescription.flatMap{ c in { attrStr, strRange, refStr in assert(refStr == String(attrStr.characters)); c.apply(to: &attrStr, range: Range(strRange, in: attrStr)!) } },
+				OneWordTokens(token: "_"): italicAttrsChangesDescription.flatMap{ c in { attrStr, strRange, refStr in assert(refStr == String(attrStr.characters)); c.apply(to: &attrStr, range: Range(strRange, in: attrStr)!) } },
+			].compactMapValues{ $0 },
+			simpleReturnTypeReplacements: [:],
+			identityReplacement: { AttributedString($0) /* TODO: Attributes */ }
+		)! /* We force unwrap because we _know_ these tokens are valid. */
+	}
+	
+	public var str2NSAttrStrXibLocInfo: Str2NSAttrStrXibLocInfo {
+		var defaultAttributes = baseAttributes ?? [:]
+		if let f = baseFont  {defaultAttributes[.font] = f}
+		if let c = baseColor {defaultAttributes[.foregroundColor] = c}
+		
+		return Str2NSAttrStrXibLocInfo(
+			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
+			escapeToken: Self.escapeToken,
+			simpleSourceTypeReplacements: [
+				OneWordTokens(token: "|"): simpleReplacement1.flatMap{ r in { _ in r } },
+				OneWordTokens(token: "^"): simpleReplacement2.flatMap{ r in { _ in r } },
+				OneWordTokens(token: "#"): number.flatMap{ n in { _ in n.localizedString } }
+			].compactMapValues{ $0 },
+			orderedReplacements: [
+				MultipleWordsTokens(leftToken: "{", interiorToken: "₋", rightToken: "}"): genderMeIsMale.flatMap{ $0 ? 0 : 1 },
+				MultipleWordsTokens(leftToken: "`", interiorToken: "¦", rightToken: "´"): genderOtherIsMale.flatMap{ $0 ? 0 : 1 }
+			].compactMapValues{ $0 },
+			pluralGroups: [number.flatMap{ (MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"), $0.pluralValue) }].compactMap{ $0 },
+			attributesModifications: [
+				OneWordTokens(token: "*"):   boldAttrsChangesDescription.flatMap{ c in { attrStr, strRange, refStr in assert(refStr == attrStr.string); c.nsapply(to: attrStr, range: NSRange(strRange, in: refStr)) } },
+				OneWordTokens(token: "_"): italicAttrsChangesDescription.flatMap{ c in { attrStr, strRange, refStr in assert(refStr == attrStr.string); c.nsapply(to: attrStr, range: NSRange(strRange, in: refStr)) } },
 			].compactMapValues{ $0 },
 			simpleReturnTypeReplacements: [:],
 			identityReplacement: { NSMutableAttributedString(string: $0, attributes: defaultAttributes) }
@@ -217,7 +245,7 @@ extension String {
 	 - parameter genderOtherIsMale: Tokens are \` `¦` `´`
 	 - parameter boldAttrsChangesDescription: Token is `*`
 	 - parameter italicAttrsChangesDescription: Token is `_` */
-	public func applyingCommonTokensAttributed(
+	public func applyingCommonTokensNSAttributed(
 		simpleReplacement1: String? = nil,
 		simpleReplacement2: String? = nil,
 		number: XibLocNumber? = nil,
@@ -240,7 +268,7 @@ extension String {
 			baseAttributes: baseAttributes,
 			boldAttrsChangesDescription: boldAttrsChangesDescription,
 			italicAttrsChangesDescription: italicAttrsChangesDescription
-		).str2AttrStrXibLocInfo)
+		).str2NSAttrStrXibLocInfo)
 	}
 	
 }

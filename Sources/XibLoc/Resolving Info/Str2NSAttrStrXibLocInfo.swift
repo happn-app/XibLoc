@@ -1,5 +1,5 @@
 /*
-Copyright 2021 happn
+Copyright 2019 happn
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,20 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-
 import Foundation
 
 
 
-@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
-public typealias Str2AttrStrXibLocInfo = XibLocResolvingInfo<String, AttributedString>
+public typealias Str2NSAttrStrXibLocInfo = XibLocResolvingInfo<String, NSMutableAttributedString>
 
-@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
-extension XibLocResolvingInfo where SourceType == String, ReturnType == AttributedString {
+extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutableAttributedString {
 	
 	/**
-	Convenience init for an Str2AttrStrXibLocInfo.
+	Convenience init for an Str2NSAttrStrXibLocInfo.
 	
 	Takes an str2str xib loc info and convert it to an str2attrstr xib loc info
 	with no additional tokens. */
@@ -43,26 +39,28 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == Attribut
 			orderedReplacements: strResolvingInfo.orderedReplacements,
 			pluralGroups: strResolvingInfo.pluralGroups,
 			attributesModifications: [:], simpleReturnTypeReplacements: [:],
-			identityReplacement: { AttributedString($0) /* TODO: Attributes */ }
+			identityReplacement: { NSMutableAttributedString(string: $0, attributes: defaultAttributes) }
 		)!
 	}
 	
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+	
 	public mutating func addStringAttributesChanges(tokens: OneWordTokens, changes: StringAttributesChangesDescription, allowReplace: Bool = false) -> Bool {
-		return addAttributesModification(tokens: tokens, attributesModification: changes.attributesModifications, allowReplace: allowReplace)
+		return addAttributesModification(tokens: tokens, attributesModification: changes.nsattributesModifications, allowReplace: allowReplace)
 	}
 	
 	public func addingStringAttributesChanges(tokens: OneWordTokens, changes: StringAttributesChangesDescription, allowReplace: Bool = false) -> Self? {
-		return addingAttributesModification(tokens: tokens, attributesModification: changes.attributesModifications, allowReplace: allowReplace)
+		return addingAttributesModification(tokens: tokens, attributesModification: changes.nsattributesModifications, allowReplace: allowReplace)
 	}
 	
 	public mutating func addStringAttributesChange(tokens: OneWordTokens, change: StringAttributesChangesDescription.StringAttributesChangeDescription, allowReplace: Bool = false) -> Bool {
-		return addAttributesModification(tokens: tokens, attributesModification: StringAttributesChangesDescription(change: change).attributesModifications, allowReplace: allowReplace)
+		return addAttributesModification(tokens: tokens, attributesModification: StringAttributesChangesDescription(change: change).nsattributesModifications, allowReplace: allowReplace)
 	}
 	
 	public func addingStringAttributesChange(tokens: OneWordTokens, change: StringAttributesChangesDescription.StringAttributesChangeDescription, allowReplace: Bool = false) -> Self? {
-		return addingAttributesModification(tokens: tokens, attributesModification: StringAttributesChangesDescription(change: change).attributesModifications, allowReplace: allowReplace)
+		return addingAttributesModification(tokens: tokens, attributesModification: StringAttributesChangesDescription(change: change).nsattributesModifications, allowReplace: allowReplace)
 	}
 	
-}
-
 #endif
+	
+}

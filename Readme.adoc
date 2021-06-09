@@ -24,6 +24,14 @@ If you`'re using Xcode, add a Swift Package in the settings of your project.
 The repository does have an `xcodeproj` with a shared scheme for debug purposes. The project
 might be compatible with Carthage–or not. It is not officially supported but might work for you.
 
+== Linux Support
+
+XibLoc is fully supported on Linux, except we do not allow attributed strings.
+`NSAttributedString` is technically supported on Linux, and we could allow it.
+However, as of 2021-06-09, Linux does not have either UIFont nor NSFont, same
+goes for colors, and thus attributed strings are far less useful. Also,
+`AttributedString` does _not_ seems to be supported.
+
 == Important Information for ``XibLoc```'s Devs
 If you`'re working on XibLoc on macOS, you have to use the xcodeproj in the project and not
 open Package.swift in Xcode. +

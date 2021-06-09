@@ -25,6 +25,16 @@ extension String {
 	
 	#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 	
+	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+	public func applying(xibLocInfo: XibLocResolvingInfo<String, AttributedString>) -> AttributedString {
+		return ParsedXibLoc.cachedOrNewParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: AttributedStringParserHelper.self)
+	}
+	
+	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+	public func applying(xibLocInfo: XibLocResolvingInfo<AttributedString, AttributedString>, defaultAttributes: AttributeContainer = AttributeContainer()) -> AttributedString {
+		return AttributedString(self).settingAttributes(defaultAttributes).applying(xibLocInfo: xibLocInfo)
+	}
+	
 	public func applying(xibLocInfo: XibLocResolvingInfo<String, NSMutableAttributedString>) -> NSMutableAttributedString {
 		return ParsedXibLoc.cachedOrNewParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
 	}
@@ -39,6 +49,15 @@ extension String {
 
 
 #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+
+@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+extension AttributedString {
+	
+	public func applying(xibLocInfo: XibLocResolvingInfo<AttributedString, AttributedString>) -> AttributedString {
+		return ParsedXibLoc.cachedOrNewParsedXibLoc(source: self, parserHelper: AttributedStringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: AttributedStringParserHelper.self)
+	}
+	
+}
 
 extension NSAttributedString {
 	

@@ -14,6 +14,10 @@
 		7B3C11D6246AF72700F86C18 /* CacheLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3C11D5246AF72700F86C18 /* CacheLock.swift */; };
 		7B4487A924726F0200B6DB7B /* XibLocResolvingInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4487A824726F0200B6DB7B /* XibLocResolvingInfoTests.swift */; };
 		7B4487AC2472F39F00B6DB7B /* NumberFormatter+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4487AB2472F39F00B6DB7B /* NumberFormatter+Utils.swift */; };
+		7B4A328B2670D40C00FF38F1 /* Str2NSAttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4A328A2670D40C00FF38F1 /* Str2NSAttrStrXibLocInfo.swift */; };
+		7B4A328D2670D44700FF38F1 /* ParserHelper+AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4A328C2670D44700FF38F1 /* ParserHelper+AttributedString.swift */; };
+		7B4A328F2670D49200FF38F1 /* AttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4A328E2670D49200FF38F1 /* AttributedString+Utils.swift */; };
+		7B4A32912670D49E00FF38F1 /* XibLocFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4A32902670D49E00FF38F1 /* XibLocFont.swift */; };
 		7B5BF7B82084E0EF006AAB6A /* XibLocNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */; };
 		7B5BF7C22084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */; };
 		7B66FA922467485D005EAB92 /* XibLocParsingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FA912467485D005EAB92 /* XibLocParsingInfo.swift */; };
@@ -69,6 +73,10 @@
 		7B3C11D5246AF72700F86C18 /* CacheLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheLock.swift; sourceTree = "<group>"; };
 		7B4487A824726F0200B6DB7B /* XibLocResolvingInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocResolvingInfoTests.swift; sourceTree = "<group>"; };
 		7B4487AB2472F39F00B6DB7B /* NumberFormatter+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Utils.swift"; sourceTree = "<group>"; };
+		7B4A328A2670D40C00FF38F1 /* Str2NSAttrStrXibLocInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Str2NSAttrStrXibLocInfo.swift; sourceTree = "<group>"; };
+		7B4A328C2670D44700FF38F1 /* ParserHelper+AttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParserHelper+AttributedString.swift"; sourceTree = "<group>"; };
+		7B4A328E2670D49200FF38F1 /* AttributedString+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AttributedString+Utils.swift"; sourceTree = "<group>"; };
+		7B4A32902670D49E00FF38F1 /* XibLocFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocFont.swift; sourceTree = "<group>"; };
 		7B5242482498F77700485AB8 /* Readme.adoc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Readme.adoc; sourceTree = "<group>"; };
 		7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLocNumber.swift; sourceTree = "<group>"; };
 		7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Str2AttrStrXibLocInfo.swift; sourceTree = "<group>"; };
@@ -136,6 +144,7 @@
 				7BCBB115201634E4008A3FC0 /* ParsedXibLoc.swift */,
 				7BCBB118201634E4008A3FC0 /* ParserHelper.swift */,
 				7BCBB117201634E4008A3FC0 /* ParserHelper+String.swift */,
+				7B4A328C2670D44700FF38F1 /* ParserHelper+AttributedString.swift */,
 				7BCBB116201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift */,
 			);
 			path = Parser;
@@ -144,8 +153,10 @@
 		7B04C92C20166794002F9F52 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				7B4A32902670D49E00FF38F1 /* XibLocFont.swift */,
 				7B5BF7B72084E0EF006AAB6A /* XibLocNumber.swift */,
 				7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */,
+				7B4A328E2670D49200FF38F1 /* AttributedString+Utils.swift */,
 				7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */,
 				7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */,
 				7B266296214D65720069A959 /* Scanner+LinuxCompat.swift */,
@@ -206,6 +217,7 @@
 				7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */,
 				7B353B822017DA6D004D3540 /* Str2StrXibLocInfo.swift */,
 				7B5BF7C12084E7F0006AAB6A /* Str2AttrStrXibLocInfo.swift */,
+				7B4A328A2670D40C00FF38F1 /* Str2NSAttrStrXibLocInfo.swift */,
 				7B8A96EC2017528C00481B45 /* OneWordTokens.swift */,
 				7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */,
 				7B66FAB924685CE8005EAB92 /* Tokens Group */,
@@ -432,15 +444,19 @@
 				7BC4591120B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */,
 				7B8B339C246564DB00690AD7 /* PluralValue.swift in Sources */,
 				7BC4590C20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */,
+				7B4A328B2670D40C00FF38F1 /* Str2NSAttrStrXibLocInfo.swift in Sources */,
 				7B66FABE24687F19005EAB92 /* TokensGroup.swift in Sources */,
 				7B3C11D6246AF72700F86C18 /* CacheLock.swift in Sources */,
+				7B4A328F2670D49200FF38F1 /* AttributedString+Utils.swift in Sources */,
 				7BC649752476A47300C848FD /* Collection+Utils.swift in Sources */,
 				7BCBB128201634E4008A3FC0 /* ParserHelper+NSMutableAttributedString.swift in Sources */,
 				7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */,
+				7B4A328D2670D44700FF38F1 /* ParserHelper+AttributedString.swift in Sources */,
 				7B4487AC2472F39F00B6DB7B /* NumberFormatter+Utils.swift in Sources */,
 				7BCBB148201634E4008A3FC0 /* PluralityDefinitionZoneValueIntervalOfInts.swift in Sources */,
 				7BCBB154201634E4008A3FC0 /* XibLoc.swift in Sources */,
 				7B266297214D65720069A959 /* Scanner+LinuxCompat.swift in Sources */,
+				7B4A32912670D49E00FF38F1 /* XibLocFont.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
