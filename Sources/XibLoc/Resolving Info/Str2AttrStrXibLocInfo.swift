@@ -30,7 +30,7 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == Attribut
 	
 	Takes an str2str xib loc info and convert it to an str2attrstr xib loc info
 	with no additional tokens. */
-	public init(strResolvingInfo: Str2StrXibLocInfo = Str2StrXibLocInfo(), defaultAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes) {
+	public init(strResolvingInfo: Str2StrXibLocInfo = Str2StrXibLocInfo(), defaultAttributes: AttributeContainer = XibLocConfig.defaultStr2AttrStrAttributes) {
 		let simpleSourceTypeReplacements = strResolvingInfo.simpleSourceTypeReplacements.merging(strResolvingInfo.simpleReturnTypeReplacements, uniquingKeysWith: { _, _ in
 			fatalError("The given str2str xib loc info was not valid: it had source and return type replacements which had the same tokens!")
 		})
@@ -43,7 +43,7 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == Attribut
 			orderedReplacements: strResolvingInfo.orderedReplacements,
 			pluralGroups: strResolvingInfo.pluralGroups,
 			attributesModifications: [:], simpleReturnTypeReplacements: [:],
-			identityReplacement: { AttributedString($0) /* TODO: Attributes */ }
+			identityReplacement: { AttributedString($0).settingAttributes(defaultAttributes) }
 		)!
 	}
 	

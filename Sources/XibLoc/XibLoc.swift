@@ -31,14 +31,22 @@ extension String {
 	}
 	
 	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
-	public func applying(xibLocInfo: XibLocResolvingInfo<AttributedString, AttributedString>, defaultAttributes: AttributeContainer = AttributeContainer()) -> AttributedString {
+	public func applying(xibLocInfo: XibLocResolvingInfo<AttributedString, AttributedString>, defaultAttributes: AttributeContainer) -> AttributedString {
 		return AttributedString(self).settingAttributes(defaultAttributes).applying(xibLocInfo: xibLocInfo)
 	}
 	
+	@available(macOS,   deprecated: 12, message: "Use AttributedString")
+	@available(iOS,     deprecated: 15, message: "Use AttributedString")
+	@available(tvOS,    deprecated: 15, message: "Use AttributedString")
+	@available(watchOS, deprecated: 8,  message: "Use AttributedString")
 	public func applying(xibLocInfo: XibLocResolvingInfo<String, NSMutableAttributedString>) -> NSMutableAttributedString {
 		return ParsedXibLoc.cachedOrNewParsedXibLoc(source: self, parserHelper: StringParserHelper.self, forXibLocResolvingInfo: xibLocInfo).resolve(xibLocResolvingInfo: xibLocInfo, returnTypeHelperType: NSMutableAttributedStringParserHelper.self)
 	}
 	
+	@available(macOS,   deprecated: 12, message: "Use AttributedString")
+	@available(iOS,     deprecated: 15, message: "Use AttributedString")
+	@available(tvOS,    deprecated: 15, message: "Use AttributedString")
+	@available(watchOS, deprecated: 8,  message: "Use AttributedString")
 	public func applying(xibLocInfo: XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>, defaultAttributes: [NSAttributedString.Key: Any]?) -> NSMutableAttributedString {
 		return NSMutableAttributedString(string: self, attributes: defaultAttributes).applying(xibLocInfo: xibLocInfo)
 	}
@@ -61,6 +69,10 @@ extension AttributedString {
 
 extension NSAttributedString {
 	
+	@available(macOS,   deprecated: 12, message: "Use AttributedString")
+	@available(iOS,     deprecated: 15, message: "Use AttributedString")
+	@available(tvOS,    deprecated: 15, message: "Use AttributedString")
+	@available(watchOS, deprecated: 8,  message: "Use AttributedString")
 	public func applying(xibLocInfo: XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>) -> NSMutableAttributedString {
 		let mutableAttrStr: NSMutableAttributedString
 		if let mself = self as? NSMutableAttributedString {mutableAttrStr = mself}
@@ -73,6 +85,10 @@ extension NSAttributedString {
 
 extension NSMutableAttributedString {
 	
+	@available(macOS,   deprecated: 12, message: "Use AttributedString")
+	@available(iOS,     deprecated: 15, message: "Use AttributedString")
+	@available(tvOS,    deprecated: 15, message: "Use AttributedString")
+	@available(watchOS, deprecated: 8,  message: "Use AttributedString")
 	public func apply(xibLocInfo: XibLocResolvingInfo<NSMutableAttributedString, NSMutableAttributedString>) {
 		let resolved = applying(xibLocInfo: xibLocInfo)
 		replaceCharacters(in: NSRange(location: 0, length: length), with: resolved)

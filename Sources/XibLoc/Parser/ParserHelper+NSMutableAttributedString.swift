@@ -17,6 +17,10 @@ import Foundation
 
 
 
+@available(macOS,   deprecated: 12, message: "Use AttributedString")
+@available(iOS,     deprecated: 15, message: "Use AttributedString")
+@available(tvOS,    deprecated: 15, message: "Use AttributedString")
+@available(watchOS, deprecated: 8,  message: "Use AttributedString")
 struct NSMutableAttributedStringParserHelper : ParserHelper {
 	
 	/* While the NSAttributedString is not “Swifted” to support let/var, we

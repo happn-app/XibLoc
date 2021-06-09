@@ -99,7 +99,13 @@ public struct CommonTokensGroup : TokensGroup {
 	
 	public var baseFont: XibLocFont?
 	public var baseColor: XibLocColor?
-	public var baseAttributes: [NSAttributedString.Key: Any]?
+	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+	public var baseAttributes: AttributeContainer {
+		get {_baseAttributes as! AttributeContainer}
+		set {_baseAttributes = newValue}
+	}
+	private var _baseAttributes: Any!
+	public var baseNSAttributes: [NSAttributedString.Key: Any]?
 	
 	/** Token is `*` */
 	public var boldAttrsChangesDescription: StringAttributesChangesDescription?
@@ -114,7 +120,7 @@ public struct CommonTokensGroup : TokensGroup {
 		genderOtherIsMale go: Bool? = nil,
 		baseFont f: XibLocFont? = nil,
 		baseColor c: XibLocColor? = nil,
-		baseAttributes attrs: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes,
+		baseNSAttributes nsattrs: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2NSAttrStrAttributes,
 		boldAttrsChangesDescription boldAttrsChanges: StringAttributesChangesDescription? = XibLocConfig.defaultBoldAttrsChangesDescription,
 		italicAttrsChangesDescription italicAttrsChanges: StringAttributesChangesDescription? = XibLocConfig.defaultItalicAttrsChangesDescription
 	) {
@@ -126,7 +132,34 @@ public struct CommonTokensGroup : TokensGroup {
 		
 		baseFont = f
 		baseColor = c
-		baseAttributes = attrs
+		baseNSAttributes = nsattrs
+		
+		boldAttrsChangesDescription = boldAttrsChanges
+		italicAttrsChangesDescription = italicAttrsChanges
+	}
+	
+	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+	public init(
+		simpleReplacement1 r1: String? = nil,
+		simpleReplacement2 r2: String? = nil,
+		number n: XibLocNumber? = nil,
+		genderMeIsMale gm: Bool? = nil,
+		genderOtherIsMale go: Bool? = nil,
+		baseFont f: XibLocFont? = nil,
+		baseColor c: XibLocColor? = nil,
+		baseAttributes attrs: AttributeContainer = XibLocConfig.defaultStr2AttrStrAttributes,
+		boldAttrsChangesDescription boldAttrsChanges: StringAttributesChangesDescription? = XibLocConfig.defaultBoldAttrsChangesDescription,
+		italicAttrsChangesDescription italicAttrsChanges: StringAttributesChangesDescription? = XibLocConfig.defaultItalicAttrsChangesDescription
+	) {
+		simpleReplacement1 = r1
+		simpleReplacement2 = r2
+		number = n
+		genderMeIsMale = gm
+		genderOtherIsMale = go
+		
+		baseFont = f
+		baseColor = c
+		_baseAttributes = attrs
 		
 		boldAttrsChangesDescription = boldAttrsChanges
 		italicAttrsChangesDescription = italicAttrsChanges
@@ -154,9 +187,9 @@ public struct CommonTokensGroup : TokensGroup {
 	
 	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 	public var str2AttrStrXibLocInfo: Str2AttrStrXibLocInfo {
-		var defaultAttributes = baseAttributes ?? [:]
-		if let f = baseFont  {defaultAttributes[.font] = f}
-		if let c = baseColor {defaultAttributes[.foregroundColor] = c}
+		var defaultAttributes = baseAttributes
+		if let f = baseFont  {defaultAttributes.font = f}
+		if let c = baseColor {defaultAttributes.foregroundColor = c}
 		
 		return Str2AttrStrXibLocInfo(
 			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
@@ -176,12 +209,12 @@ public struct CommonTokensGroup : TokensGroup {
 				OneWordTokens(token: "_"): italicAttrsChangesDescription.flatMap{ c in { attrStr, strRange, refStr in assert(refStr == String(attrStr.characters)); c.apply(to: &attrStr, range: Range(strRange, in: attrStr)!) } },
 			].compactMapValues{ $0 },
 			simpleReturnTypeReplacements: [:],
-			identityReplacement: { AttributedString($0) /* TODO: Attributes */ }
+			identityReplacement: { AttributedString($0).settingAttributes(defaultAttributes) }
 		)! /* We force unwrap because we _know_ these tokens are valid. */
 	}
 	
 	public var str2NSAttrStrXibLocInfo: Str2NSAttrStrXibLocInfo {
-		var defaultAttributes = baseAttributes ?? [:]
+		var defaultAttributes = baseNSAttributes ?? [:]
 		if let f = baseFont  {defaultAttributes[.font] = f}
 		if let c = baseColor {defaultAttributes[.foregroundColor] = c}
 		
@@ -245,6 +278,47 @@ extension String {
 	 - parameter genderOtherIsMale: Tokens are \` `¦` `´`
 	 - parameter boldAttrsChangesDescription: Token is `*`
 	 - parameter italicAttrsChangesDescription: Token is `_` */
+	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+	public func applyingCommonTokensAttributed(
+		simpleReplacement1: String? = nil,
+		simpleReplacement2: String? = nil,
+		number: XibLocNumber? = nil,
+		genderMeIsMale: Bool? = nil,
+		genderOtherIsMale: Bool? = nil,
+		baseFont: XibLocFont? = nil,
+		baseColor: XibLocColor? = nil,
+		baseAttributes: AttributeContainer = XibLocConfig.defaultStr2AttrStrAttributes,
+		boldAttrsChangesDescription: StringAttributesChangesDescription? = XibLocConfig.defaultBoldAttrsChangesDescription,
+		italicAttrsChangesDescription: StringAttributesChangesDescription? = XibLocConfig.defaultItalicAttrsChangesDescription
+	) -> AttributedString {
+		return applying(xibLocInfo: CommonTokensGroup(
+			simpleReplacement1: simpleReplacement1,
+			simpleReplacement2: simpleReplacement2,
+			number: number,
+			genderMeIsMale: genderMeIsMale,
+			genderOtherIsMale: genderOtherIsMale,
+			baseFont: baseFont,
+			baseColor: baseColor,
+			baseAttributes: baseAttributes,
+			boldAttrsChangesDescription: boldAttrsChangesDescription,
+			italicAttrsChangesDescription: italicAttrsChangesDescription
+		).str2AttrStrXibLocInfo)
+	}
+	
+	/**
+	 Apply a `CommonTokensGroup` on your string with attributed string result.
+	 
+	 - parameter simpleReplacement1: Token is `|`
+	 - parameter simpleReplacement2: Token is `^`
+	 - parameter number: Tokens are `#` (number value), `<` `:` `>` (plural)
+	 - parameter genderMeIsMale: Tokens are `{` `₋` `}`
+	 - parameter genderOtherIsMale: Tokens are \` `¦` `´`
+	 - parameter boldAttrsChangesDescription: Token is `*`
+	 - parameter italicAttrsChangesDescription: Token is `_` */
+	@available(macOS,   deprecated: 12, message: "Use AttributedString")
+	@available(iOS,     deprecated: 15, message: "Use AttributedString")
+	@available(tvOS,    deprecated: 15, message: "Use AttributedString")
+	@available(watchOS, deprecated: 8,  message: "Use AttributedString")
 	public func applyingCommonTokensNSAttributed(
 		simpleReplacement1: String? = nil,
 		simpleReplacement2: String? = nil,
@@ -253,7 +327,7 @@ extension String {
 		genderOtherIsMale: Bool? = nil,
 		baseFont: XibLocFont? = nil,
 		baseColor: XibLocColor? = nil,
-		baseAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2AttrStrAttributes,
+		baseNSAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2NSAttrStrAttributes,
 		boldAttrsChangesDescription: StringAttributesChangesDescription? = XibLocConfig.defaultBoldAttrsChangesDescription,
 		italicAttrsChangesDescription: StringAttributesChangesDescription? = XibLocConfig.defaultItalicAttrsChangesDescription
 	) -> NSMutableAttributedString {
@@ -265,7 +339,7 @@ extension String {
 			genderOtherIsMale: genderOtherIsMale,
 			baseFont: baseFont,
 			baseColor: baseColor,
-			baseAttributes: baseAttributes,
+			baseNSAttributes: baseNSAttributes,
 			boldAttrsChangesDescription: boldAttrsChangesDescription,
 			italicAttrsChangesDescription: italicAttrsChangesDescription
 		).str2NSAttrStrXibLocInfo)
