@@ -43,14 +43,14 @@ struct AttributedStringParserHelper : ParserHelper {
 		assert(strRange.s == String(source.characters))
 		
 		let range = Range(strRange.r, in: source)!
-		source.replaceSubrange(range, with: source)
+		source.removeSubrange(range)
 	}
 	
 	static func replace<R>(strRange: (r: R, s: String), with replacement: AttributedString, in source: inout AttributedString) -> String where R : RangeExpression, R.Bound == String.Index {
 		assert(strRange.s == String(source.characters))
 		
 		let range = Range(strRange.r, in: source)!
-		source.replaceSubrange(range, with: source)
+		source.replaceSubrange(range, with: replacement)
 		
 		return String(replacement.characters)
 	}
