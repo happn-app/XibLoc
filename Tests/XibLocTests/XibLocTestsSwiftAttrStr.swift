@@ -106,7 +106,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 				simpleReturnTypeReplacements: [:], identityReplacement: { AttributedString($0) }
 			).get()
 			var result = AttributedString("the ")
-			result.append(AttributedString("first").mergingAttributes(attributeContainerAlternateDescription))
+			result.append(AttributedString("first", attributes: attributeContainerAlternateDescription))
 			XCTAssertEqual(
 				"the <$first$:second>".applying(xibLocInfo: info),
 				result
@@ -142,7 +142,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 				simpleReturnTypeReplacements: [:], identityReplacement: { AttributedString($0) }
 			).get()
 			var result = AttributedString("the ")
-			result.append(AttributedString("first").mergingAttributes(attributeContainerAlternateDescription))
+			result.append(AttributedString("first", attributes: attributeContainerAlternateDescription))
 			XCTAssertEqual(
 				"the $<first:second>$".applying(xibLocInfo: info),
 				result
@@ -161,7 +161,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 				simpleReturnTypeReplacements: [:], identityReplacement: { AttributedString($0) }
 			).get()
 			var result = AttributedString("the ")
-			result.append(AttributedString("second").mergingAttributes(attributeContainerAlternateDescription))
+			result.append(AttributedString("second", attributes: attributeContainerAlternateDescription))
 			XCTAssertEqual(
 				"the $<first:second>$".applying(xibLocInfo: info),
 				result
@@ -179,7 +179,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 				identityReplacement: { AttributedString($0) }
 			).get()
 			var result = AttributedString("the ")
-			result.append(AttributedString("test").mergingAttributes(attributeContainerAlternateDescription))
+			result.append(AttributedString("test", attributes: attributeContainerAlternateDescription))
 			XCTAssertEqual(
 				"the *test*".applying(xibLocInfo: info),
 				result
@@ -197,7 +197,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 				identityReplacement: { AttributedString($0) }
 			).get()
 			var result = AttributedString("the ")
-			result.append(AttributedString("testtwice").mergingAttributes(attributeContainerAlternateDescription))
+			result.append(AttributedString("testtwice", attributes: attributeContainerAlternateDescription))
 			XCTAssertEqual(
 				"the *test**twice*".applying(xibLocInfo: info),
 				result
@@ -217,9 +217,9 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 				identityReplacement: { AttributedString($0) }
 			).get()
 			var result = AttributedString("the test ")
-			result.append(AttributedString("one ").mergingAttributes(attributeContainerAlternateDescription))
+			result.append(AttributedString("one ", attributes: attributeContainerAlternateDescription))
 			result.append(AttributedString("and").mergingAttributes(attributeContainerAlternateDescription).mergingAttributes(attributeContainerLanguageIdentifier))
-			result.append(AttributedString(" two").mergingAttributes(attributeContainerLanguageIdentifier))
+			result.append(AttributedString(" two", attributes: attributeContainerLanguageIdentifier))
 			XCTAssertEqual(
 				"the test *one _and* two_".applying(xibLocInfo: info),
 				result
@@ -273,7 +273,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 		for _ in 0..<nRepeats {
 			/* Bold, italic, font and text color already setup in the tests setup. */
 			let info = CommonTokensGroup(simpleReplacement1: "sᴉoɔuɐɹℲ", genderOtherIsMale: true).str2AttrStrXibLocInfo
-			var result = AttributedString("Yo sᴉoɔuɐɹℲ").mergingAttributes(XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("Yo sᴉoɔuɐɹℲ", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "Yo")!)
 			XCTAssertEqual(
 				"`*Yo* |username|¦Nope. We don’t greet women.´".applying(xibLocInfo: info),
@@ -290,7 +290,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 		for _ in 0..<nRepeats {
 			/* Bold, italic, font and text color already setup in the tests setup. */
 			let info = CommonTokensGroup(simpleReplacement1: "sᴉoɔuɐɹℲ", genderOtherIsMale: false).str2AttrStrXibLocInfo
-			var result = AttributedString("Yo sᴉoɔuɐɹℲ").mergingAttributes(XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("Yo sᴉoɔuɐɹℲ", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "Yo")!)
 			XCTAssertEqual(
 				"`Nope. We don’t greet women.¦*Yo* |username|´".applying(xibLocInfo: info),
@@ -306,7 +306,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 	func testOverlappingAttributesChangesWithPluralInTheMiddle() throws {
 		for _ in 0..<nRepeats {
 			let (info, baseAttributes) = docCasesInfo
-			var result = AttributedString("abcdefghijklmnqrstuvwxyzABCDEFGHIJKLMNOP").mergingAttributes(baseAttributes)
+			var result = AttributedString("abcdefghijklmnqrstuvwxyzABCDEFGHIJKLMNOP", attributes: baseAttributes)
 			result[result.range(of: "efghijklmnqrs")!].mergeAttributes(attributeContainerLanguageIdentifier)
 			result[result.range(of: "jklmnqrstuvwx")!].mergeAttributes(attributeContainerAlternateDescription)
 			XCTAssertEqual(
@@ -345,281 +345,273 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 	}
 	
 	/* Also exists in ObjC */
-//	func testFromHappn1Ter() throws {
-//		for _ in 0..<nRepeats {
-//			let str = "*लें*"
-//			/* Bold, italic, font and text color already setup in the tests setup. */
-//			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-//			let resultStr = "लें"
-//			let result = AttributedString(resultStr, attributes: XibLocConfig.defaultStr2AttrStrAttributes)
-//			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
-//			XCTAssertEqual(
-//				str.applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	/* Same as Ter TBH… */
-//	func testFromHappn1Quater() throws {
-//		for _ in 0..<nRepeats {
-//			let str = "*🧒🏻*"
-//			/* Bold, italic, font and text color already setup in the tests setup. */
-//			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-//			let resultStr = "🧒🏻"
-//			let result = AttributedString(resultStr, attributes: XibLocConfig.defaultStr2AttrStrAttributes)
-//			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
-//			XCTAssertEqual(
-//				str.applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testFromHappn1Quinquies() throws {
-//		for _ in 0..<nRepeats {
-//			let str = "🧒🏻*🧒🏻"
-//			let info = try Str2AttrStrXibLocInfo(
-//				attributesModifications: [OneWordTokens(token: "🧒🏻"): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).nsapply(to: attrStr, range: NSRange(strRange, in: refStr)) }],
-//				identityReplacement: { AttributedString($0, attributes: XibLocConfig.defaultStr2AttrStrAttributes) }
-//			).get()
-//			let resultStr = "*"
-//			let result = AttributedString(resultStr, attributes: XibLocConfig.defaultStr2AttrStrAttributes)
-//			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
-//			XCTAssertEqual(
-//				str.applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	/* Also exists in ObjC */
-//	func testFromHappn1Sexies() throws {
-//		for _ in 0..<nRepeats {
-//			let str = "🧒🏻👳🏿‍♀️🧒🏻"
-//			let info = try Str2AttrStrXibLocInfo(
-//				attributesModifications: [OneWordTokens(token: "🧒🏻"): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).nsapply(to: attrStr, range: NSRange(strRange, in: refStr)) }],
-//				identityReplacement: { AttributedString($0, attributes: XibLocConfig.defaultStr2AttrStrAttributes) }
-//			).get()
-//			let resultStr = "👳🏿‍♀️"
-//			let result = AttributedString(resultStr, attributes: XibLocConfig.defaultStr2AttrStrAttributes)
-//			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: 0, length: (resultStr as NSString).length))
-//			XCTAssertEqual(
-//				str.applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	/* Copied from ObjC tests. */
-//	func testFromHappn1Septies() throws {
-//		for _ in 0..<nRepeats {
-//			let str = "🧔🏻*🧒🏻*"
-//			/* Bold, italic, font and text color already setup in the tests setup. */
-//			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-//			let resultStr = "🧔🏻🧒🏻"
-//			let objcStart = ("🧔🏻" as NSString).length
-//			let result = AttributedString(resultStr, attributes: XibLocConfig.defaultStr2AttrStrAttributes)
-//			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: objcStart, length: (resultStr as NSString).length - objcStart))
-//			XCTAssertEqual(
-//				str.applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	/* Copied from ObjC tests. */
-//	func testFromHappn1Octies() throws {
-//		for _ in 0..<nRepeats {
-//			let str = "🧔🏻*a*"
-//			/* Bold, italic, font and text color already setup in the tests setup. */
-//			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-//			let resultStr = "🧔🏻a"
-//			let objcStart = ("🧔🏻" as NSString).length
-//			let result = AttributedString(resultStr, attributes: XibLocConfig.defaultStr2AttrStrAttributes)
-//			result.setBoldOrItalic(bold: true, italic: nil, range: NSRange(location: objcStart, length: (resultStr as NSString).length - objcStart))
-//			XCTAssertEqual(
-//				str.applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	/* ***** Doc Cases Tests ***** */
-//	/* Config:
-//	 *    "*" is a left and right token for an attributes modification
-//	 *    "_" is a left and right token for an attributes modification
-//	 *    "|" is a left and right token for a simple replacement
-//	 *    "<" ":" ">" are resp. a left, interior and right tokens for an ordered replacement. */
-//
-//	func testDocCase1() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result = AttributedString("This text will be bold and italic too!").mergingAttributes(baseAttributes)
-//			result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 18, length: 19))
-//			result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 23, length: 10))
-//			XCTAssertEqual(
-//				"This text will be *bold _and italic_ too*!".applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testDocCase2() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result = AttributedString("This text will be bold and italic too!").mergingAttributes(baseAttributes)
-//			result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 18, length: 19))
-//			result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 23, length: 14))
-//			XCTAssertEqual(
-//				"This text will be *bold _and italic too*_!".applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testDocCase3() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result = AttributedString("This text will be bold and italic too!").mergingAttributes(baseAttributes)
-//			result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 18, length: 19))
-//			result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 23, length: 14))
-//			XCTAssertEqual(
-//				"This text will be *bold _and italic too_*!".applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testDocCase4() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result = AttributedString("This text will be bold and italic too!").mergingAttributes(baseAttributes)
-//			result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 18, length: 8))
-//			result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 23, length: 14))
-//			XCTAssertEqual(
-//				"This text will be *bold _and* italic too_!".applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testDocCase5() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result = AttributedString("replacement_value to be replaced").mergingAttributes(baseAttributes)
-//			XCTAssertEqual(
-//				"|*some text*| to be replaced".applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testDocCase6() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result = AttributedString("Let's replace replacement_value").mergingAttributes(baseAttributes)
-//			result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 17))
-//			XCTAssertEqual(
-//				"Let's replace *|some text|*".applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testDocCase6Variant() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result = AttributedString("Let's replace replacement_value").mergingAttributes(baseAttributes)
-//			result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 17))
-//			result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 14, length: 17))
-//			XCTAssertEqual(
-//				"Let's replace _<*|some text|*:val2>_".applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testDocCase7() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result = AttributedString("Let's replace with either this is chosen or nope").mergingAttributes(baseAttributes)
-//			result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 26, length: 4))
-//			XCTAssertEqual(
-//				"Let's replace with either <*this* is chosen:nope> or <nope:_that_>".applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testDocCase8() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result = AttributedString("Let's replace with either this is chosen or nope").mergingAttributes(baseAttributes)
-//			result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 26, length: 22))
-//			result.addAttributes([.accessibilityListItemLevel: NSNumber(value: 0)], range: NSRange(location: 44, length: 4))
-//			XCTAssertEqual(
-//				"Let's replace with either *<this is chosen:_nope_> or <_nope_:that>*".applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testDocCase9() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result1 = AttributedString("Let's replace *replacement_value").mergingAttributes(baseAttributes)
-//			let result2 = AttributedString("Let's replace |some text|").mergingAttributes(baseAttributes)
-//			result2.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 5))
-//			let processed = "Let's replace *|some* text|".applying(xibLocInfo: info)
-//			XCTAssert(processed == result1 || processed == result2)
-//		}
-//	}
-//
-//	func testDocCase10() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result = AttributedString("Let's replace multiple").mergingAttributes(baseAttributes)
-//			result.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 8))
-//			XCTAssertEqual(
-//				"Let's replace <*multiple*:*choices*:stuff>".applying(xibLocInfo: info),
-//				result
-//			)
-//		}
-//	}
-//
-//	func testDocCase11() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result1 = AttributedString("Let's replace *multiple").mergingAttributes(baseAttributes)
-//			let result2 = AttributedString("Let's replace <multiple:choices:stuff>").mergingAttributes(baseAttributes)
-//			result2.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 14, length: 17))
-//			let processed = "Let's replace *<multiple:choices*:stuff>".applying(xibLocInfo: info)
-//			XCTAssert(processed == result1 || processed == result2)
-//		}
-//	}
-//
-//	func testDocCase12() throws {
-//		for _ in 0..<nRepeats {
-//			let (info, baseAttributes) = docCasesInfo
-//			let result1 = AttributedString("Let's replace *multiple").mergingAttributes(baseAttributes)
-//			let result2 = AttributedString("Let's replace <multiple:choices:stuff>").mergingAttributes(baseAttributes)
-//			result2.addAttributes([.accessibilityListItemIndex: NSNumber(value: 0)], range: NSRange(location: 15, length: 16))
-//			let processed = "Let's replace <*multiple:choices*:stuff>".applying(xibLocInfo: info)
-//			XCTAssert(processed == result1 || processed == result2)
-//		}
-//	}
+	func testFromHappn1Ter() throws {
+		for _ in 0..<nRepeats {
+			let str = "*लें*"
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
+			var result = AttributedString("लें", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			result.setBoldOrItalic(bold: true, italic: nil)
+			XCTAssertEqual(
+				str.applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	/* Same as Ter TBH… */
+	func testFromHappn1Quater() throws {
+		for _ in 0..<nRepeats {
+			let str = "*🧒🏻*"
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
+			var result = AttributedString("🧒🏻", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			result.setBoldOrItalic(bold: true, italic: nil)
+			XCTAssertEqual(
+				str.applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testFromHappn1Quinquies() throws {
+		for _ in 0..<nRepeats {
+			let str = "🧒🏻*🧒🏻"
+			let info = try Str2AttrStrXibLocInfo(
+				attributesModifications: [OneWordTokens(token: "🧒🏻"): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).apply(to: &attrStr, range: Range(strRange, in: attrStr)!) }],
+				identityReplacement: { AttributedString($0, attributes: XibLocConfig.defaultStr2AttrStrAttributes) }
+			).get()
+			var result = AttributedString("*", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			result.setBoldOrItalic(bold: true, italic: nil)
+			XCTAssertEqual(
+				str.applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	/* Also exists in ObjC */
+	func testFromHappn1Sexies() throws {
+		for _ in 0..<nRepeats {
+			let str = "🧒🏻👳🏿‍♀️🧒🏻"
+			let info = try Str2AttrStrXibLocInfo(
+				attributesModifications: [OneWordTokens(token: "🧒🏻"): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).apply(to: &attrStr, range: Range(strRange, in: attrStr)!) }],
+				identityReplacement: { AttributedString($0, attributes: XibLocConfig.defaultStr2AttrStrAttributes) }
+			).get()
+			var result = AttributedString("👳🏿‍♀️", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			result.setBoldOrItalic(bold: true, italic: nil)
+			XCTAssertEqual(
+				str.applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	/* Copied from ObjC tests. */
+	func testFromHappn1Septies() throws {
+		for _ in 0..<nRepeats {
+			let str = "🧔🏻*🧒🏻*"
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
+			var result = AttributedString("🧔🏻🧒🏻", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "🧒🏻")!)
+			XCTAssertEqual(
+				str.applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	/* Copied from ObjC tests. */
+	func testFromHappn1Octies() throws {
+		for _ in 0..<nRepeats {
+			let str = "🧔🏻*a*"
+			/* Bold, italic, font and text color already setup in the tests setup. */
+			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
+			var result = AttributedString("🧔🏻a", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "a")!)
+			XCTAssertEqual(
+				str.applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	/* ***** Doc Cases Tests ***** */
+	/* Config:
+	 *    "*" is a left and right token for an attributes modification
+	 *    "_" is a left and right token for an attributes modification
+	 *    "|" is a left and right token for a simple replacement
+	 *    "<" ":" ">" are resp. a left, interior and right tokens for an ordered replacement. */
+	
+	func testDocCase1() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			var result = AttributedString("This text will be bold and italic too!", attributes: baseAttributes)
+			result[result.range(of: "bold and italic too")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			result[result.range(of: "and italic")!].mergeAttributes(attributeContainerAlternateDescription)
+			XCTAssertEqual(
+				"This text will be *bold _and italic_ too*!".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testDocCase2() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			var result = AttributedString("This text will be bold and italic too!", attributes: baseAttributes)
+			result[result.range(of: "bold and italic too")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			result[result.range(of: "and italic too")!].mergeAttributes(attributeContainerAlternateDescription)
+			XCTAssertEqual(
+				"This text will be *bold _and italic too*_!".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testDocCase3() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			var result = AttributedString("This text will be bold and italic too!", attributes: baseAttributes)
+			result[result.range(of: "bold and italic too")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			result[result.range(of: "and italic too")!].mergeAttributes(attributeContainerAlternateDescription)
+			XCTAssertEqual(
+				"This text will be *bold _and italic too_*!".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testDocCase4() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			var result = AttributedString("This text will be bold and italic too!", attributes: baseAttributes)
+			result[result.range(of: "bold and")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			result[result.range(of: "and italic too")!].mergeAttributes(attributeContainerAlternateDescription)
+			XCTAssertEqual(
+				"This text will be *bold _and* italic too_!".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testDocCase5() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			let result = AttributedString("replacement_value to be replaced", attributes: baseAttributes)
+			XCTAssertEqual(
+				"|*some text*| to be replaced".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testDocCase6() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			var result = AttributedString("Let's replace replacement_value", attributes: baseAttributes)
+			result[result.range(of: "replacement_value")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			XCTAssertEqual(
+				"Let's replace *|some text|*".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testDocCase6Variant() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			var result = AttributedString("Let's replace replacement_value", attributes: baseAttributes)
+			result[result.range(of: "replacement_value")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			result[result.range(of: "replacement_value")!].mergeAttributes(attributeContainerAlternateDescription)
+			XCTAssertEqual(
+				"Let's replace _<*|some text|*:val2>_".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testDocCase7() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			var result = AttributedString("Let's replace with either this is chosen or nope", attributes: baseAttributes)
+			result[result.range(of: "this")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			XCTAssertEqual(
+				"Let's replace with either <*this* is chosen:nope> or <nope:_that_>".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testDocCase8() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			var result = AttributedString("Let's replace with either this is chosen or nope", attributes: baseAttributes)
+			result[result.range(of: "this is chosen or nope")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			result[result.range(of: "nope")!].mergeAttributes(attributeContainerAlternateDescription)
+			XCTAssertEqual(
+				"Let's replace with either *<this is chosen:_nope_> or <_nope_:that>*".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testDocCase9() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			let result1 = AttributedString("Let's replace *replacement_value", attributes: baseAttributes)
+			var result2 = AttributedString("Let's replace |some text|", attributes: baseAttributes)
+			result2[result2.range(of: "|some")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			let processed = "Let's replace *|some* text|".applying(xibLocInfo: info)
+			XCTAssert(processed == result1 || processed == result2)
+		}
+	}
+	
+	func testDocCase10() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			var result = AttributedString("Let's replace multiple", attributes: baseAttributes)
+			result[result.range(of: "multiple")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			XCTAssertEqual(
+				"Let's replace <*multiple*:*choices*:stuff>".applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testDocCase11() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			let result1 = AttributedString("Let's replace *multiple", attributes: baseAttributes)
+			var result2 = AttributedString("Let's replace <multiple:choices:stuff>", attributes: baseAttributes)
+			result2[result2.range(of: "<multiple:choices")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			let processed = "Let's replace *<multiple:choices*:stuff>".applying(xibLocInfo: info)
+			XCTAssert(processed == result1 || processed == result2)
+		}
+	}
+	
+	func testDocCase12() throws {
+		for _ in 0..<nRepeats {
+			let (info, baseAttributes) = docCasesInfo
+			let result1 = AttributedString("Let's replace *multiple", attributes: baseAttributes)
+			var result2 = AttributedString("Let's replace <multiple:choices:stuff>", attributes: baseAttributes)
+			result2[result2.range(of: "multiple:choices")!].mergeAttributes(attributeContainerLanguageIdentifier)
+			let processed = "Let's replace <*multiple:choices*:stuff>".applying(xibLocInfo: info)
+			XCTAssert(processed == result1 || processed == result2)
+		}
+	}
 	
 	/* Baseline is set with XibLoc compiled with USE_UTF16_OFFSETS.
-	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash
-	 * for some Objective-C strings crash. See ParsedXibLoc.swift for more info. */
+	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash
+	 * for some Objective-C strings crash. See ParsedXibLoc.swift for more info. */
 	func testPerf2() throws {
 		measure{
 			for _ in 0..<nRepeats {
 				let str = "{*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
 				/* Bold, italic, font and text color already setup in the tests setup. */
 				let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-				var result = AttributedString("CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!").mergingAttributes(XibLocConfig.defaultStr2AttrStrAttributes)
+				var result = AttributedString("CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
 				result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "CrushTime खेलें")!)
 				XCTAssertEqual(
 					str.applying(xibLocInfo: info),
@@ -662,7 +654,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 				OneWordTokens(token: "*"): helperAddTestLanguageIdentifier,
 				OneWordTokens(token: "_"): helperAddTestAlternateDescription
 			],
-			identityReplacement: { AttributedString($0).mergingAttributes(baseAttributes) }
+			identityReplacement: { AttributedString($0, attributes: baseAttributes) }
 		)!
 		return (info, baseAttributes)
 	}()

@@ -43,7 +43,7 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == Attribut
 			orderedReplacements: strResolvingInfo.orderedReplacements,
 			pluralGroups: strResolvingInfo.pluralGroups,
 			attributesModifications: [:], simpleReturnTypeReplacements: [:],
-			identityReplacement: { AttributedString($0).settingAttributes(defaultAttributes) }
+			identityReplacement: { AttributedString($0, attributes: defaultAttributes) }
 		)!
 	}
 	

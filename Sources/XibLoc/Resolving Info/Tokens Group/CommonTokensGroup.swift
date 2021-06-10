@@ -210,7 +210,7 @@ public struct CommonTokensGroup : TokensGroup {
 				OneWordTokens(token: "_"): italicAttrsChangesDescription.flatMap{ c in { attrStr, strRange, refStr in assert(refStr == String(attrStr.characters)); c.apply(to: &attrStr, range: Range(strRange, in: attrStr)!) } },
 			].compactMapValues{ $0 },
 			simpleReturnTypeReplacements: [:],
-			identityReplacement: { AttributedString($0).settingAttributes(defaultAttributes) }
+			identityReplacement: { AttributedString($0, attributes: defaultAttributes) }
 		)! /* We force unwrap because we _know_ these tokens are valid. */
 	}
 	

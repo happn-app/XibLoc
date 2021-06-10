@@ -32,7 +32,7 @@ extension String {
 	
 	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 	public func applying(xibLocInfo: XibLocResolvingInfo<AttributedString, AttributedString>, defaultAttributes: AttributeContainer) -> AttributedString {
-		return AttributedString(self).settingAttributes(defaultAttributes).applying(xibLocInfo: xibLocInfo)
+		return AttributedString(self, attributes: defaultAttributes).applying(xibLocInfo: xibLocInfo)
 	}
 	
 	@available(macOS,   deprecated: 12, message: "Use AttributedString")
