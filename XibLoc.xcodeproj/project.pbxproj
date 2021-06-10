@@ -31,6 +31,9 @@
 		7B8B339F24659ED700690AD7 /* PluralityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8B339E24659ED700690AD7 /* PluralityTests.swift */; };
 		7B8B33A42466BAA600690AD7 /* Optional+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8B33A32466BAA600690AD7 /* Optional+Utils.swift */; };
 		7B8BD02320026E8C009BE667 /* XibLoc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B8BD01A20026E8C009BE667 /* XibLoc.framework */; };
+		7BB511A826710846008C2D94 /* XibLocTestsSwiftNSAttrStr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB511A526710846008C2D94 /* XibLocTestsSwiftNSAttrStr.swift */; };
+		7BB511A926710846008C2D94 /* XibLocTestsSwiftAttrStr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB511A626710846008C2D94 /* XibLocTestsSwiftAttrStr.swift */; };
+		7BB511AA26710846008C2D94 /* XibLocTestsSwiftStr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB511A726710846008C2D94 /* XibLocTestsSwiftStr.swift */; };
 		7BC4590C20B20642003972E1 /* StringAttributesChangesDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */; };
 		7BC4591120B20BC3003972E1 /* NSMutableAttributedString+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */; };
 		7BC649752476A47300C848FD /* Collection+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC649742476A47300C848FD /* Collection+Utils.swift */; };
@@ -48,7 +51,6 @@
 		7BCBB150201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */; };
 		7BCBB154201634E4008A3FC0 /* XibLoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB122201634E4008A3FC0 /* XibLoc.swift */; };
 		7BCBB158201634E4008A3FC0 /* XibLocResolvingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */; };
-		7BCBB16220163612008A3FC0 /* XibLocTestsSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCBB15D2016354F008A3FC0 /* XibLocTestsSwift.swift */; };
 		7BF53365224050F300A141BB /* XibLocTestsObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF53364224050F300A141BB /* XibLocTestsObjC.m */; };
 		7BF53368224052C800A141BB /* XibLoc4ObjCHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF53367224052C800A141BB /* XibLoc4ObjCHelper.swift */; };
 		B168DD33225E45C90006FC54 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B168DD35225E45C90006FC54 /* Localizable.strings */; };
@@ -94,6 +96,9 @@
 		7B8BD01D20026E8C009BE667 /* Framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Framework-Info.plist"; sourceTree = "<group>"; };
 		7B8BD02220026E8C009BE667 /* XibLocTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XibLocTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B8BD02920026E8C009BE667 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
+		7BB511A526710846008C2D94 /* XibLocTestsSwiftNSAttrStr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocTestsSwiftNSAttrStr.swift; sourceTree = "<group>"; };
+		7BB511A626710846008C2D94 /* XibLocTestsSwiftAttrStr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocTestsSwiftAttrStr.swift; sourceTree = "<group>"; };
+		7BB511A726710846008C2D94 /* XibLocTestsSwiftStr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocTestsSwiftStr.swift; sourceTree = "<group>"; };
 		7BC4590B20B20642003972E1 /* StringAttributesChangesDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringAttributesChangesDescription.swift; sourceTree = "<group>"; };
 		7BC4591020B20BC3003972E1 /* NSMutableAttributedString+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Utils.swift"; sourceTree = "<group>"; };
 		7BC649742476A47300C848FD /* Collection+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Utils.swift"; sourceTree = "<group>"; };
@@ -111,7 +116,6 @@
 		7BCBB121201634E4008A3FC0 /* RandomAccessCollection+StableSort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+StableSort.swift"; sourceTree = "<group>"; };
 		7BCBB122201634E4008A3FC0 /* XibLoc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLoc.swift; sourceTree = "<group>"; };
 		7BCBB123201634E4008A3FC0 /* XibLocResolvingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocResolvingInfo.swift; sourceTree = "<group>"; };
-		7BCBB15D2016354F008A3FC0 /* XibLocTestsSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XibLocTestsSwift.swift; sourceTree = "<group>"; };
 		7BF53362224050F300A141BB /* XibLocTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XibLocTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		7BF53364224050F300A141BB /* XibLocTestsObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XibLocTestsObjC.m; sourceTree = "<group>"; };
 		7BF53367224052C800A141BB /* XibLoc4ObjCHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLoc4ObjCHelper.swift; sourceTree = "<group>"; };
@@ -287,7 +291,9 @@
 				7B8B339E24659ED700690AD7 /* PluralityTests.swift */,
 				7B4487A824726F0200B6DB7B /* XibLocResolvingInfoTests.swift */,
 				7BF53364224050F300A141BB /* XibLocTestsObjC.m */,
-				7BCBB15D2016354F008A3FC0 /* XibLocTestsSwift.swift */,
+				7BB511A726710846008C2D94 /* XibLocTestsSwiftStr.swift */,
+				7BB511A626710846008C2D94 /* XibLocTestsSwiftAttrStr.swift */,
+				7BB511A526710846008C2D94 /* XibLocTestsSwiftNSAttrStr.swift */,
 			);
 			path = XibLocTests;
 			sourceTree = "<group>";
@@ -468,7 +474,9 @@
 				7B8B339F24659ED700690AD7 /* PluralityTests.swift in Sources */,
 				7BF53368224052C800A141BB /* XibLoc4ObjCHelper.swift in Sources */,
 				7B8B33A42466BAA600690AD7 /* Optional+Utils.swift in Sources */,
-				7BCBB16220163612008A3FC0 /* XibLocTestsSwift.swift in Sources */,
+				7BB511A926710846008C2D94 /* XibLocTestsSwiftAttrStr.swift in Sources */,
+				7BB511A826710846008C2D94 /* XibLocTestsSwiftNSAttrStr.swift in Sources */,
+				7BB511AA26710846008C2D94 /* XibLocTestsSwiftStr.swift in Sources */,
 				7BF53365224050F300A141BB /* XibLocTestsObjC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
