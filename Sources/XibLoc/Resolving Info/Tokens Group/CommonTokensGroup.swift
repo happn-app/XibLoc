@@ -112,6 +112,7 @@ public struct CommonTokensGroup : TokensGroup {
 	/** Token is `_` */
 	public var italicAttrsChangesDescription: StringAttributesChangesDescription?
 	
+	@_disfavoredOverload
 	public init(
 		simpleReplacement1 r1: String? = nil,
 		simpleReplacement2 r2: String? = nil,
