@@ -24,6 +24,7 @@
 		7B66FAB724684494005EAB92 /* CommonTokensGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FAB624684494005EAB92 /* CommonTokensGroup.swift */; };
 		7B66FABB24686497005EAB92 /* CommonTokensGroup_Linux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FABA24686497005EAB92 /* CommonTokensGroup_Linux.swift */; };
 		7B66FABE24687F19005EAB92 /* TokensGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B66FABD24687F19005EAB92 /* TokensGroup.swift */; };
+		7B6A10712672042100BBB7C3 /* AttributedStringUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6A10702672042100BBB7C3 /* AttributedStringUtilsTests.swift */; };
 		7B6B353324671651008DC972 /* ParsedXibLoc+InitCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6B353224671651008DC972 /* ParsedXibLoc+InitCache.swift */; };
 		7B8A96ED2017528C00481B45 /* OneWordTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96EC2017528C00481B45 /* OneWordTokens.swift */; };
 		7B8A96F2201752B400481B45 /* MultipleWordsTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */; };
@@ -86,6 +87,7 @@
 		7B66FAB624684494005EAB92 /* CommonTokensGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTokensGroup.swift; sourceTree = "<group>"; };
 		7B66FABA24686497005EAB92 /* CommonTokensGroup_Linux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTokensGroup_Linux.swift; sourceTree = "<group>"; };
 		7B66FABD24687F19005EAB92 /* TokensGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokensGroup.swift; sourceTree = "<group>"; };
+		7B6A10702672042100BBB7C3 /* AttributedStringUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringUtilsTests.swift; sourceTree = "<group>"; };
 		7B6B353224671651008DC972 /* ParsedXibLoc+InitCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParsedXibLoc+InitCache.swift"; sourceTree = "<group>"; };
 		7B8A96EC2017528C00481B45 /* OneWordTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneWordTokens.swift; sourceTree = "<group>"; };
 		7B8A96F1201752B400481B45 /* MultipleWordsTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleWordsTokens.swift; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 			children = (
 				7BF533662240526A00A141BB /* Helpers */,
 				7B8B339E24659ED700690AD7 /* PluralityTests.swift */,
+				7B6A10702672042100BBB7C3 /* AttributedStringUtilsTests.swift */,
 				7B4487A824726F0200B6DB7B /* XibLocResolvingInfoTests.swift */,
 				7BF53364224050F300A141BB /* XibLocTestsObjC.m */,
 				7BB511A726710846008C2D94 /* XibLocTestsSwiftStr.swift */,
@@ -474,6 +477,7 @@
 				7B8B339F24659ED700690AD7 /* PluralityTests.swift in Sources */,
 				7BF53368224052C800A141BB /* XibLoc4ObjCHelper.swift in Sources */,
 				7B8B33A42466BAA600690AD7 /* Optional+Utils.swift in Sources */,
+				7B6A10712672042100BBB7C3 /* AttributedStringUtilsTests.swift in Sources */,
 				7BB511A926710846008C2D94 /* XibLocTestsSwiftAttrStr.swift in Sources */,
 				7BB511A826710846008C2D94 /* XibLocTestsSwiftNSAttrStr.swift in Sources */,
 				7BB511AA26710846008C2D94 /* XibLocTestsSwiftStr.swift in Sources */,
