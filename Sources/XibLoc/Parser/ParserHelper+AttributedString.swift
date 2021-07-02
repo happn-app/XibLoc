@@ -23,8 +23,6 @@ import Foundation
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 struct AttributedStringParserHelper : ParserHelper {
 	
-	/* While the NSAttributedString is not “Swifted” to support let/var, we
-	 * prefer dealing with mutable attributed string directly for convenience. */
 	typealias ParsedType = AttributedString
 	
 	static func copy(source: AttributedString) -> AttributedString {
