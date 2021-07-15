@@ -80,15 +80,10 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 		for _ in 0..<nRepeats {
 			let info = CommonTokensGroup(genderMeIsMale: true, genderOtherIsMale: false).str2StrXibLocInfo
 			XCTAssertEqual(
-				localized("crossed path for the first time").applying(xibLocInfo: info),
+				Utils.localized("crossed path for the first time").applying(xibLocInfo: info),
 				"Vous vous êtes croisés"
 			)
 		}
-	}
-	
-	private func localized(_ key: String) -> String {
-		let testBundle = Bundle(for: Self.self)
-		return NSLocalizedString(key, bundle: testBundle, comment: "Crash test")
 	}
 	
 	/* The tests below are only macOS compatible. Other oses either do not have
