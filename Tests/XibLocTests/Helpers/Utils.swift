@@ -21,7 +21,11 @@ import Foundation
 class Utils {
 	
 	static func localized(_ key: String) -> String {
+#if HPN_XCODE_BUILD
 		let testBundle = Bundle(for: self.self)
+#else
+		let testBundle = Bundle.module
+#endif
 		return NSLocalizedString(key, bundle: testBundle, comment: "Crash test")
 	}
 	

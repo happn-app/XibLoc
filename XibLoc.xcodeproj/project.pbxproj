@@ -700,6 +700,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLocTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "HPN_XCODE_BUILD $(inherited)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Xcode Supporting Files/XibLocTests-Bridging-Header.h";
 			};
 			name = Debug;
@@ -719,6 +720,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLocTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "HPN_XCODE_BUILD $(inherited)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Xcode Supporting Files/XibLocTests-Bridging-Header.h";
 			};
 			name = Release;
