@@ -28,16 +28,16 @@ class XibLocTestsSwiftStr : XCTestCase {
 	override func setUp() {
 		super.setUp()
 		
-		XibLocConfig.cache = nil
-		XibLocConfig.defaultEscapeToken = #"\"#
-		XibLocConfig.defaultPluralityDefinition = PluralityDefinition()
+		Conf.cache = nil
+		Conf.defaultEscapeToken = #"\"#
+		Conf.defaultPluralityDefinition = PluralityDefinition()
 		
 		#if canImport(os)
 			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-				XibLocConfig.oslog = nil
+				Conf.oslog = nil
 			}
 		#endif
-		XibLocConfig.logger = nil
+		Conf.logger = nil
 	}
 	
 	override func tearDown() {
@@ -429,7 +429,7 @@ class XibLocTestsSwiftStr : XCTestCase {
 	func testCommonTokensGroupDocCaseStr() {
 		for _ in 0..<nRepeats {
 			/* Case in doc has the default ~ escape token. */
-			XibLocConfig.defaultEscapeToken = "~"
+			Conf.defaultEscapeToken = "~"
 			let info = CommonTokensGroup().str2StrXibLocInfo
 			XCTAssertEqual(
 				"hello_world_how_are_you".applying(xibLocInfo: info),

@@ -168,7 +168,7 @@ public struct CommonTokensGroup : TokensGroup {
 	
 	public var str2StrXibLocInfo: Str2StrXibLocInfo {
 		return Str2StrXibLocInfo(
-			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
+			defaultPluralityDefinition: Conf.defaultPluralityDefinition,
 			escapeToken: Self.escapeToken,
 			simpleSourceTypeReplacements: [:],
 			orderedReplacements: [
@@ -193,7 +193,7 @@ public struct CommonTokensGroup : TokensGroup {
 		if let c = baseColor {defaultAttributes.foregroundColor = c}
 		
 		return Str2AttrStrXibLocInfo(
-			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
+			defaultPluralityDefinition: Conf.defaultPluralityDefinition,
 			escapeToken: Self.escapeToken,
 			simpleSourceTypeReplacements: [
 				OneWordTokens(token: "|"): simpleReplacement1.flatMap{ r in { _ in r } },
@@ -220,7 +220,7 @@ public struct CommonTokensGroup : TokensGroup {
 		if let c = baseColor {defaultAttributes[.foregroundColor] = c}
 		
 		return Str2NSAttrStrXibLocInfo(
-			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
+			defaultPluralityDefinition: Conf.defaultPluralityDefinition,
 			escapeToken: Self.escapeToken,
 			simpleSourceTypeReplacements: [
 				OneWordTokens(token: "|"): simpleReplacement1.flatMap{ r in { _ in r } },

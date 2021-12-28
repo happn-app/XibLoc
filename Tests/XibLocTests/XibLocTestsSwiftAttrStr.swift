@@ -34,21 +34,21 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 	override func setUp() {
 		super.setUp()
 		
-		XibLocConfig.cache = nil
-		XibLocConfig.defaultEscapeToken = #"\"#
-		XibLocConfig.defaultPluralityDefinition = PluralityDefinition()
+		Conf.cache = nil
+		Conf.defaultEscapeToken = #"\"#
+		Conf.defaultPluralityDefinition = PluralityDefinition()
 		
-		XibLocConfig.defaultStr2AttrStrAttributes = AttributeContainer()
-		XibLocConfig.defaultStr2AttrStrAttributes.font = .systemFont(ofSize: 14)
-		XibLocConfig.defaultStr2AttrStrAttributes.foregroundColor = .black
+		Conf.defaultStr2AttrStrAttributes = AttributeContainer()
+		Conf.defaultStr2AttrStrAttributes.font = .systemFont(ofSize: 14)
+		Conf.defaultStr2AttrStrAttributes.foregroundColor = .black
 		
-		XibLocConfig.defaultBoldAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setBold])
-		XibLocConfig.defaultItalicAttrsChangesDescription = nil
+		Conf.defaultBoldAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setBold])
+		Conf.defaultItalicAttrsChangesDescription = nil
 		
 		#if canImport(os)
-			XibLocConfig.oslog = nil
+			Conf.oslog = nil
 		#endif
-		XibLocConfig.logger = nil
+		Conf.logger = nil
 	}
 	
 	override func tearDown() {
@@ -59,14 +59,14 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 		let nRepeats = 1
 		for _ in 0..<nRepeats {
 			/* Set needed defaults like in the doc. */
-			XibLocConfig.defaultEscapeToken = "~"
-			XibLocConfig.defaultItalicAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setItalic])
+			Conf.defaultEscapeToken = "~"
+			Conf.defaultItalicAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setItalic])
 			let info = CommonTokensGroup().str2AttrStrXibLocInfo
 			
 			print(info)
-			var result = AttributedString("helloworldhowareyou", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
-			XibLocConfig.defaultItalicAttrsChangesDescription?.apply(to: &result, range: result.range(of: "world")!)
-			XibLocConfig.defaultItalicAttrsChangesDescription?.apply(to: &result, range: result.range(of: "are")!)
+			var result = AttributedString("helloworldhowareyou", attributes: Conf.defaultStr2AttrStrAttributes)
+			Conf.defaultItalicAttrsChangesDescription?.apply(to: &result, range: result.range(of: "world")!)
+			Conf.defaultItalicAttrsChangesDescription?.apply(to: &result, range: result.range(of: "are")!)
 			
 			XCTAssertEqual(
 				"hello_world_how_are_you".applying(xibLocInfo: info),
@@ -268,7 +268,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 		for _ in 0..<nRepeats {
 			/* Bold, italic, font and text color already setup in the tests setup. */
 			let info = CommonTokensGroup(simpleReplacement1: "sᴉoɔuɐɹℲ", genderOtherIsMale: true).str2AttrStrXibLocInfo
-			var result = AttributedString("Yo sᴉoɔuɐɹℲ", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("Yo sᴉoɔuɐɹℲ", attributes: Conf.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "Yo")!)
 			XCTAssertEqual(
 				"`*Yo* |username|¦Nope. We don’t greet women.´".applying(xibLocInfo: info),
@@ -285,7 +285,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 		for _ in 0..<nRepeats {
 			/* Bold, italic, font and text color already setup in the tests setup. */
 			let info = CommonTokensGroup(simpleReplacement1: "sᴉoɔuɐɹℲ", genderOtherIsMale: false).str2AttrStrXibLocInfo
-			var result = AttributedString("Yo sᴉoɔuɐɹℲ", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("Yo sᴉoɔuɐɹℲ", attributes: Conf.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "Yo")!)
 			XCTAssertEqual(
 				"`Nope. We don’t greet women.¦*Yo* |username|´".applying(xibLocInfo: info),
@@ -317,7 +317,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 			let str = "{*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
 			/* Bold, italic, font and text color already setup in the tests setup. */
 			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-			var result = AttributedString("CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: Conf.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "CrushTime खेलें")!)
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -331,7 +331,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 			let str = "{CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
 			/* Bold, italic, font and text color already setup in the tests setup. */
 			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-			let result = AttributedString("CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			let result = AttributedString("CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: Conf.defaultStr2AttrStrAttributes)
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
 				result
@@ -345,7 +345,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 			let str = "*लें*"
 			/* Bold, italic, font and text color already setup in the tests setup. */
 			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-			var result = AttributedString("लें", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("लें", attributes: Conf.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil)
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -360,7 +360,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 			let str = "*🧒🏻*"
 			/* Bold, italic, font and text color already setup in the tests setup. */
 			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-			var result = AttributedString("🧒🏻", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("🧒🏻", attributes: Conf.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil)
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -374,9 +374,9 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 			let str = "🧒🏻*🧒🏻"
 			let info = try Str2AttrStrXibLocInfo(
 				attributesModifications: [OneWordTokens(token: "🧒🏻"): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).apply(to: &attrStr, range: Range(strRange, in: attrStr)!) }],
-				identityReplacement: { AttributedString($0, attributes: XibLocConfig.defaultStr2AttrStrAttributes) }
+				identityReplacement: { AttributedString($0, attributes: Conf.defaultStr2AttrStrAttributes) }
 			).get()
-			var result = AttributedString("*", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("*", attributes: Conf.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil)
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -391,9 +391,9 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 			let str = "🧒🏻👳🏿‍♀️🧒🏻"
 			let info = try Str2AttrStrXibLocInfo(
 				attributesModifications: [OneWordTokens(token: "🧒🏻"): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).apply(to: &attrStr, range: Range(strRange, in: attrStr)!) }],
-				identityReplacement: { AttributedString($0, attributes: XibLocConfig.defaultStr2AttrStrAttributes) }
+				identityReplacement: { AttributedString($0, attributes: Conf.defaultStr2AttrStrAttributes) }
 			).get()
-			var result = AttributedString("👳🏿‍♀️", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("👳🏿‍♀️", attributes: Conf.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil)
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -408,7 +408,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 			let str = "🧔🏻*🧒🏻*"
 			/* Bold, italic, font and text color already setup in the tests setup. */
 			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-			var result = AttributedString("🧔🏻🧒🏻", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("🧔🏻🧒🏻", attributes: Conf.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "🧒🏻")!)
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -423,7 +423,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 			let str = "🧔🏻*a*"
 			/* Bold, italic, font and text color already setup in the tests setup. */
 			let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-			var result = AttributedString("🧔🏻a", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+			var result = AttributedString("🧔🏻a", attributes: Conf.defaultStr2AttrStrAttributes)
 			result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "a")!)
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
@@ -606,7 +606,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 				let str = "{*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!₋*CrushTime खेलें* और देखें कि क्या आप अनुमान लगा सकती हैं कि आपको किसने पसंद किया!}"
 				/* Bold, italic, font and text color already setup in the tests setup. */
 				let info = CommonTokensGroup(number: XibLocNumber(0), genderMeIsMale: true, genderOtherIsMale: true).str2AttrStrXibLocInfo
-				var result = AttributedString("CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: XibLocConfig.defaultStr2AttrStrAttributes)
+				var result = AttributedString("CrushTime खेलें और देखें कि क्या आप अनुमान लगा सकते हैं कि आपको किसने पसंद किया!", attributes: Conf.defaultStr2AttrStrAttributes)
 				result.setBoldOrItalic(bold: true, italic: nil, range: result.range(of: "CrushTime खेलें")!)
 				XCTAssertEqual(
 					str.applying(xibLocInfo: info),

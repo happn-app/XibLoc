@@ -24,7 +24,7 @@ extension ParsedXibLoc where SourceTypeHelper.ParsedType : Hashable {
 	}
 	
 	static func cachedOrNewParsedXibLoc(source: SourceType, parserHelper: SourceTypeHelper.Type, parsingInfo: XibLocParsingInfo) -> ParsedXibLoc<SourceTypeHelper> {
-		if let cache = XibLocConfig.cache {
+		if let cache = Conf.cache {
 			let initInfo = ErasedParsedXibLocInitInfoWrapper(ErasedParsedXibLocInitInfo(source: source, parserHelperTypeId: ObjectIdentifier(parserHelper), parsingInfo: parsingInfo))
 			
 			CacheLock.lock.lock()

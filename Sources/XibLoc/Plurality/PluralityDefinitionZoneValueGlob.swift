@@ -58,17 +58,17 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 			else if !transformedString.hasPrefix("^-") {transformedString.insert(contentsOf: "-?+", at: transformedString.index(after: transformedString.startIndex))}
 			#if canImport(os)
 			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-				XibLocConfig.oslog.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }}
+				Conf.oslog.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }}
 			#endif
-			XibLocConfig.logger?.debug("Glob language to regex conversion: “\(string)” --> “\(transformedString)”")
+			Conf.logger?.debug("Glob language to regex conversion: “\(string)” --> “\(transformedString)”")
 			
 			do {value = .regex(try NSRegularExpression(pattern: transformedString, options: []))}
 			catch {
 				#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-					XibLocConfig.oslog.flatMap{ os_log("Cannot create regular expression from string “%@” (original was “%@”); are you sure the original string follow all the rules? Got error %@", log: $0, type: .info, transformedString, string, String(describing: error)) }}
+					Conf.oslog.flatMap{ os_log("Cannot create regular expression from string “%@” (original was “%@”); are you sure the original string follow all the rules? Got error %@", log: $0, type: .info, transformedString, string, String(describing: error)) }}
 				#endif
-				XibLocConfig.logger?.error("Cannot create regular expression from string “\(transformedString)” (original was “\(string)”); are you sure the original string follow all the rules? Got error \(String(describing: error))")
+				Conf.logger?.error("Cannot create regular expression from string “\(transformedString)” (original was “\(string)”); are you sure the original string follow all the rules? Got error \(String(describing: error))")
 				return nil
 			}
 		}

@@ -95,7 +95,7 @@ public struct CommonTokensGroup : TokensGroup {
 		if let s2 = simpleReplacement2 {simpleReturnTypeReplacements[OneWordTokens(token: "^")] = { _ in s2 }}
 		
 		return Str2StrXibLocInfo(
-			defaultPluralityDefinition: XibLocConfig.defaultPluralityDefinition,
+			defaultPluralityDefinition: Conf.defaultPluralityDefinition,
 			escapeToken: Self.escapeToken,
 			simpleSourceTypeReplacements: [:],
 			orderedReplacements: orderedReplacements,

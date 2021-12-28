@@ -45,7 +45,7 @@ import Logging
  In the future, OSLog’s API should be modified to match the swift-log’s one, and
  we’ll then probably drop the support for OSLog (because you’ll be able to use
  OSLog through Logging without any performance or privacy hit). */
-public struct XibLocConfig {
+public enum XibLocConfig {
 	
 #if canImport(os)
 	@available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *)
@@ -97,7 +97,6 @@ public struct XibLocConfig {
 		return c
 	}()
 	
-	/** This struct is simply a container for static configuration properties. */
-	private init() {}
-	
 }
+
+typealias Conf = XibLocConfig

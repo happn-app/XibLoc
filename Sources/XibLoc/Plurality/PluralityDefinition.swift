@@ -199,9 +199,9 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 			if let garbage = scanner.xl_scanUpToString("(") {
 				#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-					XibLocConfig.oslog.flatMap{ os_log("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", log: $0, type: .info, garbage, string) }}
+					Conf.oslog.flatMap{ os_log("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", log: $0, type: .info, garbage, string) }}
 				#endif
-				XibLocConfig.logger?.warning("Got garbage (\(garbage)) while parsing plurality definition string “\(string)”. Ignoring...")
+				Conf.logger?.warning("Got garbage (\(garbage)) while parsing plurality definition string “\(string)”. Ignoring...")
 			}
 			
 			guard scanner.xl_scanString("(") != nil else {break}
@@ -209,9 +209,9 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 			guard let curZoneStrMinusOpeningParenthesis = scanner.xl_scanUpToString("(") else {
 				#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-					XibLocConfig.oslog.flatMap{ os_log("Got malformed plurality definition string “%@”. Attempting to continue anyway...", log: $0, type: .info, string) }}
+					Conf.oslog.flatMap{ os_log("Got malformed plurality definition string “%@”. Attempting to continue anyway...", log: $0, type: .info, string) }}
 				#endif
-				XibLocConfig.logger?.warning("Got malformed plurality definition string “\(string)”. Attempting to continue anyway...")
+				Conf.logger?.warning("Got malformed plurality definition string “\(string)”. Attempting to continue anyway...")
 				continue
 			}
 			
@@ -221,9 +221,9 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 			} else {
 				#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-					XibLocConfig.oslog.flatMap{ os_log("Got zone str (%@), which I cannot parse into a zone", log: $0, type: .info, curZoneStrMinusOpeningParenthesis) }}
+					Conf.oslog.flatMap{ os_log("Got zone str (%@), which I cannot parse into a zone", log: $0, type: .info, curZoneStrMinusOpeningParenthesis) }}
 				#endif
-				XibLocConfig.logger?.warning("Got zone str (\(curZoneStrMinusOpeningParenthesis)), which I cannot parse into a zone")
+				Conf.logger?.warning("Got zone str (\(curZoneStrMinusOpeningParenthesis)), which I cannot parse into a zone")
 			}
 		} while !scanner.isAtEnd
 		
@@ -244,9 +244,9 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		if matchingZones.isEmpty {
 			#if canImport(os)
 			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-				XibLocConfig.oslog.flatMap{ os_log("No zones matched for given predicate in plurality definition %{public}@. Returning latest version.", log: $0, type: .info, String(describing: self)) }}
+				Conf.oslog.flatMap{ os_log("No zones matched for given predicate in plurality definition %{public}@. Returning latest version.", log: $0, type: .info, String(describing: self)) }}
 			#endif
-			XibLocConfig.logger?.warning("No zones matched for given predicate in plurality definition \(String(describing: self)). Returning latest version.")
+			Conf.logger?.warning("No zones matched for given predicate in plurality definition \(String(describing: self)). Returning latest version.")
 			return numberOfVersions-1
 		}
 		
@@ -268,9 +268,9 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		if zones[sepIdx-1].optionalityLevel == 0 {
 			#if canImport(os)
 			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-				XibLocConfig.oslog.flatMap{ os_log("Had to remove at least one non-optional zone in plurality definition %@ in order to get version idx for %d version(s).", log: $0, type: .info, String(describing: self), numberOfVersions) }}
+				Conf.oslog.flatMap{ os_log("Had to remove at least one non-optional zone in plurality definition %@ in order to get version idx for %d version(s).", log: $0, type: .info, String(describing: self), numberOfVersions) }}
 			#endif
-			XibLocConfig.logger?.warning("Had to remove at least one non-optional zone in plurality definition \(String(describing: self)) in order to get version idx for \(numberOfVersions) version(s).")
+			Conf.logger?.warning("Had to remove at least one non-optional zone in plurality definition \(String(describing: self)) in order to get version idx for \(numberOfVersions) version(s).")
 		}
 		return Array(zones[sepIdx..<zones.endIndex])
 	}

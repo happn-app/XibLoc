@@ -287,9 +287,9 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 			if insertIdx != nil {
 				#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-					XibLocConfig.oslog.flatMap{ os_log("Asked to insert a plural group at a specific index but a plural group with the given token was already present, so we just replaced it instead.", log: $0, type: .info) }}
+					Conf.oslog.flatMap{ os_log("Asked to insert a plural group at a specific index but a plural group with the given token was already present, so we just replaced it instead.", log: $0, type: .info) }}
 				#endif
-				XibLocConfig.logger?.notice("Asked to insert a plural group at a specific index but a plural group with the given token was already present, so we just replaced it instead.")
+				Conf.logger?.notice("Asked to insert a plural group at a specific index but a plural group with the given token was already present, so we just replaced it instead.")
 			}
 			pluralGroups[index].1 = value
 		} else {
@@ -315,9 +315,9 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 			if insertIdx != nil {
 				#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-					XibLocConfig.oslog.flatMap{ os_log("Asked to add a plural group at a specific index but a plural group with the given tokens was already present, so we just replaced it instead.", log: $0, type: .info) }}
+					Conf.oslog.flatMap{ os_log("Asked to add a plural group at a specific index but a plural group with the given tokens was already present, so we just replaced it instead.", log: $0, type: .info) }}
 				#endif
-				XibLocConfig.logger?.notice("Asked to add a plural group at a specific index but a plural group with the given tokens was already present, so we just replaced it instead.")
+				Conf.logger?.notice("Asked to add a plural group at a specific index but a plural group with the given tokens was already present, so we just replaced it instead.")
 			}
 			newPluralGroups[index].1 = value
 		} else {

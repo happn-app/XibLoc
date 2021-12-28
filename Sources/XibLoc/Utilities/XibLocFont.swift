@@ -73,7 +73,7 @@ extension XibLocFont {
 		return XibLocFont(descriptor: fontDesc, size: size ?? fontDesc.pointSize)
 #else
 		guard let f = XibLocFont(descriptor: fontDesc, size: size ?? fontDesc.pointSize) else {
-			XibLocConfig.logger?.warning("Cannot create new font from original font descriptor; returning original font.")
+			Conf.logger?.warning("Cannot create new font from original font descriptor; returning original font.")
 			return self
 		}
 		return f
