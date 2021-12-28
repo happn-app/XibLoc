@@ -20,26 +20,6 @@ import Foundation
 
 
 
-extension XibLocFont {
-	
-	var isBold: Bool {
-		#if !os(macOS)
-			return fontDescriptor.symbolicTraits.contains(.traitBold)
-		#else
-			return fontDescriptor.symbolicTraits.contains(.bold)
-		#endif
-	}
-	
-	var isItalic: Bool {
-		#if !os(macOS)
-			return fontDescriptor.symbolicTraits.contains(.traitItalic)
-		#else
-			return fontDescriptor.symbolicTraits.contains(.italic)
-		#endif
-	}
-	
-}
-
 extension NSMutableAttributedString {
 	
 	func getFont(at index: Int, effectiveRange: inout NSRange) -> XibLocFont? {
@@ -47,20 +27,48 @@ extension NSMutableAttributedString {
 		return attr as? XibLocFont
 	}
 	
-	func isTextBold(at index: Int, effectiveRange: inout NSRange) -> Bool {
-		let font = getFont(at: index, effectiveRange: &effectiveRange)
-		return font?.isBold ?? false
-	}
-	
-	func isTextItalic(at index: Int, effectiveRange: inout NSRange) -> Bool {
-		let font = getFont(at: index, effectiveRange: &effectiveRange)
-		return font?.isItalic ?? false
-	}
-	
 	func setFont(_ font: XibLocFont, range: NSRange? = nil) {
 		let range = range ?? NSRange(location: 0, length: length)
 		removeAttribute(.font, range: range) /* Work around an Apple leak (according to OHAttributedLabel) */
 		addAttribute(.font, value: font, range: range)
+	}
+	
+	func setTextColor(_ color: XibLocColor, range: NSRange? = nil) {
+		let range = range ?? NSRange(location: 0, length: length)
+		removeAttribute(.foregroundColor, range: range) /* Work around an Apple leak (according to OHAttributedLabel) */
+		addAttribute(.foregroundColor, value: color, range: range)
+	}
+	
+	func setBackgroundColor(_ color: XibLocColor, range: NSRange? = nil) {
+		let range = range ?? NSRange(location: 0, length: length)
+		removeAttribute(.backgroundColor, range: range) /* Work around an Apple leak (according to OHAttributedLabel) */
+		addAttribute(.backgroundColor, value: color, range: range)
+	}
+	
+	/**
+	 - Warning: If no font is defined in the given range, the method will use the
+	 preferred font for the “body” style (on iOS, watchOS and tvOS) or the system
+	 font of “system” size. */
+	func setBoldOrItalic(bold: Bool?, italic: Bool?, range: NSRange? = nil) {
+		let range = range ?? NSRange(location: 0, length: length)
+		guard bold != nil || italic != nil else {return}
+		guard range.length > 0 else {return}
+		
+		var curPos = range.location
+		var outRange = NSRange(location: 0, length: 0)
+		
+		repeat {
+#if !os(macOS)
+			let f = getFont(at: curPos, effectiveRange: &outRange) ?? XibLocFont.preferredFont(forTextStyle: .body)
+#else
+			let f = getFont(at: curPos, effectiveRange: &outRange) ?? XibLocFont.systemFont(ofSize: XibLocFont.systemFontSize)
+#endif
+			outRange = NSIntersectionRange(outRange, range)
+			
+			setFont(f.fontBySetting(size: nil, isBold: bold, isItalic: italic), range: outRange)
+			
+			curPos = outRange.upperBound
+		} while curPos < range.upperBound
 	}
 	
 	func setFont(_ font: XibLocFont, keepOriginalSize: Bool = false, keepOriginalIsBold: Bool = false, keepOriginalIsItalic: Bool = false, range: NSRange? = nil) {
@@ -75,78 +83,10 @@ extension NSMutableAttributedString {
 			outRange = NSIntersectionRange(outRange, range)
 			
 			let (b, i, s) = (f?.isBold, f?.isItalic, f?.pointSize)
-			setFontFrom(font, newSize: keepOriginalSize ? s : nil, newIsBold: keepOriginalIsBold ? b : nil, newIsItalic: keepOriginalIsItalic ? i : nil, range: outRange)
+			setFont(font.fontBySetting(size: keepOriginalSize ? s : nil, isBold: keepOriginalIsBold ? b : nil, isItalic: keepOriginalIsItalic ? i : nil), range: outRange)
 			
 			curPos = outRange.upperBound
 		} while curPos < range.upperBound
-	}
-	
-	func setFontFrom(_ font: XibLocFont, newSize: CGFloat?, newIsBold: Bool?, newIsItalic: Bool?, range: NSRange? = nil) {
-		var fontDesc = font.fontDescriptor
-		
-		if let bold = newIsBold {
-			#if !os(macOS)
-				if bold {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitBold))       ?? fontDesc}
-				else    {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitBold)) ?? fontDesc}
-			#else
-				if bold {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.bold))}
-				else    {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.bold))}
-			#endif
-		}
-		
-		if let italic = newIsItalic {
-			#if !os(macOS)
-				if italic {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.traitItalic))       ?? fontDesc}
-				else      {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.traitItalic)) ?? fontDesc}
-			#else
-				if italic {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.union(.italic))}
-				else      {fontDesc = fontDesc.withSymbolicTraits(fontDesc.symbolicTraits.subtracting(.italic))}
-			#endif
-		}
-		
-		#if !os(macOS)
-			setFont(XibLocFont(descriptor: fontDesc, size: newSize ?? fontDesc.pointSize),         range: range)
-		#else
-			setFont(XibLocFont(descriptor: fontDesc, size: newSize ?? fontDesc.pointSize) ?? font, range: range)
-		#endif
-	}
-	
-	/**
-	- Warning: If no font is defined in the given range, the method will use the
-	preferred font for the “body” style (on iOS, watchOS and tvOS) or the system
-	font of “system” size. */
-	func setBoldOrItalic(bold: Bool?, italic: Bool?, range: NSRange? = nil) {
-		let range = range ?? NSRange(location: 0, length: length)
-		guard bold != nil || italic != nil else {return}
-		guard range.length > 0 else {return}
-		
-		var curPos = range.location
-		var outRange = NSRange(location: 0, length: 0)
-		
-		repeat {
-			#if !os(macOS)
-				let f = getFont(at: curPos, effectiveRange: &outRange) ?? XibLocFont.preferredFont(forTextStyle: .body)
-			#else
-				let f = getFont(at: curPos, effectiveRange: &outRange) ?? XibLocFont.systemFont(ofSize: XibLocFont.systemFontSize)
-			#endif
-			outRange = NSIntersectionRange(outRange, range)
-			
-			setFontFrom(f, newSize: f.pointSize, newIsBold: bold, newIsItalic: italic, range: outRange)
-			
-			curPos = outRange.upperBound
-		} while curPos < range.upperBound
-	}
-	
-	func setTextColor(_ color: XibLocColor, range: NSRange? = nil) {
-		let range = range ?? NSRange(location: 0, length: length)
-		removeAttribute(.foregroundColor, range: range) /* Work around an Apple leak (according to OHAttributedLabel) */
-		addAttribute(.foregroundColor, value: color, range: range)
-	}
-	
-	func setBackgroundColor(_ color: XibLocColor, range: NSRange? = nil) {
-		let range = range ?? NSRange(location: 0, length: length)
-		removeAttribute(.backgroundColor, range: range) /* Work around an Apple leak (according to OHAttributedLabel) */
-		addAttribute(.backgroundColor, value: color, range: range)
 	}
 	
 }

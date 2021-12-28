@@ -36,7 +36,7 @@ final class ObjCXibLoc : NSObject {
 	@objc
 	static func objc_applyingXibLocTransformForSystemBoldReplacementGenderAndPlural(base: String, baseFont: XibLocFont, baseColor: XibLocColor, replacement: String, pluralValue: Int, genderMeIsMale: Bool, genderOtherIsMale: Bool) throws -> NSMutableAttributedString {
 		return NSMutableAttributedString(
-			attributedString: base.applyingCommonTokensAttributed(simpleReplacement1: replacement, number: XibLocNumber(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale, baseFont: baseFont, baseColor: baseColor)
+			attributedString: base.applyingCommonTokensNSAttributed(simpleReplacement1: replacement, number: XibLocNumber(pluralValue), genderMeIsMale: genderMeIsMale, genderOtherIsMale: genderOtherIsMale, baseFont: baseFont, baseColor: baseColor)
 		)
 	}
 	
@@ -47,7 +47,7 @@ final class ObjCXibLoc : NSObject {
 			simpleSourceTypeReplacements: [:],
 			orderedReplacements: [:],
 			pluralGroups: [],
-			attributesModifications: [OneWordTokens(token: boldToken): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).apply(to: attrStr, range: NSRange(strRange, in: refStr)) }],
+			attributesModifications: [OneWordTokens(token: boldToken): { attrStr, strRange, refStr in StringAttributesChangesDescription(changes: [.setBold]).nsapply(to: attrStr, range: NSRange(strRange, in: refStr)) }],
 			simpleReturnTypeReplacements: [:], identityReplacement: { NSMutableAttributedString(string: $0, attributes: [.font: baseFont, .foregroundColor: baseColor]) }
 		).get())
 	}

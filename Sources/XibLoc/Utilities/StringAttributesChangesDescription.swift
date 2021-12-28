@@ -31,9 +31,9 @@ import Foundation
 
 public struct StringAttributesChangesDescription {
 	
-	/* IF the NSMutableAttributedString had been modified to be Swifty, we would have used the declaration below... */
-//	public typealias ChangeApplicationHandler = (_ modified: inout AttributedString, _ range: Range<AttributedString.Index>) -> Void
-	public typealias ChangeApplicationHandler = (_ modified: NSMutableAttributedString, _ range: NSRange /* An ObjC range */) -> Void
+	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+	public typealias   ChangeApplicationHandler = (_ modified: inout AttributedString, _ range: Range<AttributedString.Index>) -> Void
+	public typealias NSChangeApplicationHandler = (_ modified: NSMutableAttributedString, _ range: NSRange /* An ObjC range */) -> Void
 	
 	public enum StringAttributesChangeDescription {
 		
@@ -53,33 +53,67 @@ public struct StringAttributesChangesDescription {
 		
 		case addLink(URL)
 		
+		@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 		var handlerToApplyChange: ChangeApplicationHandler {
 			switch self {
-			case .setBold: return { attrStr, range in attrStr.setBoldOrItalic(bold: true, italic: nil, range: range) }
-			case .removeBold: return { attrStr, range in attrStr.setBoldOrItalic(bold: false, italic: nil, range: range) }
+				case .setBold:    return { attrStr, range in attrStr.setBoldOrItalic(bold: true,  italic: nil, range: range) }
+				case .removeBold: return { attrStr, range in attrStr.setBoldOrItalic(bold: false, italic: nil, range: range) }
 				
-			case .setItalic: return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: true, range: range) }
-			case .removeItalic: return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: false, range: range) }
+				case .setItalic:    return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: true,  range: range) }
+				case .removeItalic: return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: false, range: range) }
 				
-			case .addStraightUnderline: return { attrStr, range in attrStr.addAttribute(.underlineStyle, value: NSUnderlineStyle.single, range: range) }
-			case .removeUnderline: return { attrStr, range in attrStr.addAttribute(.underlineStyle, value: NSUnderlineStyle(), range: range) }
-				
-			case .setFgColor(let color): return { attrStr, range in attrStr.setTextColor(color, range: range) }
-			case .setBgColor(let color): return { attrStr, range in attrStr.setBackgroundColor(color, range: range) }
-				
-			case .changeFont(newFont: let font, preserveSizes: let preserveSizes, preserveBold: let preserveBold, preserveItalic: let preserveItalic):
-				return { attrStr, range in attrStr.setFont(font, keepOriginalSize: preserveSizes, keepOriginalIsBold: preserveBold, keepOriginalIsItalic: preserveItalic, range: range) }
-				
-			case .addLink(let url): return { attrStr, range in attrStr.addAttribute(.link, value: url, range: range) }
+				case .addStraightUnderline: return { attrStr, range in attrStr[range].underlineStyle = .single }
+				case .removeUnderline:      return { attrStr, range in attrStr[range].underlineStyle = [] }
+					
+				case .setFgColor(let color): return { attrStr, range in attrStr[range].foregroundColor = color }
+				case .setBgColor(let color): return { attrStr, range in attrStr[range].backgroundColor = color }
+					
+				case .changeFont(newFont: let font, preserveSizes: let preserveSizes, preserveBold: let preserveBold, preserveItalic: let preserveItalic):
+					return { attrStr, range in attrStr.setFont(font, keepOriginalSize: preserveSizes, keepOriginalIsBold: preserveBold, keepOriginalIsItalic: preserveItalic, range: range) }
+					
+				case .addLink(let url): return { attrStr, range in attrStr[range].link = url }
+			}
+		}
+		
+		var handlerToApplyNSChange: NSChangeApplicationHandler {
+			switch self {
+				case .setBold:    return { attrStr, range in attrStr.setBoldOrItalic(bold: true,  italic: nil, range: range) }
+				case .removeBold: return { attrStr, range in attrStr.setBoldOrItalic(bold: false, italic: nil, range: range) }
+					
+				case .setItalic:    return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: true,  range: range) }
+				case .removeItalic: return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: false, range: range) }
+					
+				case .addStraightUnderline: return { attrStr, range in attrStr.addAttribute(.underlineStyle, value: NSUnderlineStyle.single, range: range) }
+				case .removeUnderline:      return { attrStr, range in attrStr.addAttribute(.underlineStyle, value: NSUnderlineStyle(),      range: range) }
+					
+				case .setFgColor(let color): return { attrStr, range in attrStr.setTextColor(color, range: range) }
+				case .setBgColor(let color): return { attrStr, range in attrStr.setBackgroundColor(color, range: range) }
+					
+				case .changeFont(newFont: let font, preserveSizes: let preserveSizes, preserveBold: let preserveBold, preserveItalic: let preserveItalic):
+					return { attrStr, range in attrStr.setFont(font, keepOriginalSize: preserveSizes, keepOriginalIsBold: preserveBold, keepOriginalIsItalic: preserveItalic, range: range) }
+					
+				case .addLink(let url): return { attrStr, range in attrStr.addAttribute(.link, value: url, range: range) }
 			}
 		}
 		
 	}
 	
-	public var changes: [ChangeApplicationHandler]
+	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+	public var changes: [ChangeApplicationHandler] {
+		get {_changes as! [ChangeApplicationHandler]}
+		set {_changes = newValue}
+	}
+	private var _changes: [Any]!
 	
-	public var attributesModifications: (_ modified: inout NSMutableAttributedString, _ strRange: Range<String.Index>, _ refStr: String) -> Void {
-		return { attrStr, range, str in self.apply(to: attrStr, range: NSRange(range, in: str)) }
+	public var nschanges: [NSChangeApplicationHandler]
+	
+	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+	public var attributesModifications: (_ modified: inout AttributedString, _ strRange: Range<String.Index>, _ refStr: String) -> Void {
+		return { attrStr, range, str in self.apply(to: &attrStr, range: Range(range, in: attrStr)!) }
+	}
+	
+	public var nsattributesModifications: (_ modified: inout NSMutableAttributedString, _ strRange: Range<String.Index>, _ refStr: String) -> Void {
+		return { attrStr, range, str in self.nsapply(to: attrStr, range: NSRange(range, in: str)) }
 	}
 	
 	public init(change c: StringAttributesChangeDescription) {
@@ -87,13 +121,19 @@ public struct StringAttributesChangesDescription {
 	}
 	
 	public init(changes c: [StringAttributesChangeDescription]) {
-		changes = c.map{ $0.handlerToApplyChange }
+		if #available(macOS 12, iOS 15, tvOS 15, watchOS 8, *) {
+			_changes = c.map{ $0.handlerToApplyChange }
+		}
+		nschanges = c.map{ $0.handlerToApplyNSChange }
 	}
 	
-	/* IF the NSMutableAttributedString had been modified to be Swifty, we would have used the declaration below... */
-//	func apply(to attributedString: inout AttributedString, range: Range<AttributedString.Index>) {
-	func apply(to attributedString: NSMutableAttributedString, range: NSRange /* An ObjC range */) {
-		for h in changes {h(attributedString, range)}
+	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+	func apply(to attributedString: inout AttributedString, range: Range<AttributedString.Index>) {
+		for h in changes {h(&attributedString, range)}
+	}
+	
+	func nsapply(to attributedString: NSMutableAttributedString, range: NSRange /* An ObjC range */) {
+		for h in nschanges {h(attributedString, range)}
 	}
 	
 }

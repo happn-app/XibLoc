@@ -171,6 +171,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		/* Converting the source type string to the destination type */
 		var result = xibLocResolvingInfo.identityReplacement(sourceWithSimpleReplacements)
+		assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
 		replacementsIterator.reset()
 		
 		/* Applying other replacements */
@@ -204,6 +205,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				let stringReplacement = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: newValueCreator(currentValue), in: &result)
 				replacementsIterator.delete(replacementGroup: replacement.groupId)
 				replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringReplacement)
+				assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
 				
 			case .orderedReplacement(let token, valueIndex: let valueIndex, numberOfValues: let numberOfValues):
 				guard let wantedValue = xibLocResolvingInfo.orderedReplacements[token] else {
@@ -220,6 +222,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
 				replacementsIterator.delete(replacementGroup: replacement.groupId)
 				replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringContent)
+				assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
 				
 			case .pluralGroup(let token, zoneIndex: let zoneIndex, numberOfZones: let numberOfZones):
 				guard let wantedValue = pluralGroupsDictionary[token] else {
@@ -240,6 +243,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
 				replacementsIterator.delete(replacementGroup: replacement.groupId)
 				replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringContent)
+				assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
 			}
 		}
 		
