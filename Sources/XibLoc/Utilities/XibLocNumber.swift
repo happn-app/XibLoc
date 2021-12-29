@@ -18,12 +18,10 @@ import Foundation
 
 
 /**
-Contains a PluralValue to resolve a plurality, and the localized string
-representation of said plural value.
-
-Interestingly, it is not possible to retrieve the original value of the number
-from this struct (without parsing the string values available, which I would
-definitely do not recommend)! */
+ Contains a PluralValue to resolve a plurality, and the localized string representation of said plural value.
+ 
+ Interestingly, it is not possible to retrieve the original value of the number from this struct
+ (without parsing the string values available, which I would definitely do not recommend)! */
 public struct XibLocNumber {
 	
 	public let localizedString: String

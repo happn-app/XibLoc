@@ -20,17 +20,15 @@ import Foundation
 struct XibLocParsingInfo : Hashable {
 	
 	/**
-	 Are the given token valid or do they overlap in a way we cannot guarantee
-	 the parsing will work?
+	 Are the given token valid or do they overlap in a way we cannot guarantee the parsing will work?
 	 
 	 We apply the following rules:
 	 - If `lsep == rsep`, reduce to only sep;
-	 - No char used in any separator (left, right, internal, escape token) must
-	 be used in another separator;
+	 - No char used in any separator (left, right, internal, escape token) must be used in another separator;
 	 - But the same char can be used multiple time in one separator.
 	 
-	 - Note: We’re currently overly cautious. There are probably less restrictive
-	 rules we could apply. */
+	 - Note: We’re currently overly cautious.
+	 There are probably less restrictive rules we could apply. */
 	static func validateTokens(escapeToken: String?, oneWordTokens: [OneWordTokens], multipleWordsTokens: [MultipleWordsTokens]) -> Bool {
 		/* Soft TODO: Find better, less restrictive rules, maybe. */
 		struct ValidationError : Error {}

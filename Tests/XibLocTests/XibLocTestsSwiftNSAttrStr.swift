@@ -22,9 +22,7 @@ import XCTest
 
 class XibLocTestsSwiftNSAttrStr : XCTestCase {
 	
-	/* All tests are repeated a few times in a loop as we actually got random
-	 * crashes (first found was testFromHappn4/testFromHappn3ObjC; Swift should
-	 * be good but who knows…). */
+	/* All tests are repeated a few times in a loop as we actually got random crashes (first found was testFromHappn4/testFromHappn3ObjC; Swift should be good but who knows…). */
 	let nRepeats = 150
 	
 	override func setUp() {
@@ -42,11 +40,11 @@ class XibLocTestsSwiftNSAttrStr : XCTestCase {
 		Conf.defaultBoldAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setBold])
 		Conf.defaultItalicAttrsChangesDescription = nil
 		
-		#if canImport(os)
-			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-				Conf.oslog = nil
-			}
-		#endif
+#if canImport(os)
+		if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+			Conf.oslog = nil
+		}
+#endif
 		Conf.logger = nil
 	}
 	
@@ -85,14 +83,13 @@ class XibLocTestsSwiftNSAttrStr : XCTestCase {
 		}
 	}
 	
-	#if os(macOS)
+#if os(macOS)
 	/* ************************
 	   MARK: - macOS Only Tests
 	   ************************ */
 	
-	/* The tests below are only macOS compatible. Other oses either do not have
-	 * NSAttributedString (Linux), or do not have the necessary attributes to
-	 * test attributed strings (we could find one, be there is no need, really). */
+	/* The tests below are only macOS compatible.
+	 * Other oses either do not have NSAttributedString (Linux), or do not have the necessary attributes to test attributed strings (we could find one, be there is no need, really). */
 	
 	func testOneOrderedReplacementAndIdentityAttributeModification1() throws {
 		for _ in 0..<nRepeats {
@@ -446,10 +443,10 @@ class XibLocTestsSwiftNSAttrStr : XCTestCase {
 	
 	/* ***** Doc Cases Tests ***** */
 	/* Config:
-	 *    "*" is a left and right token for an attributes modification
-	 *    "_" is a left and right token for an attributes modification
-	 *    "|" is a left and right token for a simple replacement
-	 *    "<" ":" ">" are resp. a left, interior and right tokens for an ordered replacement. */
+	 *    "*" is a left and right token for an attributes modification
+	 *    "_" is a left and right token for an attributes modification
+	 *    "|" is a left and right token for a simple replacement
+	 *    "<" ":" ">" are resp. a left, interior and right tokens for an ordered replacement. */
 	
 	func testDocCase1() throws {
 		for _ in 0..<nRepeats {
@@ -610,8 +607,8 @@ class XibLocTestsSwiftNSAttrStr : XCTestCase {
 	}
 	
 	/* Baseline is set with XibLoc compiled with USE_UTF16_OFFSETS.
-	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash
-	 * for some Objective-C strings crash. See ParsedXibLoc.swift for more info. */
+	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash for some Objective-C strings crash.
+	 * See ParsedXibLoc.swift for more info. */
 	func testPerf2() throws {
 		measure{
 			for _ in 0..<nRepeats {
@@ -652,7 +649,7 @@ class XibLocTestsSwiftNSAttrStr : XCTestCase {
 		return (info, baseAttributes)
 	}()
 	
-	#endif
+#endif
 	
 }
 

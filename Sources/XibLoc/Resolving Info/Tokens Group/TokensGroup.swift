@@ -27,7 +27,7 @@ public protocol TokensGroup {
 	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 	var str2AttrStrXibLocInfo: Str2AttrStrXibLocInfo {get}
 	var str2NSAttrStrXibLocInfo: Str2NSAttrStrXibLocInfo {get}
-	#endif
+#endif
 	
 }
 

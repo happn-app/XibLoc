@@ -32,19 +32,19 @@ public struct OneWordTokens : Hashable {
 	}
 	
 	/**
-	A convenience init for one word tokens with a one-char left and right tokens.
-	
-	The short tokens form is a concatenation of the left and right tokens. If the
-	left and right tokens are the same, it does not need to be put twice.
-	
-	Examples:
-	- Left and right token: “`|`” -> Short tokens form: “`|`” or “`||`”
-	- Left token: “`{`”, Right token: “`}`” -> Short tokens form: “`{}`” */
+	 A convenience init for one word tokens with a one-char left and right tokens.
+	 
+	 The short tokens form is a concatenation of the left and right tokens.
+	 If the left and right tokens are the same, it does not need to be put twice.
+	 
+	 Examples:
+	 - Left and right token: “`|`” -> Short tokens form: “`|`” or “`||`”
+	 - Left token: “`{`”, Right token: “`}`” -> Short tokens form: “`{}`” */
 	public init?(shortTokensForm string: String) {
 		switch string.count {
-		case 1: self.init(token: string)
-		case 2: self.init(leftToken: String(string.first!), rightToken: String(string.dropFirst().first!))
-		default: return nil
+			case 1: self.init(token: string)
+			case 2: self.init(leftToken: String(string.first!), rightToken: String(string.dropFirst().first!))
+			default: return nil
 		}
 	}
 	

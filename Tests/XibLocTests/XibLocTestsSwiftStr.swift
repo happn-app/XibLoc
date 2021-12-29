@@ -20,9 +20,7 @@ import XCTest
 
 class XibLocTestsSwiftStr : XCTestCase {
 	
-	/* All tests are repeated a few times in a loop as we actually got random
-	 * crashes (first found was testFromHappn4/testFromHappn3ObjC; Swift should
-	 * be good but who knows…). */
+	/* All tests are repeated a few times in a loop as we actually got random crashes (first found was testFromHappn4/testFromHappn3ObjC; Swift should be good but who knows…). */
 	let nRepeats = 150
 	
 	override func setUp() {
@@ -32,11 +30,11 @@ class XibLocTestsSwiftStr : XCTestCase {
 		Conf.defaultEscapeToken = #"\"#
 		Conf.defaultPluralityDefinition = PluralityDefinition()
 		
-		#if canImport(os)
-			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-				Conf.oslog = nil
-			}
-		#endif
+#if canImport(os)
+		if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+			Conf.oslog = nil
+		}
+#endif
 		Conf.logger = nil
 	}
 	
@@ -411,8 +409,8 @@ class XibLocTestsSwiftStr : XCTestCase {
 	}
 	
 	/* Baseline is set with XibLoc compiled with USE_UTF16_OFFSETS.
-	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash
-	 * for some Objective-C strings crash. See ParsedXibLoc.swift for more info. */
+	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash for some Objective-C strings crash.
+	 * See ParsedXibLoc.swift for more info. */
 	func testPerf1() throws {
 		measure{
 			for _ in 0..<nRepeats {

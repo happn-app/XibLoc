@@ -22,18 +22,14 @@ import Foundation
 /**
  A default Tokens Group.
  
- This tokens group should be enough to process most, if not all of your
- translations.
- If you need more tokens, you can create your own groups, the same way this one
- has been done (or any other way you want, the idea is simply to get a
- `XibLocResolvingInfo` at the end; you can even extend `XibLocResolvingInfo` to
- create a custom init if you prefer, though you must remember to call
- `initParsingInfo` at the end of your init).
+ This tokens group should be enough to process most, if not all of your translations.
+ If you need more tokens, you can create your own groups, the same way this one has been done
+ (or any other way you want, the idea is simply to get a `XibLocResolvingInfo` at the end;
+ you can even extend `XibLocResolvingInfo` to create a custom init if you prefer,
+ though you must remember to call `initParsingInfo` at the end of your init).
  
- The default init of this group will set `defaultBoldAttrsChangesDescription`
- and `defaultItalicAttrsChangesDescription` resp. to the `*` and `_` tokens. If
- you don’t want bold or italic, you must explicitly disable it, whether when
- initing the group, or by setting the defaults in the `XibLocConfig` struct.
+ The default init of this group will set `defaultBoldAttrsChangesDescription` and `defaultItalicAttrsChangesDescription` resp. to the `*` and `_` tokens.
+ If you don’t want bold or italic, you must explicitly disable it, whether when initing the group, or by setting the defaults in the `XibLocConfig` struct.
  
  List of tokens:
  - Escape: `~`
@@ -46,27 +42,19 @@ import Foundation
  - Bold: `*`
  - Italic: `_`
  
- - Note: Only the transformations set to a non-nil value will see their tokens
- parsed. Which means, the following string `hello_world_how_are_you`, if
- processed with a `CommonTokensGroup()` (using all default arguments), will
- yield the same string when processed with the str2str resolving info, but will
- yield the attributed string `helloworldhowareyou` with the words “`world`” and
- “`are`” in italic if processed with the str2attrstr resolving info.
+ - Note: Only the transformations set to a non-nil value will see their tokens parsed.
+ Which means, the following string `hello_world_how_are_you`, if processed with a `CommonTokensGroup()` (using all default arguments),
+ will yield the same string when processed with the str2str resolving info,
+ but will yield the attributed string `helloworldhowareyou` with the words “`world`” and “`are`” in italic if processed with the str2attrstr resolving info.
  
- This is because an str2str resolving info will not do anything with the bold
- and italic tokens and thus, they are not put in the str2str resolving info.
+ This is because an str2str resolving info will not do anything with the bold and italic tokens and thus, they are not put in the str2str resolving info.
  
- If you’re processing translations automatically through some kind of script or
- app, because of the behaviour described above, it is recommended you escape as
- many tokens as possible. XibLoc will remove all the escape tokens. For
- instance, using the previous example, one should use the string
- `hello~_world~_how~_are~_you` whether they expect the translation to be used in
- an attributed or a non-attributed string. Finally, don’t forget to escape the
- escape token if it is in the original string.
+ If you’re processing translations automatically through some kind of script or app, because of the behaviour described above, it is recommended you escape as many tokens as possible.
+ XibLoc will remove all the escape tokens.
+ For instance, using the previous example, one should use the string `hello~_world~_how~_are~_you` whether they expect the translation to be used in an attributed or a non-attributed string.
+ Finally, don’t forget to escape the escape token if it is in the original string.
  
- The list of all the tokens (except the escape one!) is given in a static
- variable for convenience, as well as a static method to escape all of the
- tokens in a string. */
+ The list of all the tokens (except the escape one!) is given in a static variable for convenience, as well as a static method to escape all of the tokens in a string. */
 public struct CommonTokensGroup : TokensGroup {
 	
 	public static let escapeToken = "~"
@@ -77,7 +65,7 @@ public struct CommonTokensGroup : TokensGroup {
 	/** Token is `^` */
 	public var simpleReplacement2: String?
 	/**
-	 Intentionally blank line (for Xcode formatting purposes).
+	 Intentionally blank line (for doc formatting purposes).
 	 
 	 Tokens:
 	 - For the number replacement: `#`
@@ -92,9 +80,9 @@ public struct CommonTokensGroup : TokensGroup {
 	/**
 	 Tokens: \` `¦` `´`
 	 
-	 (Xcode Formatting note: I did not find a way to specify the first token is
-	 code (because it’s the same token as the token used to specify we have code
-	 in Xcode comments). Doesn’t matter, it’s not really visible though.) */
+	 (Doc formatting note: I did not find a way to specify the first token is code
+	  (because it’s the same token as the token used to specify we have code in doc comments).
+	 Doesn’t matter, it’s not really visible though.) */
 	public var genderOtherIsMale: Bool?
 	
 	public var baseFont: XibLocFont?

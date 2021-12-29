@@ -20,12 +20,12 @@ import Foundation
 extension RandomAccessCollection {
 	
 	/**
-	Return a sorted collection with a stable sort algorithm.
-	
-	Retrieved from [StackOverflow](https://stackoverflow.com/a/45585365/1152894)
-	
-	- Parameter areInIncreasingOrder: Return `nil` when two element are equal.
-	- Returns: The sorted collection */
+	 Return a sorted collection with a stable sort algorithm.
+	 
+	 Retrieved from [StackOverflow](https://stackoverflow.com/a/45585365/1152894)
+	 
+	 - Parameter areInIncreasingOrder: Return `nil` when two element are equal.
+	 - Returns: The sorted collection */
 	func stableSorted(by areInIncreasingOrder: (_ obj1: Iterator.Element, _ obj2: Iterator.Element) -> Bool?) -> [Iterator.Element] {
 		let sorted = enumerated().sorted{ (one, another) -> Bool in
 			if let result = areInIncreasingOrder(one.element, another.element) {return result}

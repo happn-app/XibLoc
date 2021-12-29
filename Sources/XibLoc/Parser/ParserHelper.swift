@@ -19,23 +19,31 @@ import Foundation
 
 public protocol ParserHelper {
 	
-	/** Can be anything. Usually it will be a String or an NS(Mutable)AttributedString. */
+	/**
+	 Can be anything.
+	 Usually it will be a String or an NS(Mutable)AttributedString. */
 	associatedtype ParsedType
 	
-	/** Workaround the NSMutableAttributedString are reference types problem. For
-	reference types, copy the referenced object and return the copy. For value
-	types, there is nothing to do, you can simply return the input. */
+	/**
+	 Workaround the NSMutableAttributedString are reference types problem.
+	 
+	 For reference types, copy the referenced object and return the copy.
+	 For value types, there is nothing to do, you can simply return the input. */
 	static func copy(source: ParsedType) -> ParsedType
 	
-	/** When asked to (remove, replace, whatever) something from the source type,
-	the given range will always contain a String range, and the corresponding
-	String from which the range comes from. In theory, the given string should
-	**always** be the stringRepresentation of the given source. */
+	/**
+	 When asked to (remove, replace, whatever) something from the source type,
+	 the given range will always contain a String range, and the corresponding String from which the range comes from.
+	 
+	 In theory, the given string should **always** be the stringRepresentation of the given source. */
 	typealias StrRange<R> = (r: R, s: String) where R : RangeExpression, R.Bound == String.Index
 	
-	/** Convert the source to its string representation. The conversion should be
-	a surjection. Also, you must be able to manipulate your ParsedType with the
-	indexes of the given string. */
+	/**
+	 Convert the source to its string representation.
+	 
+	 The conversion should be a surjection.
+	 
+	 Also, you must be able to manipulate your ParsedType with the indexes of the given string. */
 	static func stringRepresentation(of source: ParsedType) -> String
 	
 	static func slice<R>(strRange: StrRange<R>, from source: ParsedType) -> ParsedType where R : RangeExpression, R.Bound == String.Index

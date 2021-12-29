@@ -15,7 +15,7 @@ limitations under the License. */
 
 import Foundation
 #if canImport(os)
-	import os.log
+import os.log
 #endif
 
 import Logging
@@ -49,12 +49,12 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 		
 		let priorityDecreases = scanner.xl_scanCharacters(from: CharacterSet(charactersIn: "↓"))
 		let optionalities     = scanner.xl_scanCharacters(from: CharacterSet(charactersIn: "?"))
-
+		
 		if !scanner.isAtEnd {
-			#if canImport(os)
+#if canImport(os)
 			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 				Conf.oslog.flatMap{ os_log("Got garbage after end of plurality definition zone string: %@", log: $0, type: .info, (scanner.string as NSString).substring(from: scanner.scanLocation)) }}
-			#endif
+#endif
 			Conf.logger?.warning("Got garbage after end of plurality definition zone string: \((scanner.string as NSString).substring(from: scanner.scanLocation))")
 		}
 		
@@ -71,10 +71,10 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 			else                                                                     {ret = nil}
 			if ret == nil {
 				let v = $0
-				#if canImport(os)
+#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 					Conf.oslog.flatMap{ l in os_log("Cannot parse zone value string “%@”. Skipping...", log: l, type: .info, v) }}
-				#endif
+#endif
 				Conf.logger?.warning("Cannot parse zone value string “\(v)”. Skipping...")
 			}
 			return ret

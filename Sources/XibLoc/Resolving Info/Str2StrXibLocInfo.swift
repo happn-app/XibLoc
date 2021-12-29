@@ -26,14 +26,12 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == String {
 	}
 	
 	/**
-	Convenience init for an Str2StrXibLocInfo.
-	
-	Usually you should get a XibLocInfo from a tokens group. In case you have a
-	translation that does not fit within a tokens group, you can use this
-	convenience to create the info you need easily.
-	
-	All the keys in the dictionaries must represent the short form of the one
-	word or multiple words tokens they represent. */
+	 Convenience init for an Str2StrXibLocInfo.
+	 
+	 Usually you should get a XibLocInfo from a tokens group.
+	 In case you have a translation that does not fit within a tokens group, you can use this convenience to create the info you need easily.
+	 
+	 All the keys in the dictionaries must represent the short form of the one word or multiple words tokens they represent. */
 	public init?(replacements: [String: String] = [:], plurals: [(valueTokens: String, pluralTokens: String, value: XibLocNumber)] = [], orderedReplacements or: [String: Int] = [:], escapeToken e: String? = XibLocConfig.defaultEscapeToken, defaultPluralityDefinition dpd: PluralityDefinition = XibLocConfig.defaultPluralityDefinition) {
 		var orderedReplacementsBuilding = [MultipleWordsTokens: Int]()
 		var pluralGroupsBuilding = [(MultipleWordsTokens, PluralValue)]()

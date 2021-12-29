@@ -26,17 +26,16 @@ public typealias Str2AttrStrXibLocInfo = XibLocResolvingInfo<String, AttributedS
 extension XibLocResolvingInfo where SourceType == String, ReturnType == AttributedString {
 	
 	/**
-	Convenience init for an Str2AttrStrXibLocInfo.
-	
-	Takes an str2str xib loc info and convert it to an str2attrstr xib loc info
-	with no additional tokens. */
+	 Convenience init for an Str2AttrStrXibLocInfo.
+	 
+	 Takes an str2str xib loc info and convert it to an str2attrstr xib loc info with no additional tokens. */
 	public init(strResolvingInfo: Str2StrXibLocInfo = Str2StrXibLocInfo(), defaultAttributes: AttributeContainer = XibLocConfig.defaultStr2AttrStrAttributes) {
 		let simpleSourceTypeReplacements = strResolvingInfo.simpleSourceTypeReplacements.merging(strResolvingInfo.simpleReturnTypeReplacements, uniquingKeysWith: { _, _ in
 			fatalError("The given str2str xib loc info was not valid: it had source and return type replacements which had the same tokens!")
 		})
 		
-		/* We’re initing ourselves from a valid loc info and do not add new
-		 * tokens: we _know_ the tokens are valid and the init will succeed. */
+		/* We’re initing ourselves from a valid loc info and do not add new tokens:
+		 * we _know_ the tokens are valid and the init will succeed. */
 		self.init(
 			defaultPluralityDefinition: strResolvingInfo.defaultPluralityDefinition, escapeToken: strResolvingInfo.escapeToken,
 			simpleSourceTypeReplacements: simpleSourceTypeReplacements,

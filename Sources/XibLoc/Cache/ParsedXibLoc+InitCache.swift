@@ -56,10 +56,10 @@ private struct ErasedParsedXibLocInitInfo : Hashable {
 
 
 /* ************************
-   MARK: - NSCache Wrappers
-   ************************ */
+   MARK: - NSCache Wrappers
+   ************************ */
 /* NSCache does not support caching non-objc objects or non-objc keys.
- * We need to erase the ParsedXibLoc anyway, so it’s not that bad. */
+ * We need to erase the ParsedXibLoc anyway, so it’s not that bad. */
 
 
 /** Public because the cache property in XibLoc config is public. */

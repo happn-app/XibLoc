@@ -26,9 +26,7 @@ import XCTest
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 class XibLocTestsSwiftAttrStr : XCTestCase {
 	
-	/* All tests are repeated a few times in a loop as we actually got random
-	 * crashes (first found was testFromHappn4/testFromHappn3ObjC; Swift should
-	 * be good but who knows…). */
+	/* All tests are repeated a few times in a loop as we actually got random crashes (first found was testFromHappn4/testFromHappn3ObjC; Swift should be good but who knows…). */
 	let nRepeats = 150
 	
 	override func setUp() {
@@ -45,9 +43,9 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 		Conf.defaultBoldAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setBold])
 		Conf.defaultItalicAttrsChangesDescription = nil
 		
-		#if canImport(os)
-			Conf.oslog = nil
-		#endif
+#if canImport(os)
+		Conf.oslog = nil
+#endif
 		Conf.logger = nil
 	}
 	
@@ -86,9 +84,8 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 		}
 	}
 	
-	/* The tests below are only macOS compatible. Other oses either do not have
-	 * NSAttributedString (Linux), or do not have the necessary attributes to
-	 * test attributed strings (we could find one, be there is no need, really). */
+	/* The tests below are only macOS compatible.
+	 * Other oses either do not have NSAttributedString (Linux), or do not have the necessary attributes to test attributed strings (we could find one, be there is no need, really). */
 	
 	func testOneOrderedReplacementAndIdentityAttributeModification1() throws {
 		for _ in 0..<nRepeats {
@@ -598,8 +595,8 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 	}
 	
 	/* Baseline is set with XibLoc compiled with USE_UTF16_OFFSETS.
-	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash
-	 * for some Objective-C strings crash. See ParsedXibLoc.swift for more info. */
+	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash for some Objective-C strings crash.
+	 * See ParsedXibLoc.swift for more info. */
 	func testPerf2() throws {
 		measure{
 			for _ in 0..<nRepeats {

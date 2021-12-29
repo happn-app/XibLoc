@@ -21,19 +21,14 @@ import Foundation
 extension Collection {
 	
 	/**
-	Returns the index corresponding to the given offset from the start of the
-	collection, if that position exists.
-	
-	Note that when `offset` equals `count`, `endIndex` is returned instead of
-	`nil`.
-	
-	- Parameter offset: The position to seek, given as the number of positions
-	after `startIndex`.
-	- Returns: `index(startIndex, offsetBy: offset)` if the result will be in
-	range; otherwise, `nil`.
-	
-	- Complexity: O(1) if the collection conforms to `RandomAccessCollection`;
-	otherwise, O(*k*), where *k* is `offset`. */
+	 Returns the index corresponding to the given offset from the start of the collection, if that position exists.
+	 
+	 Note that when `offset` equals `count`, `endIndex` is returned instead of `nil`.
+	 
+	 - Parameter offset: The position to seek, given as the number of positions after `startIndex`.
+	 - Returns: `index(startIndex, offsetBy: offset)` if the result will be in range; otherwise, `nil`.
+	 
+	 - Complexity: O(1) if the collection conforms to `RandomAccessCollection`; otherwise, O(*k*), where *k* is `offset`. */
 	func index<T: BinaryInteger>(forOffset offset: T) -> Index? {
 		guard let offset = Int(exactly: offset), offset >= 0 else { return nil }
 		
@@ -41,19 +36,14 @@ extension Collection {
 	}
 	
 	/**
-	Returns the index corresponding to the given offset from the start of the
-	collection, if that position exists and can be dereferenced.
-	
-	Note that when `offset` equals `count`, `nil` is returned (instead of
-	`endIndex`).
-	
-	- Parameter offset: The position to seek, given as the number of positions
-	after `startIndex`.
-	- Returns: `index(startIndex, offsetBy: offset)` if the result will be in
-	range; otherwise, `nil`.
-	
-	- Complexity: O(1) if the collection conforms to `RandomAccessCollection`;
-	otherwise, O(*k*), where *k* is `offset`. */
+	 Returns the index corresponding to the given offset from the start of the collection, if that position exists and can be dereferenced.
+	 
+	 Note that when `offset` equals `count`, `nil` is returned (instead of `endIndex`).
+	 
+	 - Parameter offset: The position to seek, given as the number of positions after `startIndex`.
+	 - Returns: `index(startIndex, offsetBy: offset)` if the result will be in range; otherwise, `nil`.
+	 
+	 - Complexity: O(1) if the collection conforms to `RandomAccessCollection`; otherwise, O(*k*), where *k* is `offset`. */
 	func elementIndex<T: BinaryInteger>(forOffset offset: T) -> Index? {
 		let result = index(forOffset: offset)
 		return result != endIndex ? result : nil

@@ -15,7 +15,7 @@ limitations under the License. */
 
 import Foundation
 #if canImport(os)
-	import os.log
+import os.log
 #endif
 
 import Logging
@@ -24,66 +24,72 @@ import Logging
 
 struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 	
-	/** Returns an “any number” glob match zone value (matches any number, either
-	ints or floats). Equivalent of `init(string: "*")!`. An argument is required
-	because we can't create an init method that has no argument and a name... */
+	/**
+	 Returns an “any number” glob match zone value (matches any number, either ints or floats).
+	 
+	 Equivalent of `init(string: "*")!`.
+	 
+	 An argument is required because we can't create an init method that has no argument and a name… */
 	init(forAnyNumber: Void) {
 		value = .anyNumber
 	}
 	
-	/** Returns an “any float” glob match zone value (matches 1.0 but not 1).
-	Equivalent of `init(string: "*.")!`. An argument is required because we can't
-	create an init method that has no argument and a name... */
+	/**
+	 Returns an “any float” glob match zone value (matches 1.0 but not 1).
+	 
+	 Equivalent of `init(string: "*.")!`.
+	 
+	 An argument is required because we can't create an init method that has no argument and a name… */
 	init(forAnyFloat: Void) {
 		value = .anyFloat
 	}
 	
 	init?(string: String) {
 		switch string {
-		case "*", "^*{.*}$": value = .anyNumber
-		case "*.", "^*.*$":  value = .anyFloat
-			
-		default:
-			guard string.hasPrefix("^") && string.hasSuffix("$") else {return nil}
-			
-			var transformedString = string
-				.replacingOccurrences(of: ".", with: "\\.")
-				.replacingOccurrences(of: "?", with: "[0-9]")
-				.replacingOccurrences(of: "*", with: "[0-9]*")
-				.replacingOccurrences(of: "→", with: "-")
-				.replacingOccurrences(of: "{", with: "(")
-				.replacingOccurrences(of: "}", with: ")?")
-			
-			if       transformedString.hasPrefix("^+") {transformedString.remove(at: transformedString.index(after: transformedString.startIndex))} /* We remove the "+" */
-			else if !transformedString.hasPrefix("^-") {transformedString.insert(contentsOf: "-?+", at: transformedString.index(after: transformedString.startIndex))}
-			#if canImport(os)
-			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-				Conf.oslog.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }}
-			#endif
-			Conf.logger?.debug("Glob language to regex conversion: “\(string)” --> “\(transformedString)”")
-			
-			do {value = .regex(try NSRegularExpression(pattern: transformedString, options: []))}
-			catch {
-				#if canImport(os)
+			case "*", "^*{.*}$": value = .anyNumber
+			case "*.", "^*.*$":  value = .anyFloat
+				
+			default:
+				guard string.hasPrefix("^") && string.hasSuffix("$") else {return nil}
+				
+				var transformedString = string
+					.replacingOccurrences(of: ".", with: "\\.")
+					.replacingOccurrences(of: "?", with: "[0-9]")
+					.replacingOccurrences(of: "*", with: "[0-9]*")
+					.replacingOccurrences(of: "→", with: "-")
+					.replacingOccurrences(of: "{", with: "(")
+					.replacingOccurrences(of: "}", with: ")?")
+				
+				if       transformedString.hasPrefix("^+") {transformedString.remove(at: transformedString.index(after: transformedString.startIndex))} /* We remove the "+" */
+				else if !transformedString.hasPrefix("^-") {transformedString.insert(contentsOf: "-?+", at: transformedString.index(after: transformedString.startIndex))}
+#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-					Conf.oslog.flatMap{ os_log("Cannot create regular expression from string “%@” (original was “%@”); are you sure the original string follow all the rules? Got error %@", log: $0, type: .info, transformedString, string, String(describing: error)) }}
-				#endif
-				Conf.logger?.error("Cannot create regular expression from string “\(transformedString)” (original was “\(string)”); are you sure the original string follow all the rules? Got error \(String(describing: error))")
-				return nil
-			}
+					Conf.oslog.flatMap{ os_log("Glob language to regex conversion: “%@” --> “%@”", log: $0, type: .debug, string, transformedString) }}
+#endif
+				Conf.logger?.debug("Glob language to regex conversion: “\(string)” --> “\(transformedString)”")
+				
+				do {value = .regex(try NSRegularExpression(pattern: transformedString, options: []))}
+				catch {
+#if canImport(os)
+					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+						Conf.oslog.flatMap{ os_log("Cannot create regular expression from string “%@” (original was “%@”); are you sure the original string follow all the rules? Got error %@", log: $0, type: .info, transformedString, string, String(describing: error)) }}
+#endif
+					Conf.logger?.error("Cannot create regular expression from string “\(transformedString)” (original was “\(string)”); are you sure the original string follow all the rules? Got error \(String(describing: error))")
+					return nil
+				}
 		}
 	}
 	
 	func matches(pluralValue: PluralValue) -> Bool {
 		switch value {
-		case .anyNumber: return true
-		case .anyFloat:  return pluralValue.isFloat
-			
-		case .regex(let regexp):
-			let stringValue = pluralValue.fullStringValue
-			guard let r = regexp.firstMatch(in: stringValue, options: [], range: NSRange(stringValue.startIndex..<stringValue.endIndex, in: stringValue)) else {return false}
-			guard r.range.location != NSNotFound else {return false} /* Not sure if needed, but better safe than sorry... */
-			return true
+			case .anyNumber: return true
+			case .anyFloat:  return pluralValue.isFloat
+				
+			case .regex(let regexp):
+				let stringValue = pluralValue.fullStringValue
+				guard let r = regexp.firstMatch(in: stringValue, options: [], range: NSRange(stringValue.startIndex..<stringValue.endIndex, in: stringValue)) else {return false}
+				guard r.range.location != NSNotFound else {return false} /* Not sure if needed, but better safe than sorry... */
+				return true
 		}
 	}
 	

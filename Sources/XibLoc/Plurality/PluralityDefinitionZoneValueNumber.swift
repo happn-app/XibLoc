@@ -27,16 +27,14 @@ struct PluralityDefinitionZoneValueNumber : PluralityDefinitionZoneValue {
 	}
 	
 	func matches(pluralValue: PluralValue) -> Bool {
-		/* If the ref value doesn’t have a decimal separator (is int), we need the
-		 * given value to also be an int. However, if the ref value is a float, it
-		 * can match an int.
-		 * This matches the behavior of the interval of ints zone matching only
-		 * ints while the interval of floats can match ints too.
-		 *
-		 * Note: Before the `PluralValue` rewrite, this zone did not behave like
-		 *       that: if the ref value was a float it required the matched value
-		 *       to be a float too. But it was not a correct behavior (and was
-		 *       very probably a bug actually). */
+		/* If the ref value doesn’t have a decimal separator (is int), we need the given value to also be an int.
+		 * However, if the ref value is a float, it can match an int.
+		 *
+		 * This matches the behavior of the interval of ints zone matching only ints while the interval of floats can match ints too.
+		 *
+		 * Note: Before the `PluralValue` rewrite, this zone did not behave like that:
+		 *       if the ref value was a float it required the matched value to be a float too.
+		 *       But it was not a correct behavior (and was very probably a bug actually). */
 		guard refValue.isFloat || pluralValue.isInt else {
 			return false
 		}

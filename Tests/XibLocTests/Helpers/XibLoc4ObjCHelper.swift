@@ -53,14 +53,14 @@ final class ObjCXibLoc : NSObject {
 	}
 	
 	/**
-	Set bold or italic to 0 for no bold/italic, 1 to set it, -1 to leave as-is. */
+	 Set bold or italic to 0 for no bold/italic, 1 to set it, -1 to leave as-is. */
 	@objc
 	static func setBoldOrItalic(in base: NSMutableAttributedString, bold: Int, italic: Int, range: NSRange) {
 		func intToOptBool(_ i: Int) -> Bool? {
 			switch i {
-			case -1: return nil
-			case  0: return false
-			default: return true
+				case -1: return nil
+				case  0: return false
+				default: return true
 			}
 		}
 		base.setBoldOrItalic(bold: intToOptBool(bold), italic: intToOptBool(italic), range: range)

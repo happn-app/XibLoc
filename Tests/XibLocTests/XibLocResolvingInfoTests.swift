@@ -64,7 +64,7 @@ class XibLocResolvingInfoTests: XCTestCase {
 		XCTAssertEqual(info.simpleReturnTypeReplacements.count, 2)
 		XCTAssertFalse(info.removeTokens(OneWordTokens(token: "#")))
 		XCTAssertEqual(info.simpleReturnTypeReplacements.count, 2)
-
+		
 		XCTAssertEqual(info.pluralGroups.count, 1)
 		XCTAssertTrue(info.removeTokens(MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">")))
 		XCTAssertEqual(info.pluralGroups.count, 0)

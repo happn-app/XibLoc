@@ -18,13 +18,13 @@ limitations under the License. */
 import Foundation
 
 #if os(macOS)
-	import AppKit
-	public typealias XibLocFont = NSFont
-	public typealias XibLocColor = NSColor
+import AppKit
+public typealias XibLocFont = NSFont
+public typealias XibLocColor = NSColor
 #else
-	import UIKit
-	public typealias XibLocFont = UIFont
-	public typealias XibLocColor = UIColor
+import UIKit
+public typealias XibLocFont = UIFont
+public typealias XibLocColor = UIColor
 #endif
 
 
@@ -58,10 +58,10 @@ public struct StringAttributesChangesDescription {
 			switch self {
 				case .setBold:    return { attrStr, range in attrStr.setBoldOrItalic(bold: true,  italic: nil, range: range) }
 				case .removeBold: return { attrStr, range in attrStr.setBoldOrItalic(bold: false, italic: nil, range: range) }
-				
+					
 				case .setItalic:    return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: true,  range: range) }
 				case .removeItalic: return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: false, range: range) }
-				
+					
 				case .addStraightUnderline: return { attrStr, range in attrStr[range].underlineStyle = .single }
 				case .removeUnderline:      return { attrStr, range in attrStr[range].underlineStyle = [] }
 					

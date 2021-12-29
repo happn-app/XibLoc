@@ -23,8 +23,7 @@ import Foundation
 @available(watchOS, deprecated: 8,  message: "Use AttributedString")
 struct NSMutableAttributedStringParserHelper : ParserHelper {
 	
-	/* While the NSAttributedString is not “Swifted” to support let/var, we
-	 * prefer dealing with mutable attributed string directly for convenience. */
+	/* While the NSAttributedString is not “Swifted” to support let/var, we prefer dealing with mutable attributed string directly for convenience. */
 	typealias ParsedType = NSMutableAttributedString
 	
 	static func copy(source: NSMutableAttributedString) -> NSMutableAttributedString {

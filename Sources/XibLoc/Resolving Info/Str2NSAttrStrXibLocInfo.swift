@@ -24,17 +24,16 @@ public typealias Str2NSAttrStrXibLocInfo = XibLocResolvingInfo<String, NSMutable
 extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutableAttributedString {
 	
 	/**
-	Convenience init for an Str2NSAttrStrXibLocInfo.
-	
-	Takes an str2str xib loc info and convert it to an str2attrstr xib loc info
-	with no additional tokens. */
+	 Convenience init for an Str2NSAttrStrXibLocInfo.
+	 
+	 Takes an str2str xib loc info and convert it to an str2attrstr xib loc info with no additional tokens. */
 	public init(strResolvingInfo: Str2StrXibLocInfo = Str2StrXibLocInfo(), defaultAttributes: [NSAttributedString.Key: Any]? = XibLocConfig.defaultStr2NSAttrStrAttributes) {
 		let simpleSourceTypeReplacements = strResolvingInfo.simpleSourceTypeReplacements.merging(strResolvingInfo.simpleReturnTypeReplacements, uniquingKeysWith: { _, _ in
 			fatalError("The given str2str xib loc info was not valid: it had source and return type replacements which had the same tokens!")
 		})
 		
-		/* We’re initing ourselves from a valid loc info and do not add new
-		 * tokens: we _know_ the tokens are valid and the init will succeed. */
+		/* We’re initing ourselves from a valid loc info and do not add new tokens:
+		 * we _know_ the tokens are valid and the init will succeed. */
 		self.init(
 			defaultPluralityDefinition: strResolvingInfo.defaultPluralityDefinition, escapeToken: strResolvingInfo.escapeToken,
 			simpleSourceTypeReplacements: simpleSourceTypeReplacements,
@@ -44,8 +43,6 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 			identityReplacement: { NSMutableAttributedString(string: $0, attributes: defaultAttributes) }
 		)!
 	}
-	
-#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 	
 	public mutating func addStringAttributesChanges(tokens: OneWordTokens, changes: StringAttributesChangesDescription, allowReplace: Bool = false) -> Bool {
 		return addAttributesModification(tokens: tokens, attributesModification: changes.nsattributesModifications, allowReplace: allowReplace)
@@ -62,8 +59,6 @@ extension XibLocResolvingInfo where SourceType == String, ReturnType == NSMutabl
 	public func addingStringAttributesChange(tokens: OneWordTokens, change: StringAttributesChangesDescription.StringAttributesChangeDescription, allowReplace: Bool = false) -> Self? {
 		return addingAttributesModification(tokens: tokens, attributesModification: StringAttributesChangesDescription(change: change).nsattributesModifications, allowReplace: allowReplace)
 	}
-	
-#endif
 	
 }
 

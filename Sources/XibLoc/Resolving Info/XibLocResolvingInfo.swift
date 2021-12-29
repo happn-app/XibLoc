@@ -15,7 +15,7 @@ limitations under the License. */
 
 import Foundation
 #if canImport(os)
-	import os.log
+import os.log
 #endif
 
 import Logging
@@ -23,59 +23,49 @@ import Logging
 
 
 /**
-Supported configurations & Required Constraints:
-- See `validateTokens` in `XibLocParsingInfo` private init for constraints on
-the tokens;
-- Supported overlaps:
-   - Config: “`*`” is a left and right token for an attributes modification
-   - Config: “`_`” is a left and right token for an attributes modification
-   - Config: “`|`” is a left and right token for a simple replacement
-   - Config: “`<`” “`:`” “`>`” are resp. a left, interior and right tokens for
-     an ordered replacement
-   - Supported: “`This text will be *bold _and italic_ too*!`”
-   - Supported: “`This text will be *bold _and italic too*_!`”
-   - Supported: “`This text will be *bold _and italic too_*!`”
-   - Supported: “`This text will be *bold _and* italic too_!`”
-   - Supported: “`Let’s replace |*some text*|`”
-      - Note: Useless, but supported. If the simple replacement is a source
-              type replacement, the content will never be checked and the
-              attributes will never be set. If the replacement is a return
-              type replacement, the attributes of the content will be
-              modified, but then replaced by the replacement…
-   - Supported: “`Let’s replace *|some text|*`”
-      - Note: Only useful for a source type replacement (attributes would
-              be overwritten with a return type replacement).
-   - Supported: “`Let’s replace with either <*this* is chosen:nope> or <nope:_that_>`”
-   - Supported: “`Let’s replace with either *<this is chosen:_nope_> or <_nope_:that>*`”
-   - Unsupported: “`Let’s replace *|some* text|`”
-   - Supported: “`Let’s replace <*multiple*:*choices*:stuff>`”
-   - Unsupported: “`Let’s replace *<multiple:choices*:stuff>`”
-   - Unsupported: “`Let’s replace <*multiple:choices*:stuff>`”
-
-(This § is here because Xcode does not know how to parse comments and does
-weird sh*t… Thanks Xcode, go home, you’re drunk.)
-
-- Important: If you write a custom init of this struct, you **must** validate
-the token by calling `initParsingInfo` at the end of your init and fail the init
-if the method returns `false`. You can also call another init which does said
-validation. */
+ Supported configurations & Required Constraints:
+ - See `validateTokens` in `XibLocParsingInfo` private init for constraints on the tokens;
+ - Supported overlaps:
+    - Config: “`*`” is a left and right token for an attributes modification
+    - Config: “`_`” is a left and right token for an attributes modification
+    - Config: “`|`” is a left and right token for a simple replacement
+    - Config: “`<`” “`:`” “`>`” are resp. a left, interior and right tokens for an ordered replacement
+    - Supported: “`This text will be *bold _and italic_ too*!`”
+    - Supported: “`This text will be *bold _and italic too*_!`”
+    - Supported: “`This text will be *bold _and italic too_*!`”
+    - Supported: “`This text will be *bold _and* italic too_!`”
+    - Supported: “`Let’s replace |*some text*|`”
+       - Note: Useless, but supported.
+         If the simple replacement is a source type replacement, the content will never be checked and the attributes will never be set.
+         If the replacement is a return type replacement, the attributes of the content will be modified, but then replaced by the replacement…
+    - Supported: “`Let’s replace *|some text|*`”
+       - Note: Only useful for a source type replacement (attributes would be overwritten with a return type replacement).
+    - Supported: “`Let’s replace with either <*this* is chosen:nope> or <nope:_that_>`”
+    - Supported: “`Let’s replace with either *<this is chosen:_nope_> or <_nope_:that>*`”
+    - Unsupported: “`Let’s replace *|some* text|`”
+    - Supported: “`Let’s replace <*multiple*:*choices*:stuff>`”
+    - Unsupported: “`Let’s replace *<multiple:choices*:stuff>`”
+    - Unsupported: “`Let’s replace <*multiple:choices*:stuff>`”
+ 
+ - Important: If you write a custom init of this struct, you **must** validate the token by calling `initParsingInfo` at the end of your init
+ and fail the init if the method returns `false`.
+ You can also call another init which does said validation. */
 public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	
 	public var defaultPluralityDefinition: PluralityDefinition
 	
 	public private(set) var escapeToken: String?
 	
-	/* Value for a simple type replacement is a handler, so you can have access
-	 * to the original value being replaced. It used to be a constant. */
+	/* Value for a simple type replacement is a handler, so you can have access to the original value being replaced.
+	 * It used to be a constant. */
 	public private(set) var simpleSourceTypeReplacements: [OneWordTokens: (_ originalValue: SourceType) -> SourceType]
 	public private(set) var orderedReplacements: [MultipleWordsTokens: Int]
-	/* Plural groups are ordered because of the possibility of plurality
-	 * definition overrides. */
+	/* Plural groups are ordered because of the possibility of plurality definition overrides. */
 	public private(set) var pluralGroups: [(MultipleWordsTokens, PluralValue)]
 	
 	public private(set) var attributesModifications: [OneWordTokens: (_ modified: inout ReturnType, _ strRange: Range<String.Index>, _ refStr: String) -> Void] /* The handler must NOT modify the string representation of the given argument. */
-	/* Value for a simple type replacement is a handler, so you can have access
-	 * to the original value being replaced. It used to be a constant. */
+	/* Value for a simple type replacement is a handler, so you can have access to the original value being replaced.
+	 * It used to be a constant. */
 	public private(set) var simpleReturnTypeReplacements: [OneWordTokens: (_ originalValue: ReturnType) -> ReturnType]
 	
 	public var identityReplacement: (_ source: SourceType) -> ReturnType
@@ -89,9 +79,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		return XibLocParsingInfo(resolvingInfo: self)!
 	}
 	
-	/**
-	Call this function at the end of any init of XibLocResolvingInfo, and fail
-	your init if the method returns false. */
+	/** Call this function at the end of any init of XibLocResolvingInfo, and fail your init if the method returns false. */
 	public mutating func initParsingInfo() -> Bool {
 		_parsingInfo = XibLocParsingInfo(resolvingInfo: self)
 		return _parsingInfo != nil
@@ -152,10 +140,9 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	
 	@discardableResult
 	public mutating func removeTokens(_ tokens: OneWordTokens) -> Bool {
-		/* Only one of these three variables can contain the given token, so if
-		 * any has the value and removes it, we can stop. */
+		/* Only one of these three variables can contain the given token, so if any has the value and removes it, we can stop. */
 		let changed = (
-			     (attributesModifications.removeValue(forKey: tokens) != nil) ||
+			(attributesModifications.removeValue(forKey: tokens) != nil) ||
 			(simpleReturnTypeReplacements.removeValue(forKey: tokens) != nil) ||
 			(simpleSourceTypeReplacements.removeValue(forKey: tokens) != nil)
 		)
@@ -186,8 +173,7 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	
 	@discardableResult
 	public mutating func removeTokens(_ tokens: MultipleWordsTokens) -> Bool {
-		/* The tokens can be used only once in a valid resolving info, so we can
-		 * stop as soon as we have removed the token from anywhere. */
+		/* The tokens can be used only once in a valid resolving info, so we can stop as soon as we have removed the token from anywhere. */
 		let changed = (
 			(orderedReplacements.removeValue(forKey: tokens) != nil) ||
 			(pluralGroups.firstIndex(where: { $0.0 == tokens }).flatMap{ pluralGroups.remove(at: $0) } != nil)
@@ -285,10 +271,10 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		let savedPluralGroups = pluralGroups
 		if let index = currentIndex {
 			if insertIdx != nil {
-				#if canImport(os)
+#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 					Conf.oslog.flatMap{ os_log("Asked to insert a plural group at a specific index but a plural group with the given token was already present, so we just replaced it instead.", log: $0, type: .info) }}
-				#endif
+#endif
 				Conf.logger?.notice("Asked to insert a plural group at a specific index but a plural group with the given token was already present, so we just replaced it instead.")
 			}
 			pluralGroups[index].1 = value
@@ -313,10 +299,10 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		var newPluralGroups = pluralGroups
 		if let index = currentIndex {
 			if insertIdx != nil {
-				#if canImport(os)
+#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 					Conf.oslog.flatMap{ os_log("Asked to add a plural group at a specific index but a plural group with the given tokens was already present, so we just replaced it instead.", log: $0, type: .info) }}
-				#endif
+#endif
 				Conf.logger?.notice("Asked to add a plural group at a specific index but a plural group with the given tokens was already present, so we just replaced it instead.")
 			}
 			newPluralGroups[index].1 = value

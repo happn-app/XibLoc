@@ -15,7 +15,7 @@ limitations under the License. */
 
 import Foundation
 #if canImport(os)
-	import os.log
+import os.log
 #endif
 
 import Logging
@@ -28,11 +28,11 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	
 	public let sourceTypeHelperType: SourceTypeHelper.Type
 	
-	/** Init a new ParsedXibLoc. Usually you shouldn’t use this, unless you add
-	the support for a type other than `String` or `NSMutableAttributedString`, in
-	which case you should extend your type to apply directly the given resolving
-	info, and the implementation of your extension should call this init (see the
-	implementation of the extension of `String` etc. in file `XibLoc.swift`). */
+	/**
+	 Init a new ParsedXibLoc.
+	 Usually you shouldn’t use this, unless you add the support for a type other than `String` or `NSMutableAttributedString`,
+	 in which case you should extend your type to apply directly the given resolving info,
+	 and the implementation of your extension should call this init (see the implementation of the extension of `String` etc. in file `XibLoc.swift`). */
 	public init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
 		self.init(source: source, parserHelper: parserHelper, parsingInfo: xibLocResolvingInfo.parsingInfo)
 	}
@@ -49,11 +49,12 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, parsingInfo: XibLocParsingInfo, pluralityDefinitionsList: [PluralityDefinition?]) {
 		assert(pluralityDefinitionsList.count >= parsingInfo.pluralGroups.count)
 		
-		/* Let's build the replacements. Overlaps are allowed with the following rules:
-		 *    - The attributes modifications can overlap between themselves at will;
-		 *    - Replacements can be embedded in other replacements (internal ranges for multiple words tokens);
-		 *    - Replacements cannot overlap attributes modifications or replacements if one is not fully embedded in the other.
-		 * Note: Anything can be embedded in a simple replacement, but everything embedded in it will be dropped... (the content is replaced, by definition!) */
+		/* Let's build the replacements.
+		 * Overlaps are allowed with the following rules:
+		 *    - The attributes modifications can overlap between themselves at will;
+		 *    - Replacements can be embedded in other replacements (internal ranges for multiple words tokens);
+		 *    - Replacements cannot overlap attributes modifications or replacements if one is not fully embedded in the other.
+		 * Note: Anything can be embedded in a simple replacement, but everything embedded in it will be dropped… (the content is replaced, by definition!) */
 		
 		func getOneWordRanges(tokens: [OneWordTokens], replacementTypeBuilder: (_ token: OneWordTokens) -> ReplacementValue, currentGroupId: inout Int, in output: inout [Replacement]) {
 			for sep in tokens {
@@ -108,15 +109,12 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		getOneWordRanges(tokens: parsingInfo.simpleReturnTypeReplacements, replacementTypeBuilder: { .simpleReturnTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		getOneWordRanges(tokens: parsingInfo.attributesModifications, replacementTypeBuilder: { .attributesModification($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		
-		/* Let's remove the tokens we want gone from the source string. The escape
-		 * token is always removed. We only remove the left and right separator
-		 * tokens from the attributes modification; all other tokens are left. The
-		 * idea behind the removal of the tokens is to avoid adjusting all the
-		 * ranges in the replacements when applying the changes in the source. The
-		 * attributes modification change is guaranteed not to modify the range of
-		 * anything by contract, so we can pre-compute the ranges before applying
-		 * the modification. All other changes will modify the ranges 99% of the
-		 * cases, so there are no pre-computations to be done this way. */
+		/* Let's remove the tokens we want gone from the source string.
+		 * The escape token is always removed.
+		 * We only remove the left and right separator tokens from the attributes modification; all other tokens are left.
+		 * The idea behind the removal of the tokens is to avoid adjusting all the ranges in the replacements when applying the changes in the source.
+		 * The attributes modification change is guaranteed not to modify the range of anything by contract, so we can pre-compute the ranges before applying the modification.
+		 * All other changes will modify the ranges 99% of the cases, so there are no pre-computations to be done this way. */
 		
 		var untokenizedSourceBuilding = source
 		var untokenizedStringSourceBuilding = stringSource
@@ -154,10 +152,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		while let replacement = replacementsIterator.next() {
 			guard case .simpleSourceTypeReplacement(let token) = replacement.value else {continue}
 			guard let newValueCreator = xibLocResolvingInfo.simpleSourceTypeReplacements[token] else {
-				#if canImport(os)
+#if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 					Conf.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
-				#endif
+#endif
 				Conf.logger?.warning("Got token \(String(describing: token)) in replacement tree for simple source type replacement, but no value given in xibLocResolvingInfo")
 				continue
 			}
@@ -177,73 +175,73 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		/* Applying other replacements */
 		while let replacement = replacementsIterator.next() {
 			switch replacement.value {
-			case .simpleSourceTypeReplacement: (/* Treated before conversion to ReturnType */)
-			case .attributesModification(let token):
-				guard let modifier = xibLocResolvingInfo.attributesModifications[token] else {
-					#if canImport(os)
-					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-						Conf.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for attributes modification, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
-					#endif
-					Conf.logger?.warning("Got token \(String(describing: token)) in replacement tree for attributes modification, but no value given in xibLocResolvingInfo")
-					continue
-				}
-				modifier(&result, replacement.range, replacementsIterator.refString)
-				assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
-				replacementsIterator.delete(replacementGroup: replacement.groupId)
-				
-			case .simpleReturnTypeReplacement(let token):
-				guard let newValueCreator = xibLocResolvingInfo.simpleReturnTypeReplacements[token] else {
-					#if canImport(os)
-					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-						Conf.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
-					#endif
-					Conf.logger?.warning("Got token \(String(describing: token)) in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo")
-					continue
-				}
-				
-				let currentValue = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
-				let stringReplacement = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: newValueCreator(currentValue), in: &result)
-				replacementsIterator.delete(replacementGroup: replacement.groupId)
-				replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringReplacement)
-				assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
-				
-			case .orderedReplacement(let token, valueIndex: let valueIndex, numberOfValues: let numberOfValues):
-				guard let wantedValue = xibLocResolvingInfo.orderedReplacements[token] else {
-					#if canImport(os)
-					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-						Conf.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
-					#endif
-					Conf.logger?.warning("Got token \(String(describing: token)) in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo")
-					continue
-				}
-				guard valueIndex == wantedValue || (wantedValue >= numberOfValues.value && valueIndex == numberOfValues.value-1) else {continue}
-				
-				let content = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
-				let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
-				replacementsIterator.delete(replacementGroup: replacement.groupId)
-				replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringContent)
-				assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
-				
-			case .pluralGroup(let token, zoneIndex: let zoneIndex, numberOfZones: let numberOfZones):
-				guard let wantedValue = pluralGroupsDictionary[token] else {
-					#if canImport(os)
-					if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
-						Conf.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for plural replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
-					#endif
-					Conf.logger?.warning("Got token \(String(describing: token)) in replacement tree for plural replacement, but no value given in xibLocResolvingInfo")
-					continue
-				}
-				let pluralityDefinition = pluralityDefinitions[token] ?? xibLocResolvingInfo.defaultPluralityDefinition
-				let indexToUse = pluralityDefinition.indexOfVersionToUse(forValue: wantedValue, numberOfVersions: numberOfZones.value) /* Let's use the default defaultFloatPrecision! */
-				assert(indexToUse <= numberOfZones.value)
-				
-				guard zoneIndex == indexToUse else {continue}
-				
-				let content = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
-				let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
-				replacementsIterator.delete(replacementGroup: replacement.groupId)
-				replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringContent)
-				assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
+				case .simpleSourceTypeReplacement: (/* Treated before conversion to ReturnType */)
+				case .attributesModification(let token):
+					guard let modifier = xibLocResolvingInfo.attributesModifications[token] else {
+#if canImport(os)
+						if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+							Conf.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for attributes modification, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
+#endif
+						Conf.logger?.warning("Got token \(String(describing: token)) in replacement tree for attributes modification, but no value given in xibLocResolvingInfo")
+						continue
+					}
+					modifier(&result, replacement.range, replacementsIterator.refString)
+					assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
+					replacementsIterator.delete(replacementGroup: replacement.groupId)
+					
+				case .simpleReturnTypeReplacement(let token):
+					guard let newValueCreator = xibLocResolvingInfo.simpleReturnTypeReplacements[token] else {
+#if canImport(os)
+						if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+							Conf.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
+#endif
+						Conf.logger?.warning("Got token \(String(describing: token)) in replacement tree for simple return type replacement, but no value given in xibLocResolvingInfo")
+						continue
+					}
+					
+					let currentValue = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
+					let stringReplacement = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: newValueCreator(currentValue), in: &result)
+					replacementsIterator.delete(replacementGroup: replacement.groupId)
+					replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringReplacement)
+					assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
+					
+				case .orderedReplacement(let token, valueIndex: let valueIndex, numberOfValues: let numberOfValues):
+					guard let wantedValue = xibLocResolvingInfo.orderedReplacements[token] else {
+#if canImport(os)
+						if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+							Conf.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
+#endif
+						Conf.logger?.warning("Got token \(String(describing: token)) in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo")
+						continue
+					}
+					guard valueIndex == wantedValue || (wantedValue >= numberOfValues.value && valueIndex == numberOfValues.value-1) else {continue}
+					
+					let content = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
+					let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
+					replacementsIterator.delete(replacementGroup: replacement.groupId)
+					replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringContent)
+					assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
+					
+				case .pluralGroup(let token, zoneIndex: let zoneIndex, numberOfZones: let numberOfZones):
+					guard let wantedValue = pluralGroupsDictionary[token] else {
+#if canImport(os)
+						if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
+							Conf.oslog.flatMap{ os_log("Got token %{public}@ in replacement tree for plural replacement, but no value given in xibLocResolvingInfo", log: $0, type: .info, String(describing: token)) }}
+#endif
+						Conf.logger?.warning("Got token \(String(describing: token)) in replacement tree for plural replacement, but no value given in xibLocResolvingInfo")
+						continue
+					}
+					let pluralityDefinition = pluralityDefinitions[token] ?? xibLocResolvingInfo.defaultPluralityDefinition
+					let indexToUse = pluralityDefinition.indexOfVersionToUse(forValue: wantedValue, numberOfVersions: numberOfZones.value) /* Let's use the default defaultFloatPrecision! */
+					assert(indexToUse <= numberOfZones.value)
+					
+					guard zoneIndex == indexToUse else {continue}
+					
+					let content = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
+					let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
+					replacementsIterator.delete(replacementGroup: replacement.groupId)
+					replacementsIterator.replace(rangeInText: replacement.containerRange, with: stringContent)
+					assert(returnTypeHelperType.stringRepresentation(of: result) == replacementsIterator.refString)
 			}
 		}
 		
@@ -251,8 +249,8 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	}
 	
 	/* ***************
-	   MARK: - Private
-	   *************** */
+	   MARK: - Private
+	   *************** */
 	
 	/* Would prefer embedded in Replacement, but makes Swift crash :( (Xcode 9.1/9B55) */
 	private enum ReplacementValue {
@@ -271,16 +269,15 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		var isAttributesModifiation: Bool {
 			switch self {
-			case .attributesModification: return true
-			default:                      return false
+				case .attributesModification: return true
+				default:                      return false
 			}
 		}
 		
 	}
 	
-	/* Note: I'm not so sure having a struct here is such a good idea... We have
-	 *       to workaround a lot the fact that we pass replacements by value
-	 *       instead of pointers to replacements... */
+	/* Note: I'm not so sure having a struct here is such a good idea…
+	 *       We have to workaround a lot the fact that we pass replacements by value instead of pointers to replacements… */
 	private struct Replacement {
 		
 		let groupId: Int
@@ -308,22 +305,20 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	}
 	
 	/**
-	Contains the parsed replacements to apply when transforming the input string.
-	
-	The data structure is basically a graph whose root is hidden (the variable
-	contains all the children of the root directly). The children of a
-	replacement are the replacements whose ranges are embedded in them.
-	Attributes changes replacements are special: they are sterile (cannot have
-	children). As they have a different behavior than other replacements (they
-	can overlap for instance), they have to be treated a bit differently. */
+	 Contains the parsed replacements to apply when transforming the input string.
+	 
+	 The data structure is basically a graph whose root is hidden (the variable contains all the children of the root directly).
+	 The children of a replacement are the replacements whose ranges are embedded in them.
+	 Attributes changes replacements are special: they are sterile (cannot have children).
+	 As they have a different behavior than other replacements (they can overlap for instance), they have to be treated a bit differently. */
 	private let replacements: [Replacement]
 	private let untokenizedSource: SourceType
 	private let untokenizedStringSource: String
 	private let pluralityDefinitions: [MultipleWordsTokens: PluralityDefinition]
 	
 	/* *************************
-      MARK: → General Utilities
-	   ************************* */
+	   MARK: → General Utilities
+	   ************************* */
 	
 	private class ReplacementsIterator : IteratorProtocol {
 		
@@ -398,29 +393,23 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		}
 		
 		/* adjustedRange and removedRange are relative to originalString.
-		 * addedDistance is relative to newString.
-		 *
-		 * The original range that will be adjusted MUST start and end with
-		 * indexes that are at the start of an extended grapheme cluster. */
+		 * addedDistance is relative to newString.
+		 *
+		 * The original range that will be adjusted MUST start and end with indexes that are at the start of an extended grapheme cluster. */
 		private static func adjustedRange(from adjustedRange: Range<String.Index>, byReplacing removedRange: Range<String.Index>, in originalString: String, with addedString: String, newString: String) -> Range<String.Index> {
-			/* Let's verify we're indeed at the start of a cluster for the lower
-			 * and upper bounds of the adjusted range. */
+			/* Let's verify we're indeed at the start of a cluster for the lower and upper bounds of the adjusted range. */
 			assert(String.Index(adjustedRange.lowerBound, within: originalString) != nil)
 			assert(String.Index(adjustedRange.upperBound, within: originalString) != nil)
 			
-			/* We make sure that the removed range does not overlap with the
-			 * adjusted range or the adjusted range contains the removed range
-			 * fully. */
+			/* We make sure that the removed range does not overlap with the adjusted range or the adjusted range contains the removed range fully. */
 			assert(!adjustedRange.overlaps(removedRange) || adjustedRange.clamped(to: removedRange) == removedRange)
 			
 			let adjustLowerBound = (originalString.distance(from: adjustedRange.lowerBound, to: removedRange.upperBound) <= 0)
 			let adjustUpperBound = (originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0)
 			
-			#if !USE_UTF16_OFFSETS
-			/* With this version of the algorithm we play it safe and re-compute
-			 * the ranges by searching for partial strings from the original string
-			 * in the new string. This has a small performance impact on some ObjC
-			 * strings, but in most of the cases it’s completely negligible. */
+#if !USE_UTF16_OFFSETS
+			/* With this version of the algorithm we play it safe and re-compute the ranges by searching for partial strings from the original string in the new string.
+			 * This has a small performance impact on some ObjC strings, but in most of the cases it’s completely negligible. */
 			let newLowerBound: String.Index
 			let newUpperBound: String.Index
 			
@@ -430,9 +419,8 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				let suffixRangeInNewString = convert(range: removedRange.upperBound..<adjustedRange.lowerBound,  from: originalString, to: newString, searchAnchorInNewString: newString.index(prefixRangeInNewString.upperBound, offsetBy: addedString.count))
 				newLowerBound = suffixRangeInNewString.upperBound
 			} else {
-				/* Technically we shouldn’t have to adjust the lower bound of the
-				 * range. However, it seems the bound can become invalid, so we’ll
-				 * recalculate it anyway. */
+				/* Technically we shouldn’t have to adjust the lower bound of the range.
+				 * However, it seems the bound can become invalid, so we’ll recalculate it anyway. */
 				let prefixRangeInNewString = convert(range: originalString.startIndex..<adjustedRange.lowerBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
 				newLowerBound = prefixRangeInNewString.upperBound
 			}
@@ -443,28 +431,24 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				let suffixRangeInNewString = convert(range: removedRange.upperBound..<adjustedRange.upperBound,  from: originalString, to: newString, searchAnchorInNewString: newString.index(prefixRangeInNewString.upperBound, offsetBy: addedString.count))
 				newUpperBound = suffixRangeInNewString.upperBound
 			} else {
-				/* Technically we shouldn’t have to adjust the upper bound of the
-				 * range. However, it seems the bound can become invalid, so we’ll
-				 * recalculate it anyway. */
+				/* Technically we shouldn’t have to adjust the upper bound of the range.
+				 * However, it seems the bound can become invalid, so we’ll recalculate it anyway. */
 				let prefixRangeInNewString = convert(range: originalString.startIndex..<adjustedRange.upperBound, from: originalString, to: newString, searchAnchorInNewString: newString.startIndex)
 				newUpperBound = prefixRangeInNewString.upperBound
 			}
 			
-			#else
-			/* This version of the algorithm, though slightly faster in some
-			 * circumstances, crashes _randomly_ for some ObjC strings. It is kept
-			 * for posterity mainly, and for performance test comparison with the
-			 * other version of the algorithm. */
+#else
+			/* This version of the algorithm, though slightly faster in some circumstances, crashes _randomly_ for some ObjC strings.
+			 * It is kept for posterity mainly, and for performance test comparison with the other version of the algorithm. */
 			guard adjustLowerBound || adjustUpperBound else {return adjustedRange}
 			
 			let removedUTF16Distance = removedRange.upperBound.utf16Offset(in: originalString) - removedRange.lowerBound.utf16Offset(in: originalString) - addedString.utf16.count
 			let newLowerBound = String.Index(utf16Offset: adjustedRange.lowerBound.utf16Offset(in: originalString) - (adjustLowerBound ? removedUTF16Distance : 0), in: newString)
 			let newUpperBound = String.Index(utf16Offset: adjustedRange.upperBound.utf16Offset(in: originalString) - (adjustUpperBound ? removedUTF16Distance : 0), in: newString)
 			
-			#endif
+#endif
 			
-			/* Let's verify we're still at the start of a cluster for the lower and
-			 * upper bounds of the new range. */
+			/* Let's verify we're still at the start of a cluster for the lower and upper bounds of the new range. */
 			assert(String.Index(newLowerBound, within: newString) != nil)
 			assert(String.Index(newUpperBound, within: newString) != nil)
 			return Range<String.Index>(uncheckedBounds: (lower: newLowerBound, upper: newUpperBound))
@@ -472,8 +456,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with string: String, in replacements: inout [Replacement], originalString: String, newString: String) {
 			for (idx, var replacement) in replacements.enumerated() {
-				/* We make sure range is contained by the container range of the
-				 * replacement, or that both do not overlap. */
+				/* We make sure range is contained by the container range of the replacement, or that both do not overlap. */
 				assert(!replacement.containerRange.overlaps(replacedRange) || replacement.containerRange.clamped(to: replacedRange) == replacedRange)
 				
 				replacement.range          = ReplacementsIterator.adjustedRange(from: replacement.range,          byReplacing: replacedRange, in: originalString, with: string, newString: newString)
@@ -492,19 +475,18 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				guard replacement.groupId != deletedGroupId else {
 					if currentLevel < currentIndexPath.endIndex {
 						switch currentIndexPath[currentLevel] {
-						case idx:
-							/* The replacement we are removing is currently being
-							 * visited. Let's relocate the current index to the
-							 * previous replacement. */
-							currentIndexPath.removeLast(currentIndexPath.count-currentLevel-1)
-							while let last = currentIndexPath.last, last == 0 {currentIndexPath.removeLast()}
-							if let last = currentIndexPath.last {currentIndexPath.removeLast(); currentIndexPath.append(last - 1)}
-							else                                {wentIn = false}
-							
-						case idx...:
-							currentIndexPath[currentLevel] -= 1
-							
-						default: (/*nop*/)
+							case idx:
+								/* The replacement we are removing is currently being visited.
+								 * Let's relocate the current index to the previous replacement. */
+								currentIndexPath.removeLast(currentIndexPath.count-currentLevel-1)
+								while let last = currentIndexPath.last, last == 0 {currentIndexPath.removeLast()}
+								if let last = currentIndexPath.last {currentIndexPath.removeLast(); currentIndexPath.append(last - 1)}
+								else                                {wentIn = false}
+								
+							case idx...:
+								currentIndexPath[currentLevel] -= 1
+								
+							default: (/*nop*/)
 						}
 					}
 					replacements.remove(at: idx)
@@ -531,8 +513,8 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	}
 	
 	/* **************************
-	   MARK: → Parsing the XibLoc
-	   ************************** */
+	   MARK: → Parsing the XibLoc
+	   ************************** */
 	
 	private static func remove(escapeToken: String?, in replacements: inout [Replacement], source: inout SourceType, stringSource: inout String, parserHelper: SourceTypeHelper.Type) {
 		guard let escapeToken = escapeToken else {return}
@@ -575,34 +557,29 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	}
 	
 	/**
-	Inserts the given replacement in the given array of replacements, if
-	possible. If a valid insertion cannot be done, returns `false` (otherwise,
-	returns `true`).
-	
-	Assumes the given replacement and current replacements are valid. */
+	 Inserts the given replacement in the given array of replacements, if possible.
+	 If a valid insertion cannot be done, returns `false` (otherwise, returns `true`).
+	 
+	 Assumes the given replacement and current replacements are valid. */
 	@discardableResult
 	private static func insert(replacement insertedReplacement: Replacement, in currentReplacements: inout [Replacement]) -> Bool {
 		for (idx, checkedReplacement) in currentReplacements.enumerated() {
-			/* If both checked and inserted replacements have the same container
-			 * range, we are inserting a new replacement value for the checked
-			 * replacement (eg. inserting the “b” when “a” has been inserted in the
-			 * following replacement: “<a:b>”). Let's just check the two ranges do
-			 * not overlap (asserted, this is an internal logic error if ranges
-			 * overlap). */
+			/* If both checked and inserted replacements have the same container range,
+			 * we are inserting a new replacement value for the checked replacement
+			 * (eg. inserting the “b” when “a” has been inserted in the following replacement: “<a:b>”).
+			 * Let's just check the two ranges do not overlap (asserted, this is an internal logic error if ranges overlap). */
 			guard insertedReplacement.containerRange != checkedReplacement.containerRange else {
 				assert(!insertedReplacement.range.overlaps(checkedReplacement.range))
 				continue
 			}
 			
-			/* If there are no overlaps of the container ranges, or if we have two
-			 * attributes modifications, we have an easy case: nothing to do (all
-			 * ranges are valid). */
+			/* If there are no overlaps of the container ranges, or if we have two attributes modifications, we have an easy case: nothing to do (all ranges are valid). */
 			guard !insertedReplacement.value.isAttributesModifiation || !checkedReplacement.value.isAttributesModifiation else {continue}
 			guard insertedReplacement.range.overlaps(checkedReplacement.range) else {continue}
 			
 			if !checkedReplacement.value.isAttributesModifiation && checkedReplacement.range.clamped(to: insertedReplacement.containerRange) == insertedReplacement.containerRange {
 				/* insertedReplacement’s container range is included in checkedReplacement’s range and checkedReplacement is not an attributes modification:
-				 *    we must add insertedReplacement as a child of checkedReplacement */
+				 *    we must add insertedReplacement as a child of checkedReplacement */
 				var checkedReplacement = checkedReplacement
 				guard insert(replacement: insertedReplacement, in: &checkedReplacement.children) else {return false}
 				currentReplacements[idx] = checkedReplacement
@@ -610,7 +587,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			} else if insertedReplacement.range.clamped(to: checkedReplacement.containerRange) == checkedReplacement.containerRange {
 				if !insertedReplacement.value.isAttributesModifiation {
 					/* checkedReplacement’s container range is included in insertedReplacement’s range and insertedReplacement is not an attributes modification:
-					 *    we must add all replacements whose group id is equal to checkedReplacement’s group id as a child of insertedReplacement */
+					 *    we must add all replacements whose group id is equal to checkedReplacement’s group id as a child of insertedReplacement */
 					var i = idx
 					var insertedReplacement = insertedReplacement
 					while i < currentReplacements.endIndex {
@@ -622,8 +599,9 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 					currentReplacements.insert(insertedReplacement, at: idx)
 					return true
 				} else {
-					/* inserted replacement is an attributes modification: it cannot have children. However the checked replacement is fully embedded
-					 * in the inserted replacement: nothing is stopping us from adding the replacement on this check. */
+					/* inserted replacement is an attributes modification: it cannot have children.
+					 * However the checked replacement is fully embedded in the inserted replacement:
+					 *    nothing is stopping us from adding the replacement on this check. */
 					continue
 				}
 			} else {
@@ -653,10 +631,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		/* We do have plurality override(s)! Is it valid? */
 		guard let pluralityEndIdx = stringSource.range(of: "||", options: [.literal], range: pluralityStringStartIdx..<stringSource.endIndex)?.lowerBound else {
 			/* Nope. It is not. */
-			#if canImport(os)
+#if canImport(os)
 			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 				Conf.oslog.flatMap{ os_log("Got invalid plurality override in string source \"%@\"", log: $0, type: .info, stringSource) }}
-			#endif
+#endif
 			Conf.logger?.warning("Got invalid plurality override in string source \"\(stringSource)\"")
 			return []
 		}
@@ -669,7 +647,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		let nonPluralityStringStartIdx = stringSource.index(pluralityEndIdx, offsetBy: 2)
 		parserHelper.remove(strRange: (..<nonPluralityStringStartIdx, stringSource), from: &source)
 		stringSource.removeSubrange(startIdx..<nonPluralityStringStartIdx)
-
+		
 		return pluralityDefinitions
 	}
 	
@@ -687,10 +665,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		guard let rightSeparatorRange = range(of: rightSeparator, escapeToken: escapeToken, baseString: baseString, in: currentPositionInString..<baseString.endIndex) else {
 			/* Invalid string: The left token was found, but the right was not. */
-			#if canImport(os)
+#if canImport(os)
 			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 				Conf.oslog.flatMap{ os_log("Invalid baseString “%@”: left token “%@” was found, but right one “%@” was not. Ignoring.", log: $0, type: .info, baseString, leftSeparator, rightSeparator) }}
-			#endif
+#endif
 			Conf.logger?.warning("Invalid baseString “\(baseString)”: left token “\(leftSeparator)” was found, but right one “\(rightSeparator)” was not. Ignoring.")
 			currentPositionInString = baseString.endIndex
 			return nil

@@ -20,19 +20,15 @@ import Foundation
 public extension NumberFormatter {
 	
 	/**
-	An alternative to `string(from:)` which does not return an optional value.
-	
-	In theory, after looking at the implementation of the formatter, it should
-	never ever return `nil` when using “normal” numbers. However, the method
-	returns an optional, so we propose this alternative to simplify using a
-	`NumberFormatter` safely.
-	
-	The fallback in case the formatter returns `nil` uses a “`%*.f`” format, with
-	the number of decimals set to minimumFractionDigits.
-	
-	- Note: About the naming, I thought about naming the method `string(from:)`
-	like the one it enhances, however we can get an ambiguity when using the
-	method, so I opted into prefixing the method with `xl` (for XibLoc). */
+	 An alternative to `string(from:)` which does not return an optional value.
+	 
+	 In theory, after looking at the implementation of the formatter, it should never ever return `nil` when using “normal” numbers.
+	 However, the method returns an optional, so we propose this alternative to simplify using a `NumberFormatter` safely.
+	 
+	 The fallback in case the formatter returns `nil` uses a “`%*.f`” format, with the number of decimals set to minimumFractionDigits.
+	 
+	 - Note: About the naming, I thought about naming the method `string(from:)` like the one it enhances,
+	 however we can get an ambiguity when using the method, so I opted into prefixing the method with `xl` (for XibLoc). */
 	func xl_string(from number: NSNumber) -> String {
 		return string(from: number) ?? String(format: "%*.f", locale: Locale.current, minimumFractionDigits, number.doubleValue)
 	}
