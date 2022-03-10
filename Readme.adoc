@@ -4,7 +4,7 @@ François Lamboley <francois.lamboley@happn.com>
 :happn: https://happn.com
 :frizlab: https://github.com/Frizlab
 
-image:https://img.shields.io/badge/platform-macOS%20|%20iOS%20|%20tvOS%20|%20watchOS%20|%20Linux-lightgrey.svg?style=flat[Platforms] link:https://swift.org/package-manager/[image:https://img.shields.io/badge/SPM-compatible-E05C43.svg?style=flat[SPM Compatible]] link:License.txt[image:https://img.shields.io/github/license/happn-tech/XibLoc.svg[License]] link:{happn}[image:https://img.shields.io/badge/from-happn-0087B4.svg?style=flat[happn]]
+image:https://img.shields.io/badge/platform-macOS%20|%20iOS%20|%20tvOS%20|%20watchOS%20|%20Linux-lightgrey.svg?style=flat[Platforms] link:https://swift.org/package-manager/[image:https://img.shields.io/badge/SPM-compatible-E05C43.svg?style=flat[SPM Compatible]] link:License.txt[image:https://img.shields.io/github/license/happn-app/XibLoc.svg[License]] link:{happn}[image:https://img.shields.io/badge/from-happn-0087B4.svg?style=flat[happn]]
 
 A new format for your locs.
 
@@ -14,7 +14,7 @@ Use SPM.
 In your `Package.swift`, in the dependencies argument, add:
 [source,swift]
 ----
-.package(url: "https://github.com/happn-tech/XibLoc.git", from: "1.0.0")
+.package(url: "https://github.com/happn-app/XibLoc.git", from: "1.0.0")
 ----
 and add `XibLoc` to the list of dependencies of your app.
 
