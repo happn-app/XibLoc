@@ -523,8 +523,15 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		var pos = iterator.refString.startIndex
 		while let r = iterator.refString.range(of: escapeToken, options: [.literal], range: pos..<iterator.refString.endIndex) {
+			/* We’ll use this later to re-create the range after modifying the string. */
+			let d1 = iterator.refString.distance(from: iterator.refString.startIndex, to: r.lowerBound)
+			let d2 = iterator.refString.distance(from: iterator.refString.startIndex, to: r.upperBound)
+			
 			parserHelper.remove(strRange: (r, iterator.refString), from: &source)
 			iterator.delete(rangeInText: r)
+			
+			/* We must recreate the range because the previous range is no longer valid in the modified string. */
+			let r = iterator.refString.index(iterator.refString.startIndex, offsetBy: d1)..<iterator.refString.index(iterator.refString.startIndex, offsetBy: d2)
 			pos = r.lowerBound
 			
 			if pos >= iterator.refString.endIndex {break}

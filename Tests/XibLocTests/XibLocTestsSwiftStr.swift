@@ -470,31 +470,4 @@ class XibLocTestsSwiftStr : XCTestCase {
 		}
 	}
 	
-	func testOneAttributesChangeBeforeAnEscapeButIsolatedToBug() throws {
-		let baseStr = "CHF•44.20"
-		let currencyStr = "CHF"
-		var xibLocStr = baseStr.replacingOccurrences(of: currencyStr, with: "*\(currencyStr)*", options: .literal)
-		
-		let escapeToken = "4"
-		var pos = xibLocStr.startIndex
-		while let r = xibLocStr.range(of: escapeToken, options: [.literal], range: pos..<xibLocStr.endIndex) {
-			xibLocStr.removeSubrange(r)
-			pos = r.lowerBound
-			
-			if pos >= xibLocStr.endIndex {break}
-			if xibLocStr[r] == escapeToken {pos = xibLocStr.index(pos, offsetBy: escapeToken.count)}
-		}
-		XCTAssertEqual(xibLocStr, "CHF•4.20")
-	}
-	
-	func testOneAttributesChangeBeforeAnEscapeButEvenMoreIsolatedToBug() throws {
-		let baseStr = "CHF•44.20"
-		let currencyStr = "CHF"
-		var xibLocStr = baseStr.replacingOccurrences(of: currencyStr, with: "*\(currencyStr)*", options: .literal)
-		
-		let range = xibLocStr.index(xibLocStr.startIndex, offsetBy: 6)..<xibLocStr.index(xibLocStr.startIndex, offsetBy: 7)
-		xibLocStr.removeSubrange(range)
-		XCTAssertEqual(xibLocStr[range], "4")
-	}
-	
 }
