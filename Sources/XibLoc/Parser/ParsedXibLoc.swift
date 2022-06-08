@@ -408,6 +408,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			let adjustUpperBound = (originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0)
 			
 #if !USE_UTF16_OFFSETS
+#warning("I’m pretty sure the adjustment can be done using another algo (basically the same as the one in remove(escapeToken...)). Note there might be other places where we could update the algo too.")
 			/* With this version of the algorithm we play it safe and re-compute the ranges by searching for partial strings from the original string in the new string.
 			 * This has a small performance impact on some ObjC strings, but in most of the cases it’s completely negligible. */
 			let newLowerBound: String.Index
