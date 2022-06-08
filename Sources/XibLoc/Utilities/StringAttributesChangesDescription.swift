@@ -63,7 +63,7 @@ public struct StringAttributesChangesDescription {
 				case .removeItalic: return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: false, range: range) }
 					
 				case .addStraightUnderline: return { attrStr, range in attrStr[range].underlineStyle = .single }
-				case .removeUnderline:      return { attrStr, range in attrStr[range].underlineStyle = [] }
+				case .removeUnderline:      return { attrStr, range in attrStr[range].underlineStyle = nil }
 					
 				case .setFgColor(let color): return { attrStr, range in attrStr[range].foregroundColor = color }
 				case .setBgColor(let color): return { attrStr, range in attrStr[range].backgroundColor = color }
@@ -83,8 +83,8 @@ public struct StringAttributesChangesDescription {
 				case .setItalic:    return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: true,  range: range) }
 				case .removeItalic: return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: false, range: range) }
 					
-				case .addStraightUnderline: return { attrStr, range in attrStr.addAttribute(.underlineStyle, value: NSUnderlineStyle.single, range: range) }
-				case .removeUnderline:      return { attrStr, range in attrStr.addAttribute(.underlineStyle, value: NSUnderlineStyle(),      range: range) }
+				case .addStraightUnderline: return { attrStr, range in attrStr.addAttribute(   .underlineStyle, value: NSUnderlineStyle.single, range: range) }
+				case .removeUnderline:      return { attrStr, range in attrStr.removeAttribute(.underlineStyle,                                 range: range) }
 					
 				case .setFgColor(let color): return { attrStr, range in attrStr.setTextColor(color, range: range) }
 				case .setBgColor(let color): return { attrStr, range in attrStr.setBackgroundColor(color, range: range) }
