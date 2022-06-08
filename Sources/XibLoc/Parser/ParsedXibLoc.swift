@@ -531,10 +531,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			iterator.delete(rangeInText: r)
 			
 			/* We must recreate the range because the previous range is no longer valid in the modified string. */
+			if d2 > iterator.refString.count {break}
 			let r = iterator.refString.index(iterator.refString.startIndex, offsetBy: d1)..<iterator.refString.index(iterator.refString.startIndex, offsetBy: d2)
-			pos = r.lowerBound
 			
-			if pos >= iterator.refString.endIndex {break}
+			pos = r.lowerBound
 			if iterator.refString[r] == escapeToken {pos = iterator.refString.index(pos, offsetBy: escapeToken.count)}
 		}
 		

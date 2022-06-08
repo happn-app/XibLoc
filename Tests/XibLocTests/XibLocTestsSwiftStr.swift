@@ -46,6 +46,68 @@ class XibLocTestsSwiftStr : XCTestCase {
 		XCTAssertEqual(CommonTokensGroup.escape("a~|b`c"), "a~~~|b~`c")
 	}
 	
+	func testEscapeAtTheEnd() throws {
+		for _ in 0..<nRepeats {
+			let info = try XibLocResolvingInfo<String, String>(
+				identityReplacement: { $0 }
+			).get()
+			XCTAssertEqual(
+				"the \\\\".applying(xibLocInfo: info),
+				"the \\"
+			)
+		}
+	}
+	
+	func testOtherEscapeAtTheEnd() throws {
+		for _ in 0..<nRepeats {
+			let info = try XibLocResolvingInfo<String, String>(
+				identityReplacement: { $0 }
+			).get()
+			XCTAssertEqual(
+				"the \\1".applying(xibLocInfo: info),
+				"the 1"
+			)
+		}
+	}
+	
+	func testInvalidEscapeAtTheEnd() throws {
+		for _ in 0..<nRepeats {
+			let info = try XibLocResolvingInfo<String, String>(
+				identityReplacement: { $0 }
+			).get()
+			XCTAssertEqual(
+				"the \\".applying(xibLocInfo: info),
+				"the "
+			)
+		}
+	}
+	
+	func testLongEscapeAtTheEnd() throws {
+		for _ in 0..<nRepeats {
+			let info = try XibLocResolvingInfo<String, String>(
+				escapeToken: "12345",
+				identityReplacement: { $0 }
+			).get()
+			XCTAssertEqual(
+				"the 1234512345".applying(xibLocInfo: info),
+				"the 12345"
+			)
+		}
+	}
+	
+	func testInvalidLongEscapeAtTheEnd() throws {
+		for _ in 0..<nRepeats {
+			let info = try XibLocResolvingInfo<String, String>(
+				escapeToken: "12345",
+				identityReplacement: { $0 }
+			).get()
+			XCTAssertEqual(
+				"the 12345".applying(xibLocInfo: info),
+				"the "
+			)
+		}
+	}
+	
 	func testEscapedSimpleReplacement() throws {
 		for _ in 0..<nRepeats {
 			let info = try XibLocResolvingInfo<String, String>(
