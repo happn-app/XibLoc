@@ -440,4 +440,34 @@ class XibLocTestsSwiftStr : XCTestCase {
 		}
 	}
 	
+	func testOneAttributesChangeBeforeAnEscape() throws {
+		let escapeToken = "4"
+		for _ in 0..<nRepeats {
+			let info = try Str2StrXibLocInfo(
+				defaultPluralityDefinition: PluralityDefinition(), escapeToken: escapeToken,
+				simpleSourceTypeReplacements: [:], orderedReplacements: [:], pluralGroups: [],
+				attributesModifications: [OneWordTokens(token: "*"): { _, _, _ in }],
+				simpleReturnTypeReplacements: [:],
+				identityReplacement: { $0 }
+			).get()
+			
+			func escape(_ str: String) -> String {
+				return ([escapeToken, "|", "^", "#", "<", ":", ">", "{", "₋", "}", "`", "¦", "´", "*", "_"])
+					.reduce(str, { $0.replacingOccurrences(of: $1, with: escapeToken + $1) })
+			}
+			
+			let baseStr = "CHF•44.20"
+			let currencyStr = "CHF"
+			let xibLocStr = baseStr.replacingOccurrences(of: currencyStr, with: "*\(currencyStr)*", options: .literal)
+			let xibLocStrNoReplacements = "*CHF*•44.20"
+			XCTAssertEqual(xibLocStrNoReplacements, xibLocStr)
+			
+			XCTAssertEqual(
+				/* No problem with xibLocStrNoReplacements, but it’s the same string as xibLocStr! */
+				xibLocStr.applying(xibLocInfo: info),
+				"CHF•4.20"
+			)
+		}
+	}
+	
 }
