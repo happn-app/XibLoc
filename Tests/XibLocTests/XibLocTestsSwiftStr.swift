@@ -215,6 +215,22 @@ class XibLocTestsSwiftStr : XCTestCase {
 		}
 	}
 	
+	func testOneOrderedReplacementBelowMin() throws {
+		for _ in 0..<nRepeats {
+			let info = try XibLocResolvingInfo<String, String>(
+				defaultPluralityDefinition: PluralityDefinition(), escapeToken: nil,
+				simpleSourceTypeReplacements: [:],
+				orderedReplacements: [MultipleWordsTokens(leftToken: "<", interiorToken: ":", rightToken: ">"): -1],
+				pluralGroups: [], attributesModifications: [:], simpleReturnTypeReplacements: [:],
+				identityReplacement: { $0 }
+			).get()
+			XCTAssertEqual(
+				"the <first:second>".applying(xibLocInfo: info),
+				"the first"
+			)
+		}
+	}
+	
 	func testOneOrderedReplacementAboveMax() throws {
 		for _ in 0..<nRepeats {
 			let info = try XibLocResolvingInfo<String, String>(

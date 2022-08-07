@@ -214,7 +214,11 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 						Conf.logger?.warning("Got token \(String(describing: token)) in replacement tree for ordered replacement, but no value given in xibLocResolvingInfo")
 						continue
 					}
-					guard valueIndex == wantedValue || (wantedValue >= numberOfValues.value && valueIndex == numberOfValues.value-1) else {continue}
+					guard (
+						valueIndex == wantedValue ||
+						(wantedValue < 0 && valueIndex == 0) ||
+						(wantedValue >= numberOfValues.value && valueIndex == numberOfValues.value-1)
+					) else {continue}
 					
 					let content = returnTypeHelperType.slice(strRange: (replacement.range, replacementsIterator.refString), from: result)
 					let stringContent = returnTypeHelperType.replace(strRange: (replacement.containerRange, replacementsIterator.refString), with: content, in: &result)
