@@ -462,6 +462,49 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 		}
 	}
 	
+	func testFromTogever1() throws {
+		for _ in 0..<nRepeats {
+			let title = "yolo"
+			let nResults = XibLocNumber(1)
+			let str = "|title|^\n_#n# result<:s>_^"
+			let info = CommonTokensGroup(simpleReplacement1: title, simpleReplacement2: nil, number: nResults)
+				.str2AttrStrXibLocInfo
+				.addingSimpleSourceTypeReplacement(tokens: .init(token: "^"), replacement: { val in val })!
+				.addingStringAttributesChange(
+					tokens: .init(token: "_"),
+					change: .changeFont(newFont: .preferredFont(forTextStyle: .caption1), preserveSizes: false, preserveBold: false, preserveItalic: false),
+					allowReplace: true
+				)!
+			var result = AttributedString("yolo\n1 result", attributes: Conf.defaultStr2AttrStrAttributes)
+			result.setFont(.preferredFont(forTextStyle: .caption1), range: result.index(result.startIndex, offsetByCharacters: 5)..<result.endIndex)
+			XCTAssertEqual(
+				str.applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
+	func testFromTogever1Variant() throws {
+		for _ in 0..<nRepeats {
+			let title = "yolo"
+			let nResults = XibLocNumber(1)
+			let str = "|title|^\n_#n# result<:s>_^"
+			let info = CommonTokensGroup(simpleReplacement1: title, simpleReplacement2: nil, number: nResults)
+				.str2AttrStrXibLocInfo
+				.addingSimpleSourceTypeReplacement(tokens: .init(token: "^"), replacement: { val in "" })!
+				.addingStringAttributesChange(
+					tokens: .init(token: "_"),
+					change: .changeFont(newFont: .preferredFont(forTextStyle: .caption1), preserveSizes: false, preserveBold: false, preserveItalic: false),
+					allowReplace: true
+				)!
+			let result = AttributedString("yolo", attributes: Conf.defaultStr2AttrStrAttributes)
+			XCTAssertEqual(
+				str.applying(xibLocInfo: info),
+				result
+			)
+		}
+	}
+	
 	/* ***** Doc Cases Tests ***** */
 	/* Config:
 	 *    "*" is a left and right token for an attributes modification
