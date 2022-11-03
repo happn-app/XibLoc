@@ -15,6 +15,12 @@ limitations under the License. */
 
 import Foundation
 
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
+
 
 
 #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
