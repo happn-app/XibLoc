@@ -704,7 +704,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				return nil
 			}
 			startIndex = rl.upperBound
-			escaped = isTokenInRange(rl, fromString: baseString, escapedWithToken: escapeToken)
+			escaped = isTokenEscaped(tokenRange: rl, in: baseString, escapeToken: escapeToken)
 			
 			ret = rl
 		} while escaped
@@ -712,7 +712,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		return ret
 	}
 	
-	private static func isTokenInRange(_ range: Range<String.Index>, fromString baseString: String, escapedWithToken token: String?) -> Bool {
+	private static func isTokenEscaped(tokenRange range: Range<String.Index>, in baseString: String, escapeToken token: String?) -> Bool {
 		guard let escapeToken = token, !escapeToken.isEmpty else {return false}
 		
 		var wasMatch = true
