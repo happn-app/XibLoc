@@ -155,8 +155,10 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 	
 	let zones: [PluralityDefinitionZone]
 	
-	/** Returns an empty plurality definition, which will always return the latest plural version  */
-	public init() {
+	/**
+	 Returns an empty plurality definition, which will always return the latest plural version.
+	 (Faster) equivalent of `init(string: "")`. */
+	public init(matchingNothing: Void) {
 		zones = []
 	}
 	

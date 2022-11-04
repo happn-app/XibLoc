@@ -235,4 +235,16 @@ class PluralityTests: XCTestCase {
 		XCTAssertEqual(str.applying(xibLocInfo: resolvingInfos[6]!), "many")
 	}
 	
+	func testEmptyPluralityDefinition() {
+		XCTAssertEqual(PluralityDefinition(string: "").zones.count, 0)
+		XCTAssertEqual(PluralityDefinition(matchingNothing: ()).zones.count, 0)
+		XCTAssertEqual(try PluralityDefinition(matchingNothing: ()).indexOfVersionToUse(forValue: PluralValue(string: "0").get(), numberOfVersions: 5), 4)
+	}
+	
+	func testZoneMatchingNothing() {
+		let plurality = PluralityDefinition(string: "()")
+		XCTAssertEqual(plurality.zones.count, 1)
+		XCTAssertEqual(try plurality.indexOfVersionToUse(forValue: PluralValue(string: "0").get(), numberOfVersions: 5), 4)
+	}
+	
 }

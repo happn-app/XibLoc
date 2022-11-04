@@ -44,8 +44,14 @@ struct PluralityDefinitionZone : CustomDebugStringConvertible {
 		
 		guard scanner.xl_scanString("(") != nil else {return nil}
 		
-		guard let zoneContent = scanner.xl_scanUpToString(")") else {return nil}
-		guard scanner.xl_scanString(")") != nil else {return nil}
+		let zoneContent: String
+		if scanner.xl_scanString(")") == nil {
+			guard let c = scanner.xl_scanUpToString(")") else {return nil}
+			guard scanner.xl_scanString(")") != nil else {return nil}
+			zoneContent = c
+		} else {
+			zoneContent = ""
+		}
 		
 		let priorityDecreases = scanner.xl_scanCharacters(from: CharacterSet(charactersIn: "↓"))
 		let optionalities     = scanner.xl_scanCharacters(from: CharacterSet(charactersIn: "?"))

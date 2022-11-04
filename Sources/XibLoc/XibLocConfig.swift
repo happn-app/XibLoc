@@ -66,7 +66,7 @@ public enum XibLocConfig {
 	}()
 	
 	public static var defaultEscapeToken: String? = "~"
-	public static var defaultPluralityDefinition = PluralityDefinition()
+	public static var defaultPluralityDefinition = PluralityDefinition(matchingNothing: ())
 	
 #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
