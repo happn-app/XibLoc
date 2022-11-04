@@ -29,7 +29,7 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 	 
 	 Equivalent of `init(string: "*")!`.
 	 
-	 An argument is required because we can't create an init method that has no argument and a name… */
+	 An argument is required because we can’t create an init method that has no argument and a name… */
 	init(forAnyNumber: Void) {
 		value = .anyNumber
 	}
@@ -39,7 +39,7 @@ struct PluralityDefinitionZoneValueGlob : PluralityDefinitionZoneValue {
 	 
 	 Equivalent of `init(string: "*.")!`.
 	 
-	 An argument is required because we can't create an init method that has no argument and a name… */
+	 An argument is required because we can’t create an init method that has no argument and a name… */
 	init(forAnyFloat: Void) {
 		value = .anyFloat
 	}

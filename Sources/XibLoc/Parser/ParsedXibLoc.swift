@@ -1,5 +1,5 @@
 /*
-Copyright 2019 happn
+Copyright 2019-2022 happn
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	/**
 	 Init a new ParsedXibLoc.
 	 Usually you shouldn’t use this, unless you add the support for a type other than `String` or `NSMutableAttributedString`,
-	 in which case you should extend your type to apply directly the given resolving info,
-	 and the implementation of your extension should call this init (see the implementation of the extension of `String` etc. in file `XibLoc.swift`). */
+	  in which case you should extend your type to apply directly the given resolving info,
+	  and the implementation of your extension should call this init (see the implementation of the extension of `String` etc. in file `XibLoc.swift`). */
 	public init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
 		self.init(source: source, parserHelper: parserHelper, parsingInfo: xibLocResolvingInfo.parsingInfo)
 	}
@@ -49,7 +49,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, parsingInfo: XibLocParsingInfo, pluralityDefinitionsList: [PluralityDefinition?]) {
 		assert(pluralityDefinitionsList.count >= parsingInfo.pluralGroups.count)
 		
-		/* Let's build the replacements.
+		/* Let’s build the replacements.
 		 * Overlaps are allowed with the following rules:
 		 *    - The attributes modifications can overlap between themselves at will;
 		 *    - Replacements can be embedded in other replacements (internal ranges for multiple words tokens);
@@ -73,7 +73,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			for sep in tokens {
 				var pos = stringSource.startIndex
 				while let r = ParsedXibLoc.rangeFrom(leftSeparator: sep.leftToken, rightSeparator: sep.rightToken, escapeToken: parsingInfo.escapeToken, baseString: stringSource, currentPositionInString: &pos) {
-					/* Let's get the internal ranges. */
+					/* Let’s get the internal ranges. */
 					let contentRange = ParsedXibLoc.contentRange(from: r, in: stringSource, leftSep: sep.leftToken, rightSep: sep.rightToken)
 					var startIndex = contentRange.lowerBound
 					let endIndex = contentRange.upperBound
@@ -108,7 +108,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		getOneWordRanges(tokens: parsingInfo.simpleReturnTypeReplacements, replacementTypeBuilder: { .simpleReturnTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		getOneWordRanges(tokens: parsingInfo.attributesModifications, replacementTypeBuilder: { .attributesModification($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		
-		/* Let's remove the tokens we want gone from the source string.
+		/* Let’s remove the tokens we want gone from the source string.
 		 * The escape token is always removed.
 		 * We only remove the left and right separator tokens from the attributes modification; all other tokens are left.
 		 * The idea behind the removal of the tokens is to avoid adjusting all the ranges in the replacements when applying the changes in the source.
@@ -123,7 +123,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 //		print("untokenized: \(untokenizedStringSourceBuilding)")
 //		for r in replacementsBuilding {r.print(from: untokenizedStringSourceBuilding)}
 		
-		/* Let's finish the init */
+		/* Let’s finish the init */
 		
 		sourceTypeHelperType = parserHelper
 		
@@ -235,7 +235,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 						continue
 					}
 					let pluralityDefinition = pluralityDefinitions[token] ?? xibLocResolvingInfo.defaultPluralityDefinition
-					let indexToUse = pluralityDefinition.indexOfVersionToUse(forValue: wantedValue, numberOfVersions: numberOfZones.value) /* Let's use the default defaultFloatPrecision! */
+					let indexToUse = pluralityDefinition.indexOfVersionToUse(forValue: wantedValue, numberOfVersions: numberOfZones.value) /* Let’s use the default defaultFloatPrecision! */
 					assert(indexToUse <= numberOfZones.value)
 					
 					guard zoneIndex == indexToUse else {continue}
@@ -279,7 +279,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 	}
 	
-	/* Note: I'm not so sure having a struct here is such a good idea…
+	/* Note: I’m not so sure having a struct here is such a good idea…
 	 *       We have to workaround a lot the fact that we pass replacements by value instead of pointers to replacements… */
 	private struct Replacement {
 		
@@ -400,7 +400,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		 *
 		 * The original range that will be adjusted MUST start and end with indexes that are at the start of an extended grapheme cluster. */
 		private static func adjustedRange(from adjustedRange: Range<String.Index>, byReplacing removedRange: Range<String.Index>, in originalString: String, with addedString: String, newString: String) -> Range<String.Index> {
-			/* Let's verify we're indeed at the start of a cluster for the lower and upper bounds of the adjusted range. */
+			/* Let’s verify we’re indeed at the start of a cluster for the lower and upper bounds of the adjusted range. */
 			assert(String.Index(adjustedRange.lowerBound, within: originalString) != nil)
 			assert(String.Index(adjustedRange.upperBound, within: originalString) != nil)
 			
@@ -452,7 +452,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			
 #endif
 			
-			/* Let's verify we're still at the start of a cluster for the lower and upper bounds of the new range. */
+			/* Let’s verify we’re still at the start of a cluster for the lower and upper bounds of the new range. */
 			assert(String.Index(newLowerBound, within: newString) != nil)
 			assert(String.Index(newUpperBound, within: newString) != nil)
 			return Range<String.Index>(uncheckedBounds: (lower: newLowerBound, upper: newUpperBound))
@@ -481,7 +481,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 						switch currentIndexPath[currentLevel] {
 							case idx:
 								/* The replacement we are removing is currently being visited.
-								 * Let's relocate the current index to the previous replacement. */
+								 * Let’s relocate the current index to the previous replacement. */
 								currentIndexPath.removeLast(currentIndexPath.count-currentLevel-1)
 								while let last = currentIndexPath.last, last == 0 {currentIndexPath.removeLast()}
 								if let last = currentIndexPath.last {currentIndexPath.removeLast(); currentIndexPath.append(last - 1)}
@@ -576,9 +576,9 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	private static func insert(replacement insertedReplacement: Replacement, in currentReplacements: inout [Replacement]) -> Bool {
 		for (idx, checkedReplacement) in currentReplacements.enumerated() {
 			/* If both checked and inserted replacements have the same container range,
-			 * we are inserting a new replacement value for the checked replacement
-			 * (eg. inserting the “b” when “a” has been inserted in the following replacement: “<a:b>”).
-			 * Let's just check the two ranges do not overlap (asserted, this is an internal logic error if ranges overlap). */
+			 *  we are inserting a new replacement value for the checked replacement
+			 *  (eg. inserting the “b” when “a” has been inserted in the following replacement: “<a:b>”).
+			 * Let’s just check the two ranges do not overlap (asserted, this is an internal logic error if ranges overlap). */
 			guard insertedReplacement.containerRange != checkedReplacement.containerRange else {
 				assert(!insertedReplacement.range.overlaps(checkedReplacement.range))
 				continue
@@ -629,9 +629,9 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		let startIdx = stringSource.startIndex
 		
-		/* We might have plurality overrides. Let's check. */
+		/* We might have plurality overrides. Let’s check. */
 		guard !stringSource.hasPrefix("|||") else {
-			/* We don't. But we must remove one leading "|". */
+			/* We don’t. But we must remove one leading "|". */
 			parserHelper.remove(strRange: (..<stringSource.index(after: startIdx), stringSource), from: &source)
 			stringSource.removeFirst()
 			return []
@@ -650,11 +650,11 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			return []
 		}
 		
-		/* A valid plurality overrides part was found. Let's parse them! */
+		/* A valid plurality overrides part was found. Let’s parse them! */
 		let pluralityOverrideStr = stringSource[pluralityStringStartIdx..<pluralityEndIdx]
 		let pluralityDefinitions = pluralityOverrideStr.components(separatedBy: "|").map{ $0 == "_" ? nil : PluralityDefinition(string: $0) }
 		
-		/* Let's remove the plurality definition from the string. */
+		/* Let’s remove the plurality definition from the string. */
 		let nonPluralityStringStartIdx = stringSource.index(pluralityEndIdx, offsetBy: 2)
 		parserHelper.remove(strRange: (..<nonPluralityStringStartIdx, stringSource), from: &source)
 		stringSource.removeSubrange(startIdx..<nonPluralityStringStartIdx)
