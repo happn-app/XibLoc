@@ -625,22 +625,23 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	}
 	
 	private static func preprocessForPluralityDefinitionOverrides(source: inout SourceType, stringSource: inout String, parserHelper: SourceTypeHelper.Type) -> [PluralityDefinition?] {
-		guard stringSource.hasPrefix("||") else {return []}
+		let pluralityOverrideSeparator = "||"
+		guard stringSource.hasPrefix(pluralityOverrideSeparator) else {return []}
 		
 		let startIdx = stringSource.startIndex
 		
 		/* We might have plurality overrides. Let’s check. */
-		guard !stringSource.hasPrefix("|||") else {
+		guard !stringSource.hasPrefix(pluralityOverrideSeparator + "|") else {
 			/* We don’t. But we must remove one leading "|". */
 			parserHelper.remove(strRange: (..<stringSource.index(after: startIdx), stringSource), from: &source)
 			stringSource.removeFirst()
 			return []
 		}
 		
-		let pluralityStringStartIdx = stringSource.index(startIdx, offsetBy: 2)
+		let pluralityStringStartIdx = stringSource.index(startIdx, offsetBy: pluralityOverrideSeparator.count)
 		
 		/* We do have plurality override(s)! Is it valid? */
-		guard let pluralityEndIdx = stringSource.range(of: "||", options: [.literal], range: pluralityStringStartIdx..<stringSource.endIndex)?.lowerBound else {
+		guard let pluralityEndIdx = stringSource.range(of: pluralityOverrideSeparator, options: [.literal], range: pluralityStringStartIdx..<stringSource.endIndex)?.lowerBound else {
 			/* Nope. It is not. */
 #if canImport(os)
 			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
@@ -652,10 +653,12 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		/* A valid plurality overrides part was found. Let’s parse them! */
 		let pluralityOverrideStr = stringSource[pluralityStringStartIdx..<pluralityEndIdx]
+		/* Dev note: `components(separatedBy:)` does return empty components, contrary to `split(separator:)`.
+		 * In our case empty components are syntactically invalid, but we’ll properly parse them if we get some. */
 		let pluralityDefinitions = pluralityOverrideStr.components(separatedBy: "|").map{ $0 == "_" ? nil : PluralityDefinition(string: $0) }
 		
 		/* Let’s remove the plurality definition from the string. */
-		let nonPluralityStringStartIdx = stringSource.index(pluralityEndIdx, offsetBy: 2)
+		let nonPluralityStringStartIdx = stringSource.index(pluralityEndIdx, offsetBy: pluralityOverrideSeparator.count)
 		parserHelper.remove(strRange: (..<nonPluralityStringStartIdx, stringSource), from: &source)
 		stringSource.removeSubrange(startIdx..<nonPluralityStringStartIdx)
 		
