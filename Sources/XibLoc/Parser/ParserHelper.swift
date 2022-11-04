@@ -33,7 +33,7 @@ public protocol ParserHelper {
 	
 	/**
 	 When asked to (remove, replace, whatever) something from the source type,
-	 the given range will always contain a String range, and the corresponding String from which the range comes from.
+	  the given range will always contain a String range, and the corresponding String from which the range comes from.
 	 
 	 In theory, the given string should **always** be the stringRepresentation of the given source. */
 	typealias StrRange<R> = (r: R, s: String) where R : RangeExpression, R.Bound == String.Index

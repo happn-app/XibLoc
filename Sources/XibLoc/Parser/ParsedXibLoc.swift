@@ -53,8 +53,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		 * Overlaps are allowed with the following rules:
 		 *    - The attributes modifications can overlap between themselves at will;
 		 *    - Replacements can be embedded in other replacements (internal ranges for multiple words tokens);
-		 *    - Replacements cannot overlap attributes modifications or replacements if one is not fully embedded in the other.
-		 * Note: Anything can be embedded in a simple replacement, but everything embedded in it will be dropped… (the content is replaced, by definition!) */
+		 *    - Replacements cannot overlap attributes modifications or replacements if one is not fully embedded in the other. */
 		
 		func getOneWordRanges(tokens: [OneWordTokens], replacementTypeBuilder: (_ token: OneWordTokens) -> ReplacementValue, currentGroupId: inout Int, in output: inout [Replacement]) {
 			for sep in tokens {
