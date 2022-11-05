@@ -13,13 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+
 import Foundation
 import XCTest
 
 
 
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
-class AttrStrTests : XCTestCase {
+final class AttrStrTests : XCTestCase {
 	
 	/* FB11756205 and https://cohost.org/Frizlab/post/200059-to-whomever-it-may-c */
 	func testAttrStrRangeExtract() {
@@ -39,3 +41,5 @@ class AttrStrTests : XCTestCase {
 	}
 	
 }
+
+#endif
