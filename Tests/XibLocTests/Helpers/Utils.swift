@@ -17,7 +17,7 @@ import Foundation
 
 
 
-/* Class to be able to use self as an Object type */
+/* This is a class instead of an enum (or struct) to be able to use self as an Object type. */
 class Utils {
 	
 	static func localized(_ key: String) -> String {
