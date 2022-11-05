@@ -671,7 +671,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = "$(DYLIB_CURRENT_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLoc;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -695,7 +695,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = "$(DYLIB_CURRENT_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.happn.XibLoc;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
