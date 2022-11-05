@@ -298,6 +298,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			Swift.print("\(prefix)REPLACEMENT START")
 			Swift.print("\(prefix)container: \(string[containerRange].replacingOccurrences(of: "\n", with: "\\n"))")
 			Swift.print("\(prefix)range: \(string[range].replacingOccurrences(of: "\n", with: "\\n"))")
+			Swift.print("\(prefix)groupId: \(groupId)")
 			Swift.print("\(prefix)removed left  token distance: \(removedLeftTokenDistance)")
 			Swift.print("\(prefix)removed right token distance: \(removedRightTokenDistance)")
 			Swift.print("\(prefix)children (\(children.count))")
