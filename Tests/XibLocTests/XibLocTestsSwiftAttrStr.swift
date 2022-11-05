@@ -60,7 +60,6 @@ final class XibLocTestsSwiftAttrStr : XCTestCase {
 			Conf.defaultItalicAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setItalic])
 			let info = CommonTokensGroup().str2AttrStrXibLocInfo
 			
-			print(info)
 			var result = AttributedString("helloworldhowareyou", attributes: Conf.defaultStr2AttrStrAttributes)
 			Conf.defaultItalicAttrsChangesDescription?.apply(to: &result, range: result.range(of: "world")!)
 			Conf.defaultItalicAttrsChangesDescription?.apply(to: &result, range: result.range(of: "are")!)

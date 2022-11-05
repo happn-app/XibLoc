@@ -62,7 +62,6 @@ final class XibLocTestsSwiftNSAttrStr : XCTestCase {
 			Conf.defaultItalicAttrsChangesDescription = StringAttributesChangesDescription(changes: [.setItalic])
 			let info = CommonTokensGroup().str2NSAttrStrXibLocInfo
 			
-			print(info)
 			let result = NSMutableAttributedString(string: "helloworldhowareyou", attributes: Conf.defaultStr2NSAttrStrAttributes!)
 			Conf.defaultItalicAttrsChangesDescription?.nsapply(to: result, range: NSRange(location: 5, length: 5))
 			Conf.defaultItalicAttrsChangesDescription?.nsapply(to: result, range: NSRange(location: 13, length: 3))
