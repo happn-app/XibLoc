@@ -660,7 +660,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		/* A valid plurality overrides part was found. Let’s parse them! */
 		let pluralityOverrideStr = stringSource[pluralityStringStartIdx..<pluralityEndIdx]
 		/* Dev note: `components(separatedBy:)` does return empty components, contrary to `split(separator:)`.
-		 * In our case empty components are syntactically invalid, but we’ll properly parse them if we get some. */
+		 * In our case though it is not possible to get empty components (because an empty component would have signaled the end of the plurality override). */
 		let pluralityDefinitions = pluralityOverrideStr.components(separatedBy: "|").map{ $0 == "_" ? nil : PluralityDefinition(string: $0) }
 		
 		/* Let’s remove the plurality definition from the string. */
