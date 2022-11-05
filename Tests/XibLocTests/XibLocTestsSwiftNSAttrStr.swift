@@ -489,8 +489,8 @@ class XibLocTestsSwiftNSAttrStr : XCTestCase {
 					change: .changeFont(newFont: .preferredFont(forTextStyle: .caption1), preserveSizes: false, preserveBold: false, preserveItalic: false),
 					allowReplace: true
 				)!
-			let result = NSMutableAttributedString(string: "yolo\n1 result", attributes: Conf.defaultStr2NSAttrStrAttributes)
-			result.setFont(.preferredFont(forTextStyle: .caption1), range: NSRange(location: 5, length: 8))
+			let result = NSMutableAttributedString(string: title + "\n1 result", attributes: Conf.defaultStr2NSAttrStrAttributes)
+			result.setFont(.preferredFont(forTextStyle: .caption1), range: NSRange(location: title.utf16.count + 1, length: result.length - title.utf16.count - 1))
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
 				result
