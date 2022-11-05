@@ -22,7 +22,7 @@ import XCTest
 
 
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
-class AttributedStringUtilsTests: XCTestCase {
+final class AttributedStringUtilsTests : XCTestCase {
 	
 	override func setUp() {
 		super.setUp()

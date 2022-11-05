@@ -18,7 +18,7 @@ import XCTest
 
 
 
-class XibLocTestsSwiftStr : XCTestCase {
+final class XibLocTestsSwiftStr : XCTestCase {
 	
 	/* All tests are repeated a few times in a loop as we actually got random crashes (first found was testFromHappn4/testFromHappn3ObjC; Swift should be good but who knows…). */
 	let nRepeats = 150

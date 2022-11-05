@@ -18,7 +18,7 @@ import XCTest
 
 
 
-class XibLocResolvingInfoTests: XCTestCase {
+final class XibLocResolvingInfoTests : XCTestCase {
 	
 	override func setUp() {
 		super.setUp()

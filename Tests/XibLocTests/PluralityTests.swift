@@ -18,7 +18,7 @@ import XCTest
 
 
 
-class PluralityTests: XCTestCase {
+final class PluralityTests : XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
