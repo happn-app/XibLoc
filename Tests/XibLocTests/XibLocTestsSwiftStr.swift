@@ -486,6 +486,29 @@ class XibLocTestsSwiftStr : XCTestCase {
 		}
 	}
 	
+	func testFromHappnOfficectl() throws {
+		for _ in 0..<nRepeats {
+			let variables = ["firstName": "İpek", "lastName": "Küçük"]
+			let info = Str2StrXibLocInfo()
+				.addingSimpleReturnTypeReplacement(tokens: OneWordTokens(token: "|"), replacement: { variable in
+					guard let v = variables[variable] else {
+						return "MISSING_VALUE"
+					}
+					return v
+				})!
+				.addingSimpleReturnTypeReplacement(tokens: OneWordTokens(token: "*"), replacement: { text in
+					guard let transformed = text.lowercased().applyingTransform(.stripDiacritics, reverse: false) else {
+						return "TRANSFORM_FAILED"
+					}
+					return transformed.replacingOccurrences(of: " ", with: "-")
+				})!
+			XCTAssertEqual(
+				"*|firstName|.|lastName|*@happn.fr".applying(xibLocInfo: info),
+				"ipek.kucuk@happn.fr"
+			)
+		}
+	}
+	
 	/* Baseline is set with XibLoc compiled with USE_UTF16_OFFSETS.
 	 * USE_UTF16_OFFSETS is not used and is dangerous as it makes XibLoc crash for some Objective-C strings crash.
 	 * See ParsedXibLoc.swift for more info. */
