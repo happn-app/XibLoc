@@ -462,6 +462,8 @@ final class XibLocTestsSwiftAttrStr : XCTestCase {
 		}
 	}
 	
+	/* This test fails because of a bug in AttributedString (AFAICT).
+	 * See the `testAttrStrRangeExtract` test. */
 	func testFromTogever1() throws {
 		for _ in 0..<nRepeats {
 //			print("********* NEW TOGEVER TEST RUN *********")
