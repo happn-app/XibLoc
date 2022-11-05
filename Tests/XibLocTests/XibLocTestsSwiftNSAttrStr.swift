@@ -482,7 +482,8 @@ class XibLocTestsSwiftNSAttrStr : XCTestCase {
 			let str = "|title|^\n_#n# result<:s>_^"
 			let info = CommonTokensGroup(simpleReplacement1: title, simpleReplacement2: nil, number: nResults)
 				.str2NSAttrStrXibLocInfo
-				.addingSimpleSourceTypeReplacement(tokens: .init(token: "^"), replacement: { val in val })!
+				.changingDefaultPluralityDefinition(to: PluralityDefinition(string: "(1)(*)"))
+				.addingSimpleReturnTypeReplacement(tokens: .init(token: "^"), replacement: { val in val })!
 				.addingStringAttributesChange(
 					tokens: .init(token: "_"),
 					change: .changeFont(newFont: .preferredFont(forTextStyle: .caption1), preserveSizes: false, preserveBold: false, preserveItalic: false),
