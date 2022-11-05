@@ -157,14 +157,15 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 	
 	/**
 	 Returns an empty plurality definition, which will always return the latest plural version.
-	 (Faster) equivalent of `init(string: "")`. */
+	 (Faster) equivalent of `init(string: "")` or `init(string: " ")`. */
 	public init(matchingNothing: Void) {
 		zones = []
 	}
 	
 	/**
 	 Returns a plurality definition that contains one zone that matches anything.
-	 Will always return the first plural version. */
+	 Will always return the first plural version.
+	 (Faster) equivalent of `init(string: "(*)")`.*/
 	public init(matchingAnything: Void) {
 		zones = [PluralityDefinitionZone()]
 	}
