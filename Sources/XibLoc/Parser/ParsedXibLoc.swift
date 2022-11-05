@@ -667,7 +667,9 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	
 	private static func contentRange(from range: Range<String.Index>, in source: String, leftSep: String, rightSep: String) -> Range<String.Index> {
 		assert(source.distance(from: range.lowerBound, to: range.upperBound) >= leftSep.count + rightSep.count)
-		return Range<String.Index>(uncheckedBounds: (lower: source.index(range.lowerBound, offsetBy: leftSep.count), upper: source.index(range.upperBound, offsetBy: -rightSep.count)))
+		return source.index(range.lowerBound, offsetBy: leftSep.count)..<source.index(range.upperBound, offsetBy: -rightSep.count)
+		/* The line below is the same, but unchecked. We could use it though as we assert it’s good just before. */
+//		return Range<String.Index>(uncheckedBounds: (lower: source.index(range.lowerBound, offsetBy: leftSep.count), upper: source.index(range.upperBound, offsetBy: -rightSep.count)))
 	}
 	
 	private static func rangeFrom(leftSeparator: String, rightSeparator: String, escapeToken: String?, baseString: String, currentPositionInString: inout String.Index) -> Range<String.Index>? {
