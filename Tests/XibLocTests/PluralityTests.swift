@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 import XCTest
+
 @testable import XibLoc
 
 
 
-class PluralityTests: XCTestCase {
+final class PluralityTests : XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
@@ -233,6 +234,18 @@ class PluralityTests: XCTestCase {
 		XCTAssertEqual(str.applying(xibLocInfo: resolvingInfos[4]!), "few")
 		XCTAssertEqual(str.applying(xibLocInfo: resolvingInfos[5]!), "many")
 		XCTAssertEqual(str.applying(xibLocInfo: resolvingInfos[6]!), "many")
+	}
+	
+	func testEmptyPluralityDefinition() {
+		XCTAssertEqual(PluralityDefinition(string: "").zones.count, 0)
+		XCTAssertEqual(PluralityDefinition(matchingNothing: ()).zones.count, 0)
+		XCTAssertEqual(try PluralityDefinition(matchingNothing: ()).indexOfVersionToUse(forValue: PluralValue(string: "0").get(), numberOfVersions: 5), 4)
+	}
+	
+	func testZoneMatchingNothing() {
+		let plurality = PluralityDefinition(string: "()")
+		XCTAssertEqual(plurality.zones.count, 1)
+		XCTAssertEqual(try plurality.indexOfVersionToUse(forValue: PluralValue(string: "0").get(), numberOfVersions: 5), 4)
 	}
 	
 }

@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 import XCTest
+
 @testable import XibLoc
 
 
 
-class XibLocResolvingInfoTests: XCTestCase {
+final class XibLocResolvingInfoTests : XCTestCase {
 	
 	override func setUp() {
 		super.setUp()

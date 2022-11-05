@@ -1,5 +1,5 @@
 /*
-Copyright 2019 happn
+Copyright 2019-2022 happn
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	/**
 	 Init a new ParsedXibLoc.
 	 Usually you shouldn’t use this, unless you add the support for a type other than `String` or `NSMutableAttributedString`,
-	 in which case you should extend your type to apply directly the given resolving info,
-	 and the implementation of your extension should call this init (see the implementation of the extension of `String` etc. in file `XibLoc.swift`). */
+	  in which case you should extend your type to apply directly the given resolving info,
+	  and the implementation of your extension should call this init (see the implementation of the extension of `String` etc. in file `XibLoc.swift`). */
 	public init<DestinationType>(source: SourceType, parserHelper: SourceTypeHelper.Type, forXibLocResolvingInfo xibLocResolvingInfo: XibLocResolvingInfo<SourceType, DestinationType>) {
 		self.init(source: source, parserHelper: parserHelper, parsingInfo: xibLocResolvingInfo.parsingInfo)
 	}
@@ -49,12 +49,11 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	private init(source: SourceType, stringSource: String, parserHelper: SourceTypeHelper.Type, parsingInfo: XibLocParsingInfo, pluralityDefinitionsList: [PluralityDefinition?]) {
 		assert(pluralityDefinitionsList.count >= parsingInfo.pluralGroups.count)
 		
-		/* Let's build the replacements.
+		/* Let’s build the replacements.
 		 * Overlaps are allowed with the following rules:
 		 *    - The attributes modifications can overlap between themselves at will;
 		 *    - Replacements can be embedded in other replacements (internal ranges for multiple words tokens);
-		 *    - Replacements cannot overlap attributes modifications or replacements if one is not fully embedded in the other.
-		 * Note: Anything can be embedded in a simple replacement, but everything embedded in it will be dropped… (the content is replaced, by definition!) */
+		 *    - Replacements cannot overlap attributes modifications or replacements if one is not fully embedded in the other. */
 		
 		func getOneWordRanges(tokens: [OneWordTokens], replacementTypeBuilder: (_ token: OneWordTokens) -> ReplacementValue, currentGroupId: inout Int, in output: inout [Replacement]) {
 			for sep in tokens {
@@ -74,7 +73,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			for sep in tokens {
 				var pos = stringSource.startIndex
 				while let r = ParsedXibLoc.rangeFrom(leftSeparator: sep.leftToken, rightSeparator: sep.rightToken, escapeToken: parsingInfo.escapeToken, baseString: stringSource, currentPositionInString: &pos) {
-					/* Let's get the internal ranges. */
+					/* Let’s get the internal ranges. */
 					let contentRange = ParsedXibLoc.contentRange(from: r, in: stringSource, leftSep: sep.leftToken, rightSep: sep.rightToken)
 					var startIndex = contentRange.lowerBound
 					let endIndex = contentRange.upperBound
@@ -109,7 +108,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		getOneWordRanges(tokens: parsingInfo.simpleReturnTypeReplacements, replacementTypeBuilder: { .simpleReturnTypeReplacement($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		getOneWordRanges(tokens: parsingInfo.attributesModifications, replacementTypeBuilder: { .attributesModification($0) }, currentGroupId: &currentGroupId, in: &replacementsBuilding)
 		
-		/* Let's remove the tokens we want gone from the source string.
+		/* Let’s remove the tokens we want gone from the source string.
 		 * The escape token is always removed.
 		 * We only remove the left and right separator tokens from the attributes modification; all other tokens are left.
 		 * The idea behind the removal of the tokens is to avoid adjusting all the ranges in the replacements when applying the changes in the source.
@@ -121,10 +120,10 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		ParsedXibLoc.remove(escapeToken: parsingInfo.escapeToken, in: &replacementsBuilding, source: &untokenizedSourceBuilding, stringSource: &untokenizedStringSourceBuilding, parserHelper: parserHelper)
 		ParsedXibLoc.removeTokens(from: &replacementsBuilding, source: &untokenizedSourceBuilding, stringSource: &untokenizedStringSourceBuilding, parserHelper: parserHelper)
 //		print("***** RESULTS TIME *****")
-//		print("untokenized: \(untokenizedStringSourceBuilding)")
+//		print("untokenized: \(untokenizedStringSourceBuilding.replacingOccurrences(of: "\n", with: "\\n"))")
 //		for r in replacementsBuilding {r.print(from: untokenizedStringSourceBuilding)}
 		
-		/* Let's finish the init */
+		/* Let’s finish the init */
 		
 		sourceTypeHelperType = parserHelper
 		
@@ -236,7 +235,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 						continue
 					}
 					let pluralityDefinition = pluralityDefinitions[token] ?? xibLocResolvingInfo.defaultPluralityDefinition
-					let indexToUse = pluralityDefinition.indexOfVersionToUse(forValue: wantedValue, numberOfVersions: numberOfZones.value) /* Let's use the default defaultFloatPrecision! */
+					let indexToUse = pluralityDefinition.indexOfVersionToUse(forValue: wantedValue, numberOfVersions: numberOfZones.value) /* Let’s use the default defaultFloatPrecision! */
 					assert(indexToUse <= numberOfZones.value)
 					
 					guard zoneIndex == indexToUse else {continue}
@@ -280,7 +279,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 	}
 	
-	/* Note: I'm not so sure having a struct here is such a good idea…
+	/* Note: I’m not so sure having a struct here is such a good idea…
 	 *       We have to workaround a lot the fact that we pass replacements by value instead of pointers to replacements… */
 	private struct Replacement {
 		
@@ -297,8 +296,9 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		func print(from string: String, prefix: String = "") {
 			Swift.print("\(prefix)REPLACEMENT START")
-			Swift.print("\(prefix)container: \(string[containerRange])")
-			Swift.print("\(prefix)range: \(string[range])")
+			Swift.print("\(prefix)container: \(string[containerRange].replacingOccurrences(of: "\n", with: "\\n"))")
+			Swift.print("\(prefix)range: \(string[range].replacingOccurrences(of: "\n", with: "\\n"))")
+			Swift.print("\(prefix)groupId: \(groupId)")
 			Swift.print("\(prefix)removed left  token distance: \(removedLeftTokenDistance)")
 			Swift.print("\(prefix)removed right token distance: \(removedRightTokenDistance)")
 			Swift.print("\(prefix)children (\(children.count))")
@@ -401,12 +401,12 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		 *
 		 * The original range that will be adjusted MUST start and end with indexes that are at the start of an extended grapheme cluster. */
 		private static func adjustedRange(from adjustedRange: Range<String.Index>, byReplacing removedRange: Range<String.Index>, in originalString: String, with addedString: String, newString: String) -> Range<String.Index> {
-			/* Let's verify we're indeed at the start of a cluster for the lower and upper bounds of the adjusted range. */
+			/* Let’s verify we’re indeed at the start of a cluster for the lower and upper bounds of the adjusted range. */
 			assert(String.Index(adjustedRange.lowerBound, within: originalString) != nil)
 			assert(String.Index(adjustedRange.upperBound, within: originalString) != nil)
 			
 			/* We make sure that the removed range does not overlap with the adjusted range or the adjusted range contains the removed range fully. */
-			assert(!adjustedRange.overlaps(removedRange) || adjustedRange.clamped(to: removedRange) == removedRange)
+			assert(!adjustedRange.overlapsWithEmpty(removedRange) || adjustedRange.clamped(to: removedRange) == removedRange)
 			
 			let adjustLowerBound = (originalString.distance(from: adjustedRange.lowerBound, to: removedRange.upperBound) <= 0)
 			let adjustUpperBound = (originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0)
@@ -453,7 +453,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			
 #endif
 			
-			/* Let's verify we're still at the start of a cluster for the lower and upper bounds of the new range. */
+			/* Let’s verify we’re still at the start of a cluster for the lower and upper bounds of the new range. */
 			assert(String.Index(newLowerBound, within: newString) != nil)
 			assert(String.Index(newUpperBound, within: newString) != nil)
 			return Range<String.Index>(uncheckedBounds: (lower: newLowerBound, upper: newUpperBound))
@@ -462,7 +462,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with string: String, in replacements: inout [Replacement], originalString: String, newString: String) {
 			for (idx, var replacement) in replacements.enumerated() {
 				/* We make sure range is contained by the container range of the replacement, or that both do not overlap. */
-				assert(!replacement.containerRange.overlaps(replacedRange) || replacement.containerRange.clamped(to: replacedRange) == replacedRange)
+				assert(!replacement.containerRange.overlapsWithEmpty(replacedRange) || replacement.containerRange.clamped(to: replacedRange) == replacedRange)
 				
 				replacement.range          = ReplacementsIterator.adjustedRange(from: replacement.range,          byReplacing: replacedRange, in: originalString, with: string, newString: newString)
 				replacement.containerRange = ReplacementsIterator.adjustedRange(from: replacement.containerRange, byReplacing: replacedRange, in: originalString, with: string, newString: newString)
@@ -482,7 +482,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 						switch currentIndexPath[currentLevel] {
 							case idx:
 								/* The replacement we are removing is currently being visited.
-								 * Let's relocate the current index to the previous replacement. */
+								 * Let’s relocate the current index to the previous replacement. */
 								currentIndexPath.removeLast(currentIndexPath.count-currentLevel-1)
 								while let last = currentIndexPath.last, last == 0 {currentIndexPath.removeLast()}
 								if let last = currentIndexPath.last {currentIndexPath.removeLast(); currentIndexPath.append(last - 1)}
@@ -574,42 +574,46 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	 
 	 Assumes the given replacement and current replacements are valid. */
 	@discardableResult
-	private static func insert(replacement insertedReplacement: Replacement, in currentReplacements: inout [Replacement]) -> Bool {
-		for (idx, checkedReplacement) in currentReplacements.enumerated() {
+	private static func insert(replacement insertedReplacement: Replacement, in currentReplacements: inout [Replacement], level: Int = 0) -> Bool {
+//		print(String(repeating: " ", count: level) + "inserting: " + "|title|^\n_#n# result<:s>_^"[insertedReplacement.containerRange].replacingOccurrences(of: "\n", with: "\\n") + " (\(insertedReplacement.children.count) children)")
+		/* We might have to modify the inserted replacement (to add children inside it). */
+		var insertedReplacement = insertedReplacement
+		
+		var idx = 0
+		while idx < currentReplacements.endIndex {
+			defer {idx += 1}
+			let checkedReplacement = currentReplacements[idx]
+//			print(String(repeating: " ", count: level) + "checking: " + "|title|^\n_#n# result<:s>_^"[checkedReplacement.containerRange].replacingOccurrences(of: "\n", with: "\\n") + " (\(checkedReplacement.children.count) children)")
+			
 			/* If both checked and inserted replacements have the same container range,
-			 * we are inserting a new replacement value for the checked replacement
-			 * (eg. inserting the “b” when “a” has been inserted in the following replacement: “<a:b>”).
-			 * Let's just check the two ranges do not overlap (asserted, this is an internal logic error if ranges overlap). */
-			guard insertedReplacement.containerRange != checkedReplacement.containerRange else {
-				assert(!insertedReplacement.range.overlaps(checkedReplacement.range))
+			 *  we are inserting a new replacement value for the checked replacement
+			 *  (eg. inserting the “b” when “a” has been inserted in the following replacement: “<a:b>”).
+			 * Let’s just check the two ranges do not overlap (asserted, this is an internal logic error if ranges overlap). */
+			if insertedReplacement.containerRange == checkedReplacement.containerRange {
+				assert(!insertedReplacement.range.overlapsWithEmpty(checkedReplacement.range))
 				continue
 			}
 			
 			/* If there are no overlaps of the container ranges, or if we have two attributes modifications, we have an easy case: nothing to do (all ranges are valid). */
-			guard !insertedReplacement.value.isAttributesModifiation || !checkedReplacement.value.isAttributesModifiation else {continue}
-			guard insertedReplacement.range.overlaps(checkedReplacement.range) else {continue}
+			if insertedReplacement.value.isAttributesModifiation && checkedReplacement.value.isAttributesModifiation {continue}
+			if !insertedReplacement.range.overlapsWithEmpty(checkedReplacement.range) {continue}
 			
 			if !checkedReplacement.value.isAttributesModifiation && checkedReplacement.range.clamped(to: insertedReplacement.containerRange) == insertedReplacement.containerRange {
 				/* insertedReplacement’s container range is included in checkedReplacement’s range and checkedReplacement is not an attributes modification:
 				 *    we must add insertedReplacement as a child of checkedReplacement */
 				var checkedReplacement = checkedReplacement
-				guard insert(replacement: insertedReplacement, in: &checkedReplacement.children) else {return false}
+				guard insert(replacement: insertedReplacement, in: &checkedReplacement.children, level: level + 1) else {return false}
 				currentReplacements[idx] = checkedReplacement
+//				print(String(repeating: " ", count: level) + "inserted (below): " + "|title|^\n_#n# result<:s>_^"[insertedReplacement.containerRange].replacingOccurrences(of: "\n", with: "\\n") + " (\(insertedReplacement.children.count) children)")
 				return true
 			} else if insertedReplacement.range.clamped(to: checkedReplacement.containerRange) == checkedReplacement.containerRange {
 				if !insertedReplacement.value.isAttributesModifiation {
 					/* checkedReplacement’s container range is included in insertedReplacement’s range and insertedReplacement is not an attributes modification:
 					 *    we must add all replacements whose group id is equal to checkedReplacement’s group id as a child of insertedReplacement */
-					var i = idx
-					var insertedReplacement = insertedReplacement
-					while i < currentReplacements.endIndex {
-						let r = currentReplacements[i]
-						guard r.groupId == checkedReplacement.groupId else {i += 1; continue}
-						guard insert(replacement: r, in: &insertedReplacement.children) else {return false}
-						currentReplacements.remove(at: i)
-					}
-					currentReplacements.insert(insertedReplacement, at: idx)
-					return true
+					guard insert(replacement: checkedReplacement, in: &insertedReplacement.children, level: level + 1) else {return false}
+					currentReplacements.remove(at: idx)
+					idx -= 1
+					continue
 				} else {
 					/* inserted replacement is an attributes modification: it cannot have children.
 					 * However the checked replacement is fully embedded in the inserted replacement:
@@ -622,26 +626,28 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		}
 		
 		currentReplacements.append(insertedReplacement)
+//		print(String(repeating: " ", count: level) + "inserted: " + "|title|^\n_#n# result<:s>_^"[insertedReplacement.containerRange].replacingOccurrences(of: "\n", with: "\\n") + " (\(insertedReplacement.children.count) children)")
 		return true
 	}
 	
 	private static func preprocessForPluralityDefinitionOverrides(source: inout SourceType, stringSource: inout String, parserHelper: SourceTypeHelper.Type) -> [PluralityDefinition?] {
-		guard stringSource.hasPrefix("||") else {return []}
+		let pluralityOverrideSeparator = "||"
+		guard stringSource.hasPrefix(pluralityOverrideSeparator) else {return []}
 		
 		let startIdx = stringSource.startIndex
 		
-		/* We might have plurality overrides. Let's check. */
-		guard !stringSource.hasPrefix("|||") else {
-			/* We don't. But we must remove one leading "|". */
+		/* We might have plurality overrides. Let’s check. */
+		guard !stringSource.hasPrefix(pluralityOverrideSeparator + "|") else {
+			/* We don’t. But we must remove one leading "|". */
 			parserHelper.remove(strRange: (..<stringSource.index(after: startIdx), stringSource), from: &source)
 			stringSource.removeFirst()
 			return []
 		}
 		
-		let pluralityStringStartIdx = stringSource.index(startIdx, offsetBy: 2)
+		let pluralityStringStartIdx = stringSource.index(startIdx, offsetBy: pluralityOverrideSeparator.count)
 		
 		/* We do have plurality override(s)! Is it valid? */
-		guard let pluralityEndIdx = stringSource.range(of: "||", options: [.literal], range: pluralityStringStartIdx..<stringSource.endIndex)?.lowerBound else {
+		guard let pluralityEndIdx = stringSource.range(of: pluralityOverrideSeparator, options: [.literal], range: pluralityStringStartIdx..<stringSource.endIndex)?.lowerBound else {
 			/* Nope. It is not. */
 #if canImport(os)
 			if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
@@ -651,12 +657,14 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			return []
 		}
 		
-		/* A valid plurality overrides part was found. Let's parse them! */
+		/* A valid plurality overrides part was found. Let’s parse them! */
 		let pluralityOverrideStr = stringSource[pluralityStringStartIdx..<pluralityEndIdx]
+		/* Dev note: `components(separatedBy:)` does return empty components, contrary to `split(separator:)`.
+		 * In our case empty components are syntactically invalid, but we’ll properly parse them if we get some. */
 		let pluralityDefinitions = pluralityOverrideStr.components(separatedBy: "|").map{ $0 == "_" ? nil : PluralityDefinition(string: $0) }
 		
-		/* Let's remove the plurality definition from the string. */
-		let nonPluralityStringStartIdx = stringSource.index(pluralityEndIdx, offsetBy: 2)
+		/* Let’s remove the plurality definition from the string. */
+		let nonPluralityStringStartIdx = stringSource.index(pluralityEndIdx, offsetBy: pluralityOverrideSeparator.count)
 		parserHelper.remove(strRange: (..<nonPluralityStringStartIdx, stringSource), from: &source)
 		stringSource.removeSubrange(startIdx..<nonPluralityStringStartIdx)
 		
@@ -665,7 +673,9 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	
 	private static func contentRange(from range: Range<String.Index>, in source: String, leftSep: String, rightSep: String) -> Range<String.Index> {
 		assert(source.distance(from: range.lowerBound, to: range.upperBound) >= leftSep.count + rightSep.count)
-		return Range<String.Index>(uncheckedBounds: (lower: source.index(range.lowerBound, offsetBy: leftSep.count), upper: source.index(range.upperBound, offsetBy: -rightSep.count)))
+		return source.index(range.lowerBound, offsetBy: leftSep.count)..<source.index(range.upperBound, offsetBy: -rightSep.count)
+		/* The line below is the same, but unchecked. We could use it though as we assert it’s good just before. */
+//		return Range<String.Index>(uncheckedBounds: (lower: source.index(range.lowerBound, offsetBy: leftSep.count), upper: source.index(range.upperBound, offsetBy: -rightSep.count)))
 	}
 	
 	private static func rangeFrom(leftSeparator: String, rightSeparator: String, escapeToken: String?, baseString: String, currentPositionInString: inout String.Index) -> Range<String.Index>? {
@@ -702,7 +712,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 				return nil
 			}
 			startIndex = rl.upperBound
-			escaped = isTokenInRange(rl, fromString: baseString, escapedWithToken: escapeToken)
+			escaped = isTokenEscaped(tokenRange: rl, in: baseString, escapeToken: escapeToken)
 			
 			ret = rl
 		} while escaped
@@ -710,18 +720,19 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		return ret
 	}
 	
-	private static func isTokenInRange(_ range: Range<String.Index>, fromString baseString: String, escapedWithToken token: String?) -> Bool {
+	private static func isTokenEscaped(tokenRange range: Range<String.Index>, in baseString: String, escapeToken token: String?) -> Bool {
 		guard let escapeToken = token, !escapeToken.isEmpty else {return false}
 		
-		var wasMatch = true
 		var nMatches = 0
+		var wasMatch = true
 		var curPos = range.lowerBound
-		while curPos >= escapeToken.endIndex && wasMatch {
+		/* We iterate while we have found a match and there is enough string space left to have a new match. */
+		while wasMatch && baseString.distance(from: baseString.startIndex, to: curPos) >= escapeToken.count {
 			curPos = baseString.index(curPos, offsetBy: -escapeToken.count)
 			wasMatch = (baseString[curPos..<baseString.index(curPos, offsetBy: escapeToken.count)] == escapeToken)
 			if wasMatch {nMatches += 1}
 		}
-		return (nMatches % 2) == 1
+		return !nMatches.isMultiple(of: 2)
 	}
 	
 }

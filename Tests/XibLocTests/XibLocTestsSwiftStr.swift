@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 import XCTest
+
 @testable import XibLoc
 
 
 
-class XibLocTestsSwiftStr : XCTestCase {
+final class XibLocTestsSwiftStr : XCTestCase {
 	
 	/* All tests are repeated a few times in a loop as we actually got random crashes (first found was testFromHappn4/testFromHappn3ObjC; Swift should be good but who knows…). */
 	let nRepeats = 150
@@ -157,11 +158,31 @@ class XibLocTestsSwiftStr : XCTestCase {
 		}
 	}
 	
+	func testEscapedAndPrecededByMultipleEscapeToken() throws {
+		for _ in 0..<nRepeats {
+			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
+			XCTAssertEqual(
+				#"the ~~~~~~~~~|replaced|"#.applying(xibLocInfo: info),
+				#"the ~~~~|replaced|"#
+			)
+		}
+	}
+	
 	func testOneSimpleReplacement() throws {
 		for _ in 0..<nRepeats {
 			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
 			XCTAssertEqual(
 				"the |replaced|".applying(xibLocInfo: info),
+				"the replacement"
+			)
+		}
+	}
+	
+	func testOneSimpleReplacementEmptyStringBetweenTokens() throws {
+		for _ in 0..<nRepeats {
+			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
+			XCTAssertEqual(
+				"the ||".applying(xibLocInfo: info),
 				"the replacement"
 			)
 		}
@@ -482,6 +503,30 @@ class XibLocTestsSwiftStr : XCTestCase {
 			XCTAssertEqual(
 				"{Vous vous êtes croisés₋`Vous vous êtes croisés¦Vous vous êtes croisées´}".applying(xibLocInfo: info),
 				"Vous vous êtes croisés"
+			)
+		}
+	}
+	
+	func testFromHappnOfficectl() throws {
+		for _ in 0..<nRepeats {
+//			print("********* NEW OFFICECTL TEST RUN *********")
+			let variables = ["firstName": "İpek", "lastName": "Küçük"]
+			let info = Str2StrXibLocInfo()
+				.addingSimpleReturnTypeReplacement(tokens: OneWordTokens(token: "|"), replacement: { variable in
+					guard let v = variables[variable] else {
+						return "MISSING_VALUE"
+					}
+					return v
+				})!
+				.addingSimpleReturnTypeReplacement(tokens: OneWordTokens(token: "*"), replacement: { text in
+					guard let transformed = text.lowercased().applyingTransform(.stripDiacritics, reverse: false) else {
+						return "TRANSFORM_FAILED"
+					}
+					return transformed.replacingOccurrences(of: " ", with: "-")
+				})!
+			XCTAssertEqual(
+				"*|firstName|.|lastName|*@happn.fr".applying(xibLocInfo: info),
+				"ipek.kucuk@happn.fr"
 			)
 		}
 	}

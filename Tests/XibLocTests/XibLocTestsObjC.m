@@ -20,8 +20,8 @@ limitations under the License. */
 #import "XibLocTests-Swift.h"
 
 
-/* All tests are repeated a few times in a loop as we actually got random
- * crashes (first found was testFromHappn4/testFromHappn3ObjC). */
+
+/* All tests are repeated a few times in a loop as we actually got random crashes (first found was testFromHappn4/testFromHappn3ObjC). */
 static NSUInteger nRepeats = 150;
 
 
@@ -51,9 +51,8 @@ static NSUInteger nRepeats = 150;
 
 #if TARGET_OS_OSX
 
-/* Same as testFromHappn1SeptiesObjC, but was the original issue raised when
- * migrating happn to Xcode 10.2 (w/ the Swift 5 runtime). The equivalent test
- * has been added afterwards. */
+/* Same as testFromHappn1SeptiesObjC, but was the original issue raised when migrating happn to Xcode 10.2 (w/ the Swift 5 runtime).
+ * The equivalent test has been added afterwards. */
 - (void)testFromHappn2ObjC
 {
 	for (NSUInteger i = 0; i<nRepeats; ++i) {
@@ -139,7 +138,7 @@ static NSUInteger nRepeats = 150;
 	}
 }
 
-/* Also exists in Swift */
+/* Also exists in Swift. */
 - (void)testFromHappn1SeptiesObjC
 {
 	for (NSUInteger i = 0; i<nRepeats; ++i) {
@@ -162,7 +161,7 @@ static NSUInteger nRepeats = 150;
 	}
 }
 
-/* Also exists in Swift */
+/* Also exists in Swift. */
 - (void)testFromHappn1OctiesObjC
 {
 	for (NSUInteger i = 0; i<nRepeats; ++i) {

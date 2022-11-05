@@ -22,7 +22,7 @@ extension RandomAccessCollection {
 	/**
 	 Return a sorted collection with a stable sort algorithm.
 	 
-	 Retrieved from [StackOverflow](https://stackoverflow.com/a/45585365/1152894)
+	 Retrieved from [StackOverflow](https://stackoverflow.com/a/45585365)
 	 
 	 - Parameter areInIncreasingOrder: Return `nil` when two element are equal.
 	 - Returns: The sorted collection */

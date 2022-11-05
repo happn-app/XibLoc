@@ -13,14 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+
+import Foundation
 import XCTest
+
 @testable import XibLoc
 
 
 
-#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-
-class XibLocTestsSwiftNSAttrStr : XCTestCase {
+final class XibLocTestsSwiftNSAttrStr : XCTestCase {
 	
 	/* All tests are repeated a few times in a loop as we actually got random crashes (first found was testFromHappn4/testFromHappn3ObjC; Swift should be good but who knows…). */
 	let nRepeats = 150
@@ -476,19 +478,21 @@ class XibLocTestsSwiftNSAttrStr : XCTestCase {
 	
 	func testFromTogever1() throws {
 		for _ in 0..<nRepeats {
+//			print("********* NEW TOGEVER TEST RUN *********")
 			let title = "yolo"
 			let nResults = XibLocNumber(1)
 			let str = "|title|^\n_#n# result<:s>_^"
 			let info = CommonTokensGroup(simpleReplacement1: title, simpleReplacement2: nil, number: nResults)
 				.str2NSAttrStrXibLocInfo
-				.addingSimpleSourceTypeReplacement(tokens: .init(token: "^"), replacement: { val in val })!
+				.changingDefaultPluralityDefinition(to: PluralityDefinition(string: "(1)(*)"))
+				.addingSimpleReturnTypeReplacement(tokens: .init(token: "^"), replacement: { val in val })!
 				.addingStringAttributesChange(
 					tokens: .init(token: "_"),
 					change: .changeFont(newFont: .preferredFont(forTextStyle: .caption1), preserveSizes: false, preserveBold: false, preserveItalic: false),
 					allowReplace: true
 				)!
-			let result = NSMutableAttributedString(string: "yolo\n1 result", attributes: Conf.defaultStr2NSAttrStrAttributes)
-			result.setFont(.preferredFont(forTextStyle: .caption1), range: NSRange(location: 5, length: 8))
+			let result = NSMutableAttributedString(string: title + "\n1 result", attributes: Conf.defaultStr2NSAttrStrAttributes)
+			result.setFont(.preferredFont(forTextStyle: .caption1), range: NSRange(location: title.utf16.count + 1, length: result.length - title.utf16.count - 1))
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
 				result

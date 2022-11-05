@@ -1,5 +1,5 @@
 /*
-Copyright 2020 happn
+Copyright 2022 happn
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,32 +15,14 @@ limitations under the License. */
 
 import Foundation
 
+import XibLoc
 
 
-/* This is a class instead of an enum (or struct) to be able to use self as an Object type. */
-class Utils {
-	
-	static func localized(_ key: String) -> String {
-#if HPN_XCODE_BUILD
-		let testBundle = Bundle(for: self.self)
-#else
-		let testBundle = Bundle.module
-#endif
-		return NSLocalizedString(key, bundle: testBundle, comment: "Crash test")
-	}
-	
-}
 
-
-extension Optional {
+extension PluralityDefinition {
 	
-	struct NoValue : Error {}
-	
-	func get() throws -> Wrapped {
-		guard let v = self else {
-			throw NoValue()
-		}
-		return v
+	init() {
+		self.init(matchingNothing: ())
 	}
 	
 }

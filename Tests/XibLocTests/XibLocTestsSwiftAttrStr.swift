@@ -22,9 +22,8 @@ import XCTest
 
 
 
-
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
-class XibLocTestsSwiftAttrStr : XCTestCase {
+final class XibLocTestsSwiftAttrStr : XCTestCase {
 	
 	/* All tests are repeated a few times in a loop as we actually got random crashes (first found was testFromHappn4/testFromHappn3ObjC; Swift should be good but who knows…). */
 	let nRepeats = 150
@@ -462,21 +461,25 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 		}
 	}
 	
+	/* This test fails because of a bug in AttributedString (AFAICT).
+	 * See the `testAttrStrRangeExtract` test. */
 	func testFromTogever1() throws {
 		for _ in 0..<nRepeats {
+//			print("********* NEW TOGEVER TEST RUN *********")
 			let title = "yolo"
 			let nResults = XibLocNumber(1)
 			let str = "|title|^\n_#n# result<:s>_^"
 			let info = CommonTokensGroup(simpleReplacement1: title, simpleReplacement2: nil, number: nResults)
 				.str2AttrStrXibLocInfo
-				.addingSimpleSourceTypeReplacement(tokens: .init(token: "^"), replacement: { val in val })!
+				.changingDefaultPluralityDefinition(to: PluralityDefinition(string: "(1)(*)"))
+				.addingSimpleReturnTypeReplacement(tokens: .init(token: "^"), replacement: { val in val })!
 				.addingStringAttributesChange(
 					tokens: .init(token: "_"),
 					change: .changeFont(newFont: .preferredFont(forTextStyle: .caption1), preserveSizes: false, preserveBold: false, preserveItalic: false),
 					allowReplace: true
 				)!
-			var result = AttributedString("yolo\n1 result", attributes: Conf.defaultStr2AttrStrAttributes)
-			result.setFont(.preferredFont(forTextStyle: .caption1), range: result.index(result.startIndex, offsetByCharacters: 5)..<result.endIndex)
+			var result = AttributedString(title + "\n1 result", attributes: Conf.defaultStr2AttrStrAttributes)
+			result.setFont(.preferredFont(forTextStyle: .caption1), range: result.index(result.startIndex, offsetByCharacters: title.count + 1)..<result.endIndex)
 			XCTAssertEqual(
 				str.applying(xibLocInfo: info),
 				result

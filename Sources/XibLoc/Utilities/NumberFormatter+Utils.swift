@@ -28,7 +28,7 @@ public extension NumberFormatter {
 	 The fallback in case the formatter returns `nil` uses a “`%*.f`” format, with the number of decimals set to minimumFractionDigits.
 	 
 	 - Note: About the naming, I thought about naming the method `string(from:)` like the one it enhances,
-	 however we can get an ambiguity when using the method, so I opted into prefixing the method with `xl` (for XibLoc). */
+	  however we can get an ambiguity when using the method, so I opted into prefixing the method with `xl` (for XibLoc). */
 	func xl_string(from number: NSNumber) -> String {
 		return string(from: number) ?? String(format: "%*.f", locale: Locale.current, minimumFractionDigits, number.doubleValue)
 	}

@@ -112,6 +112,12 @@ public struct XibLocResolvingInfo<SourceType, ReturnType> {
 		self.init(identityReplacement: ir)!
 	}
 	
+	public func changingDefaultPluralityDefinition(to newDefaultPluralityDefinition: PluralityDefinition) -> Self {
+		var ret = self
+		ret.defaultPluralityDefinition = newDefaultPluralityDefinition
+		return ret
+	}
+	
 	@discardableResult
 	public mutating func changeEscapeToken(to newEscapeToken: String?) -> Bool {
 		let savedEscapeToken = escapeToken

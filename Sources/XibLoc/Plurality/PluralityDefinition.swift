@@ -155,14 +155,17 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 	
 	let zones: [PluralityDefinitionZone]
 	
-	/** Returns an empty plurality definition, which will always return the latest plural version  */
-	public init() {
+	/**
+	 Returns an empty plurality definition, which will always return the latest plural version.
+	 (Faster) equivalent of `init(string: "")` or `init(string: " ")`. */
+	public init(matchingNothing: Void) {
 		zones = []
 	}
 	
 	/**
 	 Returns a plurality definition that contains one zone that matches anything.
-	 Will always return the first plural version. */
+	 Will always return the first plural version.
+	 (Faster) equivalent of `init(string: "(*)")`.*/
 	public init(matchingAnything: Void) {
 		zones = [PluralityDefinitionZone()]
 	}
@@ -170,7 +173,14 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 	/**
 	 Parses the plurality string to create a plurality definition.
 	 
-	 The parsing is forgiving: messages are printed in the logs if there are syntax errors, but the init will not fail. */
+	 The parsing is forgiving: messages are printed in the logs if there are syntax errors, but the init will not fail.
+	 
+	 - Note: Parsing a single space or the empty string is the same thing.
+	 This is the single case where garbage outside of zones is allowed.
+	 We do this in order to be able to specify an empty plurality definition in a plurality overrides definition.
+	 
+	 As a soft TODO, we could say supporting comment outside zones might not be the worst idea…
+	 Is it the best though? I’m not sure. */
 	public init(string: String) {
 		let scanner = Scanner(string: string)
 		scanner.charactersToBeSkipped = CharacterSet()
@@ -178,7 +188,7 @@ public struct PluralityDefinition : CustomDebugStringConvertible {
 		var idx = 0
 		var zonesBuilding = [PluralityDefinitionZone]()
 		repeat {
-			if let garbage = scanner.xl_scanUpToString("(") {
+			if let garbage = scanner.xl_scanUpToString("("), (!scanner.isAtEnd || garbage != " ") {
 #if canImport(os)
 				if #available(macOS 10.12, tvOS 10.0, iOS 10.0, watchOS 3.0, *) {
 					Conf.oslog.flatMap{ os_log("Got garbage (%@) while parsing plurality definition string “%@”. Ignoring...", log: $0, type: .info, garbage, string) }}
