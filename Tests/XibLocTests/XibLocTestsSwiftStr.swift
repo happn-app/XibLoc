@@ -157,11 +157,31 @@ class XibLocTestsSwiftStr : XCTestCase {
 		}
 	}
 	
+	func testEscapedAndPrecededByMultipleEscapeToken() throws {
+		for _ in 0..<nRepeats {
+			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
+			XCTAssertEqual(
+				#"the ~~~~~~~~~|replaced|"#.applying(xibLocInfo: info),
+				#"the ~~~~|replaced|"#
+			)
+		}
+	}
+	
 	func testOneSimpleReplacement() throws {
 		for _ in 0..<nRepeats {
 			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
 			XCTAssertEqual(
 				"the |replaced|".applying(xibLocInfo: info),
+				"the replacement"
+			)
+		}
+	}
+	
+	func testOneSimpleReplacementEmptyStringBetweenTokens() throws {
+		for _ in 0..<nRepeats {
+			let info = CommonTokensGroup(simpleReplacement1: "replacement").str2StrXibLocInfo
+			XCTAssertEqual(
+				"the ||".applying(xibLocInfo: info),
 				"the replacement"
 			)
 		}
