@@ -464,6 +464,7 @@ class XibLocTestsSwiftAttrStr : XCTestCase {
 	
 	func testFromTogever1() throws {
 		for _ in 0..<nRepeats {
+//			print("********* NEW TOGEVER TEST RUN *********")
 			let title = "yolo"
 			let nResults = XibLocNumber(1)
 			let str = "|title|^\n_#n# result<:s>_^"

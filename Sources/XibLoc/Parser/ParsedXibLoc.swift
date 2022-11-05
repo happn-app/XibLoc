@@ -120,7 +120,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		ParsedXibLoc.remove(escapeToken: parsingInfo.escapeToken, in: &replacementsBuilding, source: &untokenizedSourceBuilding, stringSource: &untokenizedStringSourceBuilding, parserHelper: parserHelper)
 		ParsedXibLoc.removeTokens(from: &replacementsBuilding, source: &untokenizedSourceBuilding, stringSource: &untokenizedStringSourceBuilding, parserHelper: parserHelper)
 //		print("***** RESULTS TIME *****")
-//		print("untokenized: \(untokenizedStringSourceBuilding)")
+//		print("untokenized: \(untokenizedStringSourceBuilding.replacingOccurrences(of: "\n", with: "\\n"))")
 //		for r in replacementsBuilding {r.print(from: untokenizedStringSourceBuilding)}
 		
 		/* Let’s finish the init */
@@ -296,8 +296,8 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		
 		func print(from string: String, prefix: String = "") {
 			Swift.print("\(prefix)REPLACEMENT START")
-			Swift.print("\(prefix)container: \(string[containerRange])")
-			Swift.print("\(prefix)range: \(string[range])")
+			Swift.print("\(prefix)container: \(string[containerRange].replacingOccurrences(of: "\n", with: "\\n"))")
+			Swift.print("\(prefix)range: \(string[range].replacingOccurrences(of: "\n", with: "\\n"))")
 			Swift.print("\(prefix)removed left  token distance: \(removedLeftTokenDistance)")
 			Swift.print("\(prefix)removed right token distance: \(removedRightTokenDistance)")
 			Swift.print("\(prefix)children (\(children.count))")
@@ -405,7 +405,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 			assert(String.Index(adjustedRange.upperBound, within: originalString) != nil)
 			
 			/* We make sure that the removed range does not overlap with the adjusted range or the adjusted range contains the removed range fully. */
-			assert(!adjustedRange.overlaps(removedRange) || adjustedRange.clamped(to: removedRange) == removedRange)
+			assert(!adjustedRange.overlapsWithEmpty(removedRange) || adjustedRange.clamped(to: removedRange) == removedRange)
 			
 			let adjustLowerBound = (originalString.distance(from: adjustedRange.lowerBound, to: removedRange.upperBound) <= 0)
 			let adjustUpperBound = (originalString.distance(from: adjustedRange.upperBound, to: removedRange.upperBound) <= 0)
@@ -461,7 +461,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		private static func adjustReplacementRanges(replacedRange: Range<String.Index>, with string: String, in replacements: inout [Replacement], originalString: String, newString: String) {
 			for (idx, var replacement) in replacements.enumerated() {
 				/* We make sure range is contained by the container range of the replacement, or that both do not overlap. */
-				assert(!replacement.containerRange.overlaps(replacedRange) || replacement.containerRange.clamped(to: replacedRange) == replacedRange)
+				assert(!replacement.containerRange.overlapsWithEmpty(replacedRange) || replacement.containerRange.clamped(to: replacedRange) == replacedRange)
 				
 				replacement.range          = ReplacementsIterator.adjustedRange(from: replacement.range,          byReplacing: replacedRange, in: originalString, with: string, newString: newString)
 				replacement.containerRange = ReplacementsIterator.adjustedRange(from: replacement.containerRange, byReplacing: replacedRange, in: originalString, with: string, newString: newString)
@@ -573,42 +573,46 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	 
 	 Assumes the given replacement and current replacements are valid. */
 	@discardableResult
-	private static func insert(replacement insertedReplacement: Replacement, in currentReplacements: inout [Replacement]) -> Bool {
-		for (idx, checkedReplacement) in currentReplacements.enumerated() {
+	private static func insert(replacement insertedReplacement: Replacement, in currentReplacements: inout [Replacement], level: Int = 0) -> Bool {
+//		print(String(repeating: " ", count: level) + "inserting: " + "|title|^\n_#n# result<:s>_^"[insertedReplacement.containerRange].replacingOccurrences(of: "\n", with: "\\n") + " (\(insertedReplacement.children.count) children)")
+		/* We might have to modify the inserted replacement (to add children inside it). */
+		var insertedReplacement = insertedReplacement
+		
+		var idx = 0
+		while idx < currentReplacements.endIndex {
+			defer {idx += 1}
+			let checkedReplacement = currentReplacements[idx]
+//			print(String(repeating: " ", count: level) + "checking: " + "|title|^\n_#n# result<:s>_^"[checkedReplacement.containerRange].replacingOccurrences(of: "\n", with: "\\n") + " (\(checkedReplacement.children.count) children)")
+			
 			/* If both checked and inserted replacements have the same container range,
 			 *  we are inserting a new replacement value for the checked replacement
 			 *  (eg. inserting the “b” when “a” has been inserted in the following replacement: “<a:b>”).
 			 * Let’s just check the two ranges do not overlap (asserted, this is an internal logic error if ranges overlap). */
-			guard insertedReplacement.containerRange != checkedReplacement.containerRange else {
-				assert(!insertedReplacement.range.overlaps(checkedReplacement.range))
+			if insertedReplacement.containerRange == checkedReplacement.containerRange {
+				assert(!insertedReplacement.range.overlapsWithEmpty(checkedReplacement.range))
 				continue
 			}
 			
 			/* If there are no overlaps of the container ranges, or if we have two attributes modifications, we have an easy case: nothing to do (all ranges are valid). */
-			guard !insertedReplacement.value.isAttributesModifiation || !checkedReplacement.value.isAttributesModifiation else {continue}
-			guard insertedReplacement.range.overlaps(checkedReplacement.range) else {continue}
+			if insertedReplacement.value.isAttributesModifiation && checkedReplacement.value.isAttributesModifiation {continue}
+			if !insertedReplacement.range.overlapsWithEmpty(checkedReplacement.range) {continue}
 			
 			if !checkedReplacement.value.isAttributesModifiation && checkedReplacement.range.clamped(to: insertedReplacement.containerRange) == insertedReplacement.containerRange {
 				/* insertedReplacement’s container range is included in checkedReplacement’s range and checkedReplacement is not an attributes modification:
 				 *    we must add insertedReplacement as a child of checkedReplacement */
 				var checkedReplacement = checkedReplacement
-				guard insert(replacement: insertedReplacement, in: &checkedReplacement.children) else {return false}
+				guard insert(replacement: insertedReplacement, in: &checkedReplacement.children, level: level + 1) else {return false}
 				currentReplacements[idx] = checkedReplacement
+//				print(String(repeating: " ", count: level) + "inserted (below): " + "|title|^\n_#n# result<:s>_^"[insertedReplacement.containerRange].replacingOccurrences(of: "\n", with: "\\n") + " (\(insertedReplacement.children.count) children)")
 				return true
 			} else if insertedReplacement.range.clamped(to: checkedReplacement.containerRange) == checkedReplacement.containerRange {
 				if !insertedReplacement.value.isAttributesModifiation {
 					/* checkedReplacement’s container range is included in insertedReplacement’s range and insertedReplacement is not an attributes modification:
 					 *    we must add all replacements whose group id is equal to checkedReplacement’s group id as a child of insertedReplacement */
-					var i = idx
-					var insertedReplacement = insertedReplacement
-					while i < currentReplacements.endIndex {
-						let r = currentReplacements[i]
-						guard r.groupId == checkedReplacement.groupId else {i += 1; continue}
-						guard insert(replacement: r, in: &insertedReplacement.children) else {return false}
-						currentReplacements.remove(at: i)
-					}
-					currentReplacements.insert(insertedReplacement, at: idx)
-					return true
+					guard insert(replacement: checkedReplacement, in: &insertedReplacement.children, level: level + 1) else {return false}
+					currentReplacements.remove(at: idx)
+					idx -= 1
+					continue
 				} else {
 					/* inserted replacement is an attributes modification: it cannot have children.
 					 * However the checked replacement is fully embedded in the inserted replacement:
@@ -621,6 +625,7 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 		}
 		
 		currentReplacements.append(insertedReplacement)
+//		print(String(repeating: " ", count: level) + "inserted: " + "|title|^\n_#n# result<:s>_^"[insertedReplacement.containerRange].replacingOccurrences(of: "\n", with: "\\n") + " (\(insertedReplacement.children.count) children)")
 		return true
 	}
 	

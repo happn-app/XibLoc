@@ -508,6 +508,7 @@ class XibLocTestsSwiftStr : XCTestCase {
 	
 	func testFromHappnOfficectl() throws {
 		for _ in 0..<nRepeats {
+//			print("********* NEW OFFICECTL TEST RUN *********")
 			let variables = ["firstName": "İpek", "lastName": "Küçük"]
 			let info = Str2StrXibLocInfo()
 				.addingSimpleReturnTypeReplacement(tokens: OneWordTokens(token: "|"), replacement: { variable in
