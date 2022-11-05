@@ -715,15 +715,16 @@ public struct ParsedXibLoc<SourceTypeHelper : ParserHelper> {
 	private static func isTokenEscaped(tokenRange range: Range<String.Index>, in baseString: String, escapeToken token: String?) -> Bool {
 		guard let escapeToken = token, !escapeToken.isEmpty else {return false}
 		
-		var wasMatch = true
 		var nMatches = 0
+		var wasMatch = true
 		var curPos = range.lowerBound
-		while curPos >= escapeToken.endIndex && wasMatch {
+		/* We iterate while we have found a match and there is enough string space left to have a new match. */
+		while wasMatch && baseString.distance(from: baseString.startIndex, to: curPos) >= escapeToken.count {
 			curPos = baseString.index(curPos, offsetBy: -escapeToken.count)
 			wasMatch = (baseString[curPos..<baseString.index(curPos, offsetBy: escapeToken.count)] == escapeToken)
 			if wasMatch {nMatches += 1}
 		}
-		return (nMatches % 2) == 1
+		return !nMatches.isMultiple(of: 2)
 	}
 	
 }
