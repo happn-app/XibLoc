@@ -128,11 +128,11 @@ public struct StringAttributesChangesDescription {
 	}
 	
 	@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
-	func apply(to attributedString: inout AttributedString, range: Range<AttributedString.Index>) {
+	public func apply(to attributedString: inout AttributedString, range: Range<AttributedString.Index>) {
 		for h in changes {h(&attributedString, range)}
 	}
 	
-	func nsapply(to attributedString: NSMutableAttributedString, range: NSRange /* An ObjC range */) {
+	public func nsapply(to attributedString: NSMutableAttributedString, range: NSRange /* An ObjC range */) {
 		for h in nschanges {h(attributedString, range)}
 	}
 	
