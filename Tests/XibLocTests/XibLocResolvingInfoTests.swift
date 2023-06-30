@@ -37,6 +37,24 @@ final class XibLocResolvingInfoTests : XCTestCase {
 		))
 	}
 	
+	func testInvalidTokensInit2() throws {
+		XCTAssertNil(Str2StrXibLocInfo(
+			simpleSourceTypeReplacements: [OneWordTokens(token: "abcd"): { _ in "hello" }],
+			orderedReplacements: [MultipleWordsTokens(exteriorToken: "cde", interiorToken: ":"): 2],
+			identityReplacement: { $0 }
+		))
+	}
+	
+	func testHTMLLikeTokens() throws {
+		XCTAssertNotNil(Str2StrXibLocInfo(
+			simpleSourceTypeReplacements: [
+				OneWordTokens(leftToken: "<b>", rightToken: "</b>"): { _ in "hello" },
+				OneWordTokens(leftToken: "<i>", rightToken: "</i>"): { _ in "hello" },
+			],
+			identityReplacement: { $0 }
+		))
+	}
+	
 	func testAddingNewSourceTypeReplacement() throws {
 		var info = try Str2StrXibLocInfo(orderedReplacements: [#"/,\"#: 0]).get()
 		XCTAssertEqual(info.simpleSourceTypeReplacements.count, 0)

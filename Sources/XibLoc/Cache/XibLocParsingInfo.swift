@@ -23,45 +23,49 @@ struct XibLocParsingInfo : Hashable {
 	 Are the given token valid or do they overlap in a way we cannot guarantee the parsing will work?
 	 
 	 We apply the following rules:
-	 - If `lsep == rsep`, reduce to only sep;
-	 - No char used in any separator (left, right, internal, escape token) must be used in another separator;
-	 - But the same char can be used multiple time in one separator.
+	 - Take all the tokens (left, right, internal, escape token) and place them in an array, with the following exception: if `lsep == rsep`, only add the separator only once;
+	 - For each token, verify none of all the non-empty prefixes possible of the token is a suffix of another token.
 	 
-	 - Note: We’re currently overly cautious.
-	 There are probably less restrictive rules we could apply. */
+	 Example with the following tokens: `abc`, `def`, `ghi`.
+	 We first take the token `abc`, and verify `a` is not the suffix of the other tokens, then `ab`, and finally `abc`.
+	 Then we do the same for `def` and `ghi`. */
 	static func validateTokens(escapeToken: String?, oneWordTokens: [OneWordTokens], multipleWordsTokens: [MultipleWordsTokens]) -> Bool {
-		/* Soft TODO: Find better, less restrictive rules, maybe. */
-		struct ValidationError : Error {}
-		var chars = Set<Character>()
-		
-		let processToken = { (token: String) throws -> Void in
-			guard !token.isEmpty else {throw ValidationError()}
-			let tokenChars = Set(token)
-			
-			guard chars.intersection(tokenChars).isEmpty else {throw ValidationError()}
-			chars.formUnion(tokenChars)
+		var tokens = [String]()
+		if let escapeToken = escapeToken {
+			tokens.append(escapeToken)
+		}
+		for token in oneWordTokens {
+			tokens.append(token.leftToken)
+			if token.leftToken != token.rightToken {
+				tokens.append(token.rightToken)
+			}
+		}
+		for token in multipleWordsTokens {
+			tokens.append(token.leftToken)
+			tokens.append(token.interiorToken)
+			if token.leftToken != token.rightToken {
+				tokens.append(token.rightToken)
+			}
 		}
 		
-		do {
-			if let e = escapeToken {
-				try processToken(e)
+		for (idx, token) in tokens.enumerated() {
+			guard !token.isEmpty else {
+				return false
 			}
-			
-			for w in oneWordTokens {
-				try processToken(w.leftToken)
-				if w.leftToken != w.rightToken {try processToken(w.rightToken)}
+			var testedString = ""
+			for c in token {
+				testedString += String(c)
+				for (idx2, token2) in tokens.enumerated() {
+					guard idx2 != idx else {
+						continue
+					}
+					guard !token2.hasSuffix(testedString) else {
+						return false
+					}
+				}
 			}
-			
-			for w in multipleWordsTokens {
-				try processToken(w.leftToken)
-				try processToken(w.interiorToken)
-				if w.leftToken != w.rightToken {try processToken(w.rightToken)}
-			}
-			
-			return true
-		} catch {
-			return false
 		}
+		return true
 	}
 	
 	let escapeToken: String?
