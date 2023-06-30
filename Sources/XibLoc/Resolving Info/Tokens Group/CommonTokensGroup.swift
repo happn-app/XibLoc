@@ -29,9 +29,9 @@ import UIKit
  
  This tokens group should be enough to process most, if not all of your translations.
  If you need more tokens, you can create your own groups, the same way this one has been done
- (or any other way you want, the idea is simply to get a `XibLocResolvingInfo` at the end;
- you can even extend `XibLocResolvingInfo` to create a custom init if you prefer,
- though you must remember to call `initParsingInfo` at the end of your init).
+  (or any other way you want, the idea is simply to get a `XibLocResolvingInfo` at the end;
+  you can even extend `XibLocResolvingInfo` to create a custom init if you prefer,
+  though you must remember to call `initParsingInfo` at the end of your init).
  
  The default init of this group will set `defaultBoldAttrsChangesDescription` and `defaultItalicAttrsChangesDescription` resp. to the `*` and `_` tokens.
  If you don’t want bold or italic, you must explicitly disable it, whether when initing the group, or by setting the defaults in the `XibLocConfig` struct.
@@ -49,8 +49,8 @@ import UIKit
  
  - Note: Only the transformations set to a non-nil value will see their tokens parsed.
  Which means, the following string `hello_world_how_are_you`, if processed with a `CommonTokensGroup()` (using all default arguments),
- will yield the same string when processed with the str2str resolving info,
- but will yield the attributed string `helloworldhowareyou` with the words “`world`” and “`are`” in italic if processed with the str2attrstr resolving info.
+  will yield the same string when processed with the str2str resolving info,
+  but will yield the attributed string `helloworldhowareyou` with the words “`world`” and “`are`” in italic if processed with the str2attrstr resolving info.
  
  This is because an str2str resolving info will not do anything with the bold and italic tokens and thus, they are not put in the str2str resolving info.
  

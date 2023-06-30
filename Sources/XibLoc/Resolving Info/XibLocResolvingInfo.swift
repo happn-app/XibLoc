@@ -48,7 +48,7 @@ import Logging
     - Unsupported: “`Let’s replace <*multiple:choices*:stuff>`”
  
  - Important: If you write a custom init of this struct, you **must** validate the token by calling `initParsingInfo` at the end of your init
- and fail the init if the method returns `false`.
+  and fail the init if the method returns `false`.
  You can also call another init which does said validation. */
 public struct XibLocResolvingInfo<SourceType, ReturnType> {
 	
