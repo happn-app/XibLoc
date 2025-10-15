@@ -30,7 +30,7 @@ extension AttributedString {
 
 		let runs = self[range].runs
 		for r in runs {
-			let font = r.uiKit.font ?? XibLocFont.xl_preferredFont
+			let font = r.font ?? XibLocFont.xl_preferredFont
 			self[r.range].font = font.fontBySetting(size: nil, isBold: bold, isItalic: italic)
 		}
 	}
@@ -47,8 +47,8 @@ extension AttributedString {
 
 		let runs = self[range].runs
 		for r in runs {
-			let f = r.uiKit.font
-			let (b, i, s) = (f?.isBold, f?.isItalic, f?.pointSize)
+			let f = r.font ?? XibLocFont.xl_preferredFont
+			let (b, i, s) = (f.isBold, f.isItalic, f.pointSize)
 			self[r.range].font = font.fontBySetting(size: keepOriginalSize ? s : nil, isBold: keepOriginalIsBold ? b : nil, isItalic: keepOriginalIsItalic ? i : nil)
 		}
 	}
