@@ -62,8 +62,20 @@ public struct StringAttributesChangesDescription {
 				case .setItalic:    return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: true,  range: range) }
 				case .removeItalic: return { attrStr, range in attrStr.setBoldOrItalic(bold: nil, italic: false, range: range) }
 					
-				case .addStraightUnderline: return { attrStr, range in attrStr[range].underlineStyle = .single }
-				case .removeUnderline:      return { attrStr, range in attrStr[range].underlineStyle = nil }
+				case .addStraightUnderline: return { attrStr, range in
+#if os(macOS)
+					attrStr[range].appKit.underlineStyle = NSUnderlineStyle.single
+#else
+					attrStr[range].uiKit.underlineStyle = NSUnderlineStyle.single
+#endif
+				}
+				case .removeUnderline: return { attrStr, range in
+#if os(macOS)
+					attrStr[range].appKit.underlineStyle = nil
+#else
+					attrStr[range].uiKit.underlineStyle = nil
+#endif
+				}
 					
 				case .setFgColor(let color): return { attrStr, range in attrStr[range].foregroundColor = color }
 				case .setBgColor(let color): return { attrStr, range in attrStr[range].backgroundColor = color }
