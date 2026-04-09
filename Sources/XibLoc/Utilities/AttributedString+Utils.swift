@@ -30,8 +30,13 @@ extension AttributedString {
 
 		let runs = self[range].runs
 		for r in runs {
-			let font = r.uiKit.font ?? XibLocFont.xl_preferredFont
-			self[r.range].font = font.fontBySetting(size: nil, isBold: bold, isItalic: italic)
+#if os(macOS)
+		let font = r.appKit.font ?? XibLocFont.xl_preferredFont
+		self[r.range].appKit.font = font.fontBySetting(size: nil, isBold: bold, isItalic: italic)
+#else
+		let font = r.uiKit.font ?? XibLocFont.xl_preferredFont
+		self[r.range].uiKit.font = font.fontBySetting(size: nil, isBold: bold, isItalic: italic)
+#endif
 		}
 	}
 
@@ -47,9 +52,23 @@ extension AttributedString {
 
 		let runs = self[range].runs
 		for r in runs {
+#if os(macOS)
+			let f = r.appKit.font
+			let (b, i, s) = (f?.isBold, f?.isItalic, f?.pointSize)
+			self[r.range].appKit.font = font.fontBySetting(
+				size: keepOriginalSize ? s : nil,
+				isBold: keepOriginalIsBold ? b : nil,
+				isItalic: keepOriginalIsItalic ? i : nil
+			)
+#else
 			let f = r.uiKit.font
 			let (b, i, s) = (f?.isBold, f?.isItalic, f?.pointSize)
-			self[r.range].font = font.fontBySetting(size: keepOriginalSize ? s : nil, isBold: keepOriginalIsBold ? b : nil, isItalic: keepOriginalIsItalic ? i : nil)
+			self[r.range].uiKit.font = font.fontBySetting(
+				size: keepOriginalSize ? s : nil,
+				isBold: keepOriginalIsBold ? b : nil,
+				isItalic: keepOriginalIsItalic ? i : nil
+			)
+#endif
 		}
 	}
 
